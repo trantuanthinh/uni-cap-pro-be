@@ -33,7 +33,11 @@ builder.Services.AddControllers()
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
+builder.Services.AddSingleton<JWTService>();
 builder.Services.AddSingleton<SharedService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
@@ -42,8 +46,6 @@ builder.Services.AddDbContext<DataContext>(options => options.UseMySql(connectio
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddAuthentication().AddJwtBearer();
 
 
 

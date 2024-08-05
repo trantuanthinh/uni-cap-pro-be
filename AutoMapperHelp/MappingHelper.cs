@@ -10,6 +10,10 @@ namespace uni_cap_pro_be.AutoMapperHelp
 		{
 			CreateMap<User, UserDTO>();
 			CreateMap<UserDTO, User>();
+
+			CreateMap<User, SignInDTO>()
+				.ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+				.ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
 		}
 
 	}
