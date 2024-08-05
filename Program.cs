@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
-using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
@@ -26,11 +25,15 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 	x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 	x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
+builder.Services.AddControllers()
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+	});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSingleton<SharedService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");

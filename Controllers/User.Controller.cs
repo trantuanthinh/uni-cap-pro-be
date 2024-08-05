@@ -9,88 +9,119 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/api/[controlLer]")]
 	[ApiController]
-	public class UserController : Controller
+	public class UserController(IUserService userService, IMapper mapper, SharedService sharedService) : Controller
 	{
-		private readonly IUserRepository _userRepository;
-		private readonly IUserService _userService;
-		private readonly IMapper _mapper;
-		private readonly SharedService _sharedService;
-
-		public UserController(IUserRepository userRepository, IUserService userService, IMapper mapper, SharedService sharedService)
-		{
-			_userRepository = userRepository;
-			_mapper = mapper;
-			_userService = userService;
-			_sharedService = sharedService;
-		}
+		private readonly IUserService _userService = userService;
+		private readonly IMapper _mapper = mapper;
+		private readonly SharedService _sharedService = sharedService;
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult GetUsers()
 		{
-			var _users = _userRepository.GetUsers();
+			ICollection<User> _items = _userService.GetUsers();
 
 			if (!ModelState.IsValid)
 			{
-				return BadRequest();
+				return StatusCode(400, ModelState);
 			}
-			return Ok(new { data = _users });
+			return StatusCode(200, new { data = _items });
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		//[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public ActionResult<User> GetUser(Guid id)
 		{
-			var _user = _userRepository.GetUser(id);
+			User _item = _userService.GetUser(id);
 
-			if (_user == null)
+			if (_item == null)
 			{
-				return NotFound(new { message = "User not found." });
+				return StatusCode(404, new { message = "User not found." });
 			}
 
-			return Ok(new { data = _user });
+			return StatusCode(200, new { data = _item });
 		}
 
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-		public ActionResult<User> CreateUser([FromBody] UserDTO user)
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public ActionResult<User> CreateUser([FromBody] UserDTO item)
 		{
-
-			var isUser = _userService.GetUserTrimToUpper(user);
-
-			if (isUser != null)
-			{
-				ModelState.AddModelError("", "User already exists");
-				return UnprocessableEntity(ModelState);
-			}
-
-			if (!_sharedService.IsValidGmail(user.Email))
+			if (!_sharedService.IsValidGmail(item.Email))
 			{
 				ModelState.AddModelError("", "Invalid email address");
-				return BadRequest(ModelState);
+				return StatusCode(400, ModelState);
 			}
+
 			if (!ModelState.IsValid)
 			{
-				return BadRequest(ModelState);
+				return StatusCode(400, ModelState);
 			}
 
-			user.Password = _userService.HashPassword(user.Password);
-
-			var _user = _mapper.Map<User>(user);
-			_user.Created_At = DateTime.UtcNow;
-			_user.Modified_At = DateTime.UtcNow;
-
-			if (!_userRepository.CreateUser(_user))
+			User _item = _mapper.Map<User>(item);
+			bool isCreated = _userService.CreateUser(_item);
+			if (!isCreated)
 			{
-				ModelState.AddModelError("", "Something went wrong creating user");
+				ModelState.AddModelError("", "Invalid. Something went wrong creating user.");
 				return StatusCode(500, ModelState);
 			}
-			return Ok(new { message = "Successfully", data = _user });
+			return StatusCode(200, new { message = "Created Successfully", data = _item });
+		}
+
+		[HttpPatch("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public ActionResult<User> PatchUser(Guid id, [FromBody] UserDTO item)
+		{
+			User _item = _userService.GetUser(id);
+
+			if (item == null || _item == null)
+			{
+				return StatusCode(404, ModelState);
+			}
+
+			if (!TryValidateModel(_item))
+			{
+				return ValidationProblem(ModelState);
+			}
+
+			User patchItem = _mapper.Map<User>(item);
+			if (!_userService.UpdateUser(_item, patchItem))
+			{
+				ModelState.AddModelError("", "Invalid - Something went wrong updating the user");
+				return StatusCode(500, ModelState);
+			}
+
+			return StatusCode(200, new { message = "Updated Successfully", data = _item });
+		}
+
+		[HttpDelete("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public IActionResult DeleteUser(Guid id)
+		{
+			User user = _userService.GetUser(id);
+
+			if (user == null)
+			{
+				return StatusCode(404, new { message = "User not found" });
+			}
+
+			bool isDeleted = _userService.DeleteUser(user);
+
+			if (!isDeleted)
+			{
+				return StatusCode(500, new { message = "An error occurred while deleting the user" });
+			}
+
+			return StatusCode(202, new { message = "Deleted Successfully" });
 		}
 	}
 }
