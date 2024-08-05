@@ -7,7 +7,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-	[Route("/api/[controlLer]")]
+	[Route("/api/[controller]")]
 	[ApiController]
 	public class UserController(IUserService userService, IMapper mapper, SharedService sharedService) : Controller
 	{
