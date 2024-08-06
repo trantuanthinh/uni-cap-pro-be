@@ -63,8 +63,21 @@ builder.Services.AddSingleton<SharedService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
-builder.Services.AddDbContext<DataContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContext<DataContext>(options =>
+{
+	var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+	//var server = builder.Configuration["server"] ?? "localhost";
+	//var user = builder.Configuration["user"] ?? "root";
+	//var password = builder.Configuration["Password"] ?? "trantuanthinh";
+	//connectionString = string.Format(connectionString, server, user, password);
+
+	//if (!builder.Environment.IsDevelopment())
+	//{
+
+	//}
+	options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
