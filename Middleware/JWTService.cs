@@ -4,8 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Utils;
 
-namespace uni_cap_pro_be.Utils
+namespace uni_cap_pro_be.Middleware
 {
 	public class JWTService(IOptions<JwtSettings> jwtSettings)
 	{
@@ -41,6 +42,5 @@ namespace uni_cap_pro_be.Utils
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			return tokenHandler.WriteToken(token);
 		}
-
 	}
 }

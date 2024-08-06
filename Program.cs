@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
+using uni_cap_pro_be.Middleware;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
@@ -31,9 +35,28 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 	});
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+	o.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidIssuer = builder.Configuration["Jwt:Issuer"],
+		ValidAudience = builder.Configuration["Jwt:Audience"],
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"])),
+		ValidateIssuer = true,
+		ValidateAudience = true,
+		ValidateLifetime = false,
+		ValidateIssuerSigningKey = true
+	};
+});
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.AddAuthorization();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSingleton<JWTService>();
 builder.Services.AddSingleton<SharedService>();

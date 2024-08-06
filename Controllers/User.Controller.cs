@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.DTO;
 using uni_cap_pro_be.Interfaces;
@@ -31,10 +32,11 @@ namespace uni_cap_pro_be.Controllers
 
 		[HttpGet("{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		//[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public ActionResult<User> GetUser(Guid id)
 		{
+
 			User _item = _userService.GetUser(id);
 
 			if (_item == null)
@@ -73,6 +75,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { message = "Created Successfully", data = _item });
 		}
 
+		[Authorize]
 		[HttpPatch("{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
