@@ -67,15 +67,15 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
 	var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-	//var server = builder.Configuration["server"] ?? "localhost";
-	//var user = builder.Configuration["user"] ?? "root";
-	//var password = builder.Configuration["Password"] ?? "trantuanthinh";
-	//connectionString = string.Format(connectionString, server, user, password);
-
-	//if (!builder.Environment.IsDevelopment())
-	//{
-
-	//}
+	if (!builder.Environment.IsDevelopment())
+	{
+		var server = builder.Configuration["DB_HOST"] ?? "localhost";
+		var database = builder.Configuration["DB_NAME"] ?? "agrimart";
+		var user = builder.Configuration["DB_USER"] ?? "root";
+		var port = builder.Configuration["DB_PORT"] ?? "3306";
+		var password = builder.Configuration["DB_PASSWORD"] ?? "trantuanthinh";
+		connectionString = $"server={server};database={database};user={user};password={password};port={port}";
+	}
 	options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
