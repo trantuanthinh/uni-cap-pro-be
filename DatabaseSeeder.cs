@@ -41,7 +41,7 @@ namespace uni_cap_pro_be
 					PhoneNumber = "1234567898",
 					Active_Status = ActiveStatus.ACTIVE,
 					User_Type = UserType.PRODUCER,
-					Avatar = "https://www.google.com/imgres?q=anime%20avatar%20couple&imgurl=https%3A%2F%2Faniyuki.com%2Fwp-content%2Fuploads%2F2022%2F04%2Faniyuki-anime-couple-avatars-10.jpg&imgrefurl=https%3A%2F%2Fxaydungso.vn%2Fbai-viet-khac%2Ftop-99-cute-couple-avatar-anime-dang-gay-bao-tren-mang-vi-cb.html&docid=0p_pgPowd2i3RM&tbnid=yCyDz7nFbzicHM&vet=12ahUKEwjb1OnC0-WHAxWFslYBHcjoCdQQM3oECG4QAA..i&w=682&h=682&hcb=2&ved=2ahUKEwjb1OnC0-WHAxWFslYBHcjoCdQQM3oECG4QAA",
+					Avatar = "https://aniyuki.com/wp-content/uploads/2022/04/aniyuki-anime-couple-avatars-10.jpg",
 					Description = "trantuanthinh"
 				};
 				var user2 = new User
@@ -56,7 +56,7 @@ namespace uni_cap_pro_be
 					Password = hashedPassword,
 					Active_Status = ActiveStatus.ACTIVE,
 					User_Type = UserType.PRODUCER,
-					Avatar = "https://www.google.com/imgres?q=anime%20avatar%20couple&imgurl=https%3A%2F%2Faniyuki.com%2Fwp-content%2Fuploads%2F2022%2F04%2Faniyuki-anime-couple-avatars-10.jpg&imgrefurl=https%3A%2F%2Fxaydungso.vn%2Fbai-viet-khac%2Ftop-99-cute-couple-avatar-anime-dang-gay-bao-tren-mang-vi-cb.html&docid=0p_pgPowd2i3RM&tbnid=yCyDz7nFbzicHM&vet=12ahUKEwjb1OnC0-WHAxWFslYBHcjoCdQQM3oECG4QAA..i&w=682&h=682&hcb=2&ved=2ahUKEwjb1OnC0-WHAxWFslYBHcjoCdQQM3oECG4QAA",
+					Avatar = "https://aniyuki.com/wp-content/uploads/2022/04/aniyuki-anime-couple-avatars-10.jpg",
 					Description = "Regular user"
 				};
 				var user3 = new User

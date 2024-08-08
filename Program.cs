@@ -117,7 +117,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
+app.MapControllerRoute(
+	name: "default",
+	pattern: "api/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
