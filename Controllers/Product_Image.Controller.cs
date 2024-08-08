@@ -7,14 +7,14 @@ using uni_cap_pro_be.Models;
 
 namespace uni_cap_pro_be.Controllers
 {
-	[Route("/api/[controller]")]
+	[Route("/")]
 	[ApiController]
-	public class Product_ImageImageController(IProduct_ImageService product_ImageService, IMapper mapper) : Controller
+	public class Product_ImageController(IProduct_ImageService product_ImageService, IMapper mapper) : Controller
 	{
 		private readonly IProduct_ImageService _product_ImageService = product_ImageService;
 		private readonly IMapper _mapper = mapper;
 
-		[HttpGet]
+		[HttpGet("product_images")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult GetProductImageImages()
@@ -28,7 +28,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _items });
 		}
 
-		[HttpGet("{id:guid}")]
+		[HttpGet("product_image/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,7 +45,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _item });
 		}
 
-		[HttpPost]
+		[HttpPost("product_image")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -68,7 +68,7 @@ namespace uni_cap_pro_be.Controllers
 		}
 
 		[Authorize]
-		[HttpPatch("{id:guid}")]
+		[HttpPatch("product_image/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,7 +96,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { message = "Updated Successfully", data = _item });
 		}
 
-		[HttpDelete("{id:guid}")]
+		[HttpDelete("product_image/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]

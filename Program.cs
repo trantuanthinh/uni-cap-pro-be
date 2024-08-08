@@ -24,6 +24,12 @@ builder.Services.AddCors(options =>
 		});
 });
 
+builder.Services.AddControllers(options =>
+{
+	// Configure a global route prefix
+	options.Conventions.Add(new RoutePrefixConvention("/api"));
+});
+
 // Add Controllers with JSON options
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

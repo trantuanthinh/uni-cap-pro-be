@@ -4,19 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.DTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-	[Route("/api/[controller]")]
+	[Route("/")]
 	[ApiController]
-	public class ProductController(IProductService productService, IMapper mapper, SharedService sharedService) : Controller
+	public class ProductController(IProductService productService, IMapper mapper) : Controller
 	{
 		private readonly IProductService _productService = productService;
 		private readonly IMapper _mapper = mapper;
-		private readonly SharedService _sharedService = sharedService;
 
-		[HttpGet]
+		[HttpGet("products")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult GetProducts()
@@ -30,7 +28,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _items });
 		}
 
-		[HttpGet("{id:guid}")]
+		[HttpGet("product/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,7 +45,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _item });
 		}
 
-		[HttpPost]
+		[HttpPost("product")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -70,7 +68,7 @@ namespace uni_cap_pro_be.Controllers
 		}
 
 		[Authorize]
-		[HttpPatch("{id:guid}")]
+		[HttpPatch("product/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -98,7 +96,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { message = "Updated Successfully", data = _item });
 		}
 
-		[HttpDelete("{id:guid}")]
+		[HttpDelete("product/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]

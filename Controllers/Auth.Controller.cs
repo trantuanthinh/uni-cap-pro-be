@@ -6,14 +6,14 @@ using uni_cap_pro_be.Models;
 
 namespace uni_cap_pro_be.Controllers
 {
+	[Route("/")]
 	[ApiController]
-	[Route("api/[controller]")]
 	public class AuthController(IAuthService authService, JWTService jwtService) : Controller
 	{
 		private readonly IAuthService _authService = authService;
 		private readonly JWTService _jwtService = jwtService;
 
-		[HttpPost("signin")]
+		[HttpPost("auth/signin")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public ActionResult<User> Signin([FromBody] SignInDTO item)

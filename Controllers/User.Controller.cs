@@ -8,7 +8,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-	[Route("/api/[controller]")]
+	[Route("/")]
 	[ApiController]
 	public class UserController(IUserService userService, IMapper mapper, SharedService sharedService) : Controller
 	{
@@ -16,7 +16,7 @@ namespace uni_cap_pro_be.Controllers
 		private readonly IMapper _mapper = mapper;
 		private readonly SharedService _sharedService = sharedService;
 
-		[HttpGet]
+		[HttpGet("users")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult GetUsers()
@@ -30,7 +30,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _items });
 		}
 
-		[HttpGet("{id:guid}")]
+		[HttpGet("user/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,7 +47,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { data = _item });
 		}
 
-		[HttpPost]
+		[HttpPost("user")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -76,7 +76,7 @@ namespace uni_cap_pro_be.Controllers
 		}
 
 		[Authorize]
-		[HttpPatch("{id:guid}")]
+		[HttpPatch("user/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -104,7 +104,7 @@ namespace uni_cap_pro_be.Controllers
 			return StatusCode(200, new { message = "Updated Successfully", data = _item });
 		}
 
-		[HttpDelete("{id:guid}")]
+		[HttpDelete("user/{id:guid}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
