@@ -1,16 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using uni_cap_pro_be.Utils;
 
-namespace uni_cap_pro_be.Models
+namespace uni_cap_pro_be.DTO
 {
-	public class Product
+	public class ProductDTO
 	{
-		[Key]
-		public Guid Id { get; set; }
-
 		[Required]
 		public Guid CategoryId { get; set; }
-
 		[Required]
 		public Guid OwnerId { get; set; }
 		public DateTime Created_At { get; set; }

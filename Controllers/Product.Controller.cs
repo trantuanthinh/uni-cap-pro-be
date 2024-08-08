@@ -10,18 +10,18 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/api/[controller]")]
 	[ApiController]
-	public class UserController(IUserService userService, IMapper mapper, SharedService sharedService) : Controller
+	public class ProductController(IProductService productService, IMapper mapper, SharedService sharedService) : Controller
 	{
-		private readonly IUserService _userService = userService;
+		private readonly IProductService _productService = productService;
 		private readonly IMapper _mapper = mapper;
 		private readonly SharedService _sharedService = sharedService;
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult GetUsers()
+		public IActionResult GetProducts()
 		{
-			ICollection<User> _items = _userService.GetUsers();
+			ICollection<Product> _items = _productService.GetProducts();
 
 			if (!ModelState.IsValid)
 			{
@@ -34,14 +34,14 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult GetUser(Guid id)
+		public IActionResult GetProduct(Guid id)
 		{
 
-			User _item = _userService.GetUser(id);
+			Product _item = _productService.GetProduct(id);
 
 			if (_item == null)
 			{
-				return StatusCode(404, new { message = "User not found." });
+				return StatusCode(404, new { message = "Product not found." });
 			}
 
 			return StatusCode(200, new { data = _item });
@@ -52,24 +52,18 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult CreateUser([FromBody] UserDTO item)
+		public IActionResult CreateProduct([FromBody] ProductDTO item)
 		{
-			if (!_sharedService.IsValidGmail(item.Email))
-			{
-				ModelState.AddModelError("", "Invalid email address");
-				return StatusCode(400, ModelState);
-			}
-
 			if (!ModelState.IsValid)
 			{
 				return StatusCode(400, ModelState);
 			}
 
-			User _item = _mapper.Map<User>(item);
-			bool isCreated = _userService.CreateUser(_item);
+			Product _item = _mapper.Map<Product>(item);
+			bool isCreated = _productService.CreateProduct(_item);
 			if (!isCreated)
 			{
-				ModelState.AddModelError("", "Invalid. Something went wrong creating User.");
+				ModelState.AddModelError("", "Invalid. Something went wrong creating Product.");
 				return StatusCode(500, ModelState);
 			}
 			return StatusCode(200, new { message = "Created Successfully", data = _item });
@@ -80,9 +74,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult PatchUser(Guid id, [FromBody] UserDTO item)
+		public IActionResult PatchProduct(Guid id, [FromBody] ProductDTO item)
 		{
-			User _item = _userService.GetUser(id);
+			Product _item = _productService.GetProduct(id);
 
 			if (item == null || _item == null)
 			{
@@ -94,10 +88,10 @@ namespace uni_cap_pro_be.Controllers
 				return ValidationProblem(ModelState);
 			}
 
-			User patchItem = _mapper.Map<User>(item);
-			if (!_userService.UpdateUser(_item, patchItem))
+			Product patchItem = _mapper.Map<Product>(item);
+			if (!_productService.UpdateProduct(_item, patchItem))
 			{
-				ModelState.AddModelError("", "Invalid - Something went wrong updating the User");
+				ModelState.AddModelError("", "Invalid - Something went wrong updating the Product");
 				return StatusCode(500, ModelState);
 			}
 
@@ -108,20 +102,20 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult DeleteUser(Guid id)
+		public IActionResult DeleteProduct(Guid id)
 		{
-			User _item = _userService.GetUser(id);
+			Product _item = _productService.GetProduct(id);
 
 			if (_item == null)
 			{
-				return StatusCode(404, new { message = "User not found" });
+				return StatusCode(404, new { message = "Product not found" });
 			}
 
-			bool isDeleted = _userService.DeleteUser(_item);
+			bool isDeleted = _productService.DeleteProduct(_item);
 
 			if (!isDeleted)
 			{
-				return StatusCode(500, new { message = "An error occurred while deleting the User" });
+				return StatusCode(500, new { message = "An error occurred while deleting the Product" });
 			}
 
 			return StatusCode(202, new { message = "Deleted Successfully" });

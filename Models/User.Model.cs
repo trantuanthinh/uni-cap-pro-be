@@ -33,7 +33,5 @@ namespace uni_cap_pro_be.Models
 
 		public string? Avatar { get; set; }
 		public string? Description { get; set; }
-
-		public User() { }
 	}
 }

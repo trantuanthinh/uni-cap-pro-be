@@ -17,7 +17,7 @@ namespace uni_cap_pro_be.Services
 
 		public User GetUser(Guid id)
 		{
-			User _item = _dataContext.Users.SingleOrDefault(user => user.Id == id);
+			User _item = _dataContext.Users.SingleOrDefault(item => item.Id == id);
 			return _item;
 		}
 

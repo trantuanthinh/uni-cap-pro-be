@@ -11,9 +11,15 @@ namespace uni_cap_pro_be.AutoMapperHelp
 			CreateMap<User, UserDTO>();
 			CreateMap<UserDTO, User>();
 
-			CreateMap<User, SignInDTO>()
-				.ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-				.ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
+			CreateMap<Product, ProductDTO>();
+			CreateMap<ProductDTO, Product>();
+
+			CreateMap<Product_Category, Product_CategoryDTO>();
+			CreateMap<Product_CategoryDTO, Product_Category>();
+
+			CreateMap<Product_Image, Product_ImageDTO>();
+			CreateMap<Product_ImageDTO, Product_Image>();
+
 		}
 
 	}

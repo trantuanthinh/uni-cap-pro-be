@@ -35,6 +35,7 @@ builder.Services.AddControllers()
 		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 	});
 
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -53,15 +54,7 @@ builder.Services.AddAuthentication(options =>
 		ValidateIssuerSigningKey = true
 	};
 });
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddAuthorization();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddSingleton<JWTService>();
-builder.Services.AddSingleton<SharedService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -78,6 +71,20 @@ builder.Services.AddDbContext<DataContext>(options =>
 	}
 	options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.AddSingleton<JWTService>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddSingleton<SharedService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
+builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
