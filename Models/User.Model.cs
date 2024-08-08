@@ -23,7 +23,7 @@ namespace uni_cap_pro_be.Models
 		public required string Password { get; set; }
 
 		[Required]
-		public required int PhoneNumber { get; set; }
+		public required string PhoneNumber { get; set; }
 
 		[Required]
 		public required ActiveStatus Active_Status { get; set; }

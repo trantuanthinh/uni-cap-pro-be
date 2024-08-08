@@ -37,7 +37,7 @@ namespace uni_cap_pro_be.Services
 			return usernameType switch
 			{
 				UsernameType.Email => GetUserByEmail(username),
-				UsernameType.PhoneNumber => GetUserByPhoneNumber(int.Parse(username)),
+				UsernameType.PhoneNumber => GetUserByPhoneNumber(username),
 				UsernameType.UserName => GetUserByUserName(username),
 				_ => throw new ArgumentException("Invalid username type"),
 			};
@@ -49,7 +49,7 @@ namespace uni_cap_pro_be.Services
 			return _user;
 		}
 
-		public User GetUserByPhoneNumber(int phoneNumber)
+		public User GetUserByPhoneNumber(string phoneNumber)
 		{
 			User _user = _dataContext.Users.Where(item => item.PhoneNumber == phoneNumber).FirstOrDefault();
 			return _user;

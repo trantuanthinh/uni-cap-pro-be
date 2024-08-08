@@ -145,8 +145,9 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("User_Type")
                         .IsRequired()

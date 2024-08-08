@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240808140145_InitialMigration1.0")]
+    [Migration("20240808152530_InitialMigration1.0")]
     partial class InitialMigration10
     {
         /// <inheritdoc />
@@ -148,8 +148,9 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("User_Type")
                         .IsRequired()

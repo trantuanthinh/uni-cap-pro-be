@@ -8,7 +8,7 @@ namespace uni_cap_pro_be.Interfaces
 	{
 		User AuthenticatedUser(SignInDTO item);
 		User GetUserByEmail(string email);
-		User GetUserByPhoneNumber(int phoneNumber);
+		User GetUserByPhoneNumber(string phoneNumber);
 		User GetUserByUserName(string userName);
 		UsernameType ChooseUsernameType(string username);
 	}

@@ -12,7 +12,7 @@ namespace uni_cap_pro_be.Models
 		public Guid CategoryId { get; set; }
 
 		[Required]
-		public Guid OwnerId { get; set; }
+		public Guid OwnerId { get; set; } // the owner of the product
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
 

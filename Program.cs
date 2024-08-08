@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using uni_cap_pro_be;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Middleware;
@@ -23,17 +24,12 @@ builder.Services.AddCors(options =>
 		});
 });
 
-builder.Services.AddControllers();
-builder.Services.AddControllers().AddJsonOptions(x =>
+// Add Controllers with JSON options
+builder.Services.AddControllers().AddJsonOptions(options =>
 {
-	x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-	x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+	options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+	options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 });
-builder.Services.AddControllers()
-	.AddJsonOptions(options =>
-	{
-		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
-	});
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
@@ -54,7 +50,6 @@ builder.Services.AddAuthentication(options =>
 		ValidateIssuerSigningKey = true
 	};
 });
-
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -85,19 +80,26 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
 builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
 
+// Register the DatabaseSeeder service for seeding
+builder.Services.AddScoped<DatabaseSeeder>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
+//////////--//////////
+//////////--//////////
 
 var app = builder.Build();
 
+if (args.Length == 1 && args[0].ToLower().Equals("seeddata"))
+{
+	SeedData(app);
+}
+
 // Configure the HTTP request pipeline.
 app.UseCors("AllowAll");
+
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
@@ -112,3 +114,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//////////--//////////
+//////////--//////////
+
+static void SeedData(IHost app)
+{
+	using var scope = app.Services.CreateScope();
+	var service = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+	service.SeedDataContext();
+}
