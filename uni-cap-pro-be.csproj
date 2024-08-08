@@ -7,7 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <RootNamespace>uni_cap_pro_be</RootNamespace>
     <UserSecretsId>7178c444-92d3-48aa-9ce8-ad9be720e493</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
