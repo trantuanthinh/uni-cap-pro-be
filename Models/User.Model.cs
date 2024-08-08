@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
 	public class User
 	{
+		[Key]
 		public Guid Id { get; set; }
-
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
 
@@ -25,10 +26,10 @@ namespace uni_cap_pro_be.Models
 		public required int PhoneNumber { get; set; }
 
 		[Required]
-		public required string Active_Status { get; set; }
+		public required ActiveStatus Active_Status { get; set; }
 
 		[Required]
-		public required string User_Type { get; set; }
+		public required UserType User_Type { get; set; }
 
 		public string? Avatar { get; set; }
 		public string? Description { get; set; }
