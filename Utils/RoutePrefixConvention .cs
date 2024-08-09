@@ -2,14 +2,9 @@
 
 namespace uni_cap_pro_be.Utils
 {
-	public class RoutePrefixConvention : IControllerModelConvention
+	public class RoutePrefixConvention(string prefix) : IControllerModelConvention
 	{
-		private readonly string _prefix;
-
-		public RoutePrefixConvention(string prefix)
-		{
-			_prefix = prefix;
-		}
+		private readonly string _prefix = prefix;
 
 		public void Apply(ControllerModel controller)
 		{
