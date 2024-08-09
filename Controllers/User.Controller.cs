@@ -89,8 +89,7 @@ namespace uni_cap_pro_be.Controllers
             bool isCreated = _userService.CreateUser(_item);
             if (!isCreated)
             {
-                ModelState.AddModelError("", "Invalid. Something went wrong creating User.");
-                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
                 return StatusCode(500, failedMessage);
             }
 
@@ -133,6 +132,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
+        [Authorize]
         [HttpDelete("user/{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
