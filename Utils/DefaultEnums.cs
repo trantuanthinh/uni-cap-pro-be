@@ -1,27 +1,28 @@
 ﻿namespace uni_cap_pro_be.Utils
 {
-	public enum UsernameType
-	{
-		Email,
-		PhoneNumber,
-		UserName
-	}
-	public enum UserType
-	{
-		COMPANY,
-		PRODUCER
-	}
+    public enum UsernameType
+    {
+        Email,
+        PhoneNumber,
+        UserName
+    }
 
-	public enum ActiveStatus
-	{
-		ACTIVE,
-		INACTIVE
-	}
+    public enum UserType
+    {
+        COMPANY,
+        PRODUCER
+    }
 
-	public enum DeliveryStatus
-	{
-		PENDING,
-		DELIVERING,
-		DELIVERED
-	}
+    public enum ActiveStatus
+    {
+        ACTIVE,
+        INACTIVE
+    }
+
+    public enum DeliveryStatus
+    {
+        PENDING,
+        DELIVERING,
+        DELIVERED
+    }
 }
