@@ -28,18 +28,18 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetUsers()
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             ICollection<User> _items = _userService.GetUsers();
 
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _items
-            );
-            return StatusCode(200, responseMessage);
+
+            var okMessage = _api_Response.OkMessage(methodName, _items);
+            return StatusCode(200, okMessage);
         }
 
         [HttpGet("user/{id:guid}")]
@@ -48,19 +48,18 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUser(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             User _item = _userService.GetUser(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "User not found." });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpPost("user")]
@@ -70,31 +69,33 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateUser([FromBody] UserDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             if (!_sharedService.IsValidGmail(item.Email))
             {
                 ModelState.AddModelError("", "Invalid email address");
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
 
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
 
             User _item = _mapper.Map<User>(item);
+
             bool isCreated = _userService.CreateUser(_item);
             if (!isCreated)
             {
                 ModelState.AddModelError("", "Invalid. Something went wrong creating User.");
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [Authorize]
@@ -102,13 +103,17 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult PatchUser(Guid id, [FromBody] UserDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             User _item = _userService.GetUser(id);
 
             if (item == null || _item == null)
             {
-                return StatusCode(404, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(404, failedMessage);
             }
 
             if (!TryValidateModel(_item))
@@ -120,15 +125,12 @@ namespace uni_cap_pro_be.Controllers
             if (!_userService.UpdateUser(_item, patchItem))
             {
                 ModelState.AddModelError("", "Invalid - Something went wrong updating the User");
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage($"{methodName} Successfully", _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpDelete("user/{id:guid}")]
@@ -137,29 +139,25 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteUser(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             User _item = _userService.GetUser(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "User not found" });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
             bool isDeleted = _userService.DeleteUser(_item);
-
             if (!isDeleted)
             {
-                return StatusCode(
-                    500,
-                    new { message = "An error occurred while deleting the User" }
-                );
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
     }
 }

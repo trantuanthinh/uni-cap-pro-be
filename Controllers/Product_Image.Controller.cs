@@ -26,19 +26,18 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetProductImageImages()
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             ICollection<Product_Image> _items = _product_ImageService.GetProduct_Images();
 
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(400, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _items
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _items);
+            return StatusCode(200, okMessage);
         }
 
         [HttpGet("product_image/{id:guid}")]
@@ -47,50 +46,44 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetProductImage(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product_Image _item = _product_ImageService.GetProduct_Image(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "Product_Image not found." });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpPost("product_image")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateProduct_Image([FromBody] Product_ImageDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
 
             Product_Image _item = _mapper.Map<Product_Image>(item);
             bool isCreated = _product_ImageService.CreateProduct_Image(_item);
             if (!isCreated)
             {
-                ModelState.AddModelError(
-                    "",
-                    "Invalid. Something went wrong creating Product_Image."
-                );
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [Authorize]
@@ -100,11 +93,14 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult PatchProduct_Image(Guid id, [FromBody] Product_ImageDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product_Image _item = _product_ImageService.GetProduct_Image(id);
 
             if (item == null || _item == null)
             {
-                return StatusCode(404, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
             if (!TryValidateModel(_item))
@@ -115,19 +111,12 @@ namespace uni_cap_pro_be.Controllers
             Product_Image patchItem = _mapper.Map<Product_Image>(item);
             if (!_product_ImageService.UpdateProduct_Image(_item, patchItem))
             {
-                ModelState.AddModelError(
-                    "",
-                    "Invalid - Something went wrong updating the Product_Image"
-                );
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpDelete("product_image/{id:guid}")]
@@ -136,29 +125,26 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteProduct_Image(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product_Image _item = _product_ImageService.GetProduct_Image(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "Product_Image not found" });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
             bool isDeleted = _product_ImageService.DeleteProduct_Image(_item);
 
             if (!isDeleted)
             {
-                return StatusCode(
-                    500,
-                    new { message = "An error occurred while deleting the Product_Image" }
-                );
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
     }
 }

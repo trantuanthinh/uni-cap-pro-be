@@ -26,19 +26,18 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetProducts()
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             ICollection<Product> _items = _productService.GetProducts();
 
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _items
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _items);
+            return StatusCode(200, okMessage);
         }
 
         [HttpGet("product/{id:guid}")]
@@ -47,19 +46,18 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetProduct(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product _item = _productService.GetProduct(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "Product not found." });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpPost("product")]
@@ -69,25 +67,24 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateProduct([FromBody] ProductDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             if (!ModelState.IsValid)
             {
-                return StatusCode(400, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+                return StatusCode(400, failedMessage);
             }
 
             Product _item = _mapper.Map<Product>(item);
             bool isCreated = _productService.CreateProduct(_item);
             if (!isCreated)
             {
-                ModelState.AddModelError("", "Invalid. Something went wrong creating Product.");
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [Authorize]
@@ -95,13 +92,17 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult PatchProduct(Guid id, [FromBody] ProductDTO item)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product _item = _productService.GetProduct(id);
 
             if (item == null || _item == null)
             {
-                return StatusCode(404, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
             if (!TryValidateModel(_item))
@@ -112,16 +113,12 @@ namespace uni_cap_pro_be.Controllers
             Product patchItem = _mapper.Map<Product>(item);
             if (!_productService.UpdateProduct(_item, patchItem))
             {
-                ModelState.AddModelError("", "Invalid - Something went wrong updating the Product");
-                return StatusCode(500, ModelState);
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
 
         [HttpDelete("product/{id:guid}")]
@@ -130,29 +127,26 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteProduct(Guid id)
         {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+
             Product _item = _productService.GetProduct(id);
 
             if (_item == null)
             {
-                return StatusCode(404, new { message = "Product not found" });
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(404, failedMessage);
             }
 
             bool isDeleted = _productService.DeleteProduct(_item);
 
             if (!isDeleted)
             {
-                return StatusCode(
-                    500,
-                    new { message = "An error occurred while deleting the Product" }
-                );
+                var failedMessage = _api_Response.FailedMessage(methodName);
+                return StatusCode(500, failedMessage);
             }
 
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            var responseMessage = _api_Response.ResponseMessage(
-                $"{methodName} Successfully",
-                _item
-            );
-            return StatusCode(200, responseMessage);
+            var okMessage = _api_Response.OkMessage(methodName, _item);
+            return StatusCode(200, okMessage);
         }
     }
 }
