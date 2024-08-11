@@ -9,9 +9,9 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-    [Route("/")]
+    [Route("/[controller]")]
     [ApiController]
-    public class UserController(
+    public class UsersController(
         IUserService userService,
         IMapper mapper,
         SharedService sharedService,
@@ -23,7 +23,7 @@ namespace uni_cap_pro_be.Controllers
         private readonly SharedService _sharedService = sharedService;
         private readonly API_ResponseConvention _api_Response = api_Response;
 
-        [HttpGet("users")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetUsers()
@@ -42,7 +42,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpGet("user/{id:guid}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,7 +62,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("user")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -98,7 +98,7 @@ namespace uni_cap_pro_be.Controllers
         }
 
         [Authorize]
-        [HttpPatch("user/{id:guid}")]
+        [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -133,7 +133,7 @@ namespace uni_cap_pro_be.Controllers
         }
 
         [Authorize]
-        [HttpDelete("user/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

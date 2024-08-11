@@ -24,11 +24,11 @@ builder.Services.AddCors(options =>
     );
 });
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddControllers(options =>
-{
-    // Configure a global route prefix
-    options.Conventions.Add(new RoutePrefixConvention("/api"));
-});
+    options.Conventions.Add(new RoutePrefixConvention("/api"))
+);
 
 // Add Controllers with JSON options
 builder
@@ -94,15 +94,11 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
 builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
 
-// Register the DatabaseSeeder service for seeding
 builder.Services.AddScoped<DatabaseSeeder>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//////////--//////////
-//////////--//////////
 
 var app = builder.Build();
 
@@ -125,13 +121,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.MapControllers();
 app.MapControllerRoute(name: "default", pattern: "api/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-//////////--//////////
-//////////--//////////
 
 static void SeedData(IHost app)
 {

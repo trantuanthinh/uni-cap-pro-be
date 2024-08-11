@@ -9,9 +9,9 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-    [Route("/")]
+    [Route("/[controller]")]
     [ApiController]
-    public class Product_ImageController(
+    public class Product_ImagesController(
         IProduct_ImageService product_ImageService,
         IMapper mapper,
         API_ResponseConvention api_Response
@@ -21,7 +21,7 @@ namespace uni_cap_pro_be.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly API_ResponseConvention _api_Response = api_Response;
 
-        [HttpGet("product_images")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetProductImageImages()
@@ -40,7 +40,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpGet("product_image/{id:guid}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -60,7 +60,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("product_image")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -87,7 +87,7 @@ namespace uni_cap_pro_be.Controllers
         }
 
         [Authorize]
-        [HttpPatch("product_image/{id:guid}")]
+        [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -119,7 +119,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpDelete("product_image/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

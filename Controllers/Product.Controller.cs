@@ -9,9 +9,9 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-    [Route("/")]
+    [Route("/[controller]")]
     [ApiController]
-    public class ProductController(
+    public class ProductsController(
         IProductService productService,
         IMapper mapper,
         API_ResponseConvention api_Response
@@ -21,7 +21,7 @@ namespace uni_cap_pro_be.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly API_ResponseConvention _api_Response = api_Response;
 
-        [HttpGet("products")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetProducts()
@@ -40,7 +40,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpGet("product/{id:guid}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -60,7 +60,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("product")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -88,7 +88,7 @@ namespace uni_cap_pro_be.Controllers
         }
 
         [Authorize]
-        [HttpPatch("product/{id:guid}")]
+        [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -121,7 +121,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpDelete("product/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

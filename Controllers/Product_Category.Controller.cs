@@ -9,9 +9,9 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-    [Route("/")]
+    [Route("/[controller]")]
     [ApiController]
-    public class ProductCategoryController(
+    public class Product_CategoriesController(
         IProduct_CategoryService product_CategoryService,
         IMapper mapper,
         API_ResponseConvention api_Response
@@ -22,7 +22,7 @@ namespace uni_cap_pro_be.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly API_ResponseConvention _api_Response = api_Response;
 
-        [HttpGet("product_categories")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetProductCategories()
@@ -41,7 +41,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpGet("product_category/{id:guid}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -61,7 +61,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("product_category")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -89,7 +89,7 @@ namespace uni_cap_pro_be.Controllers
         }
 
         [Authorize]
-        [HttpPatch("product_category/{id:guid}")]
+        [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -122,7 +122,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpDelete("product_category/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
