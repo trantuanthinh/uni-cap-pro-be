@@ -15,7 +15,7 @@ namespace uni_cap_pro_be.Controllers
         IProduct_ImageService product_ImageService,
         IMapper mapper,
         API_ResponseConvention api_Response
-    ) : Controller
+    ) : ControllerBase
     {
         private readonly IProduct_ImageService _product_ImageService = product_ImageService;
         private readonly IMapper _mapper = mapper;

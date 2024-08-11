@@ -8,6 +8,7 @@ namespace uni_cap_pro_be.Data
 	public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 	{
 		public DbSet<User> Users { get; set; }
+
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Product_Image> Product_Images { get; set; }
 		public DbSet<Product_Category> Product_Categories { get; set; }
@@ -15,7 +16,6 @@ namespace uni_cap_pro_be.Data
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-
 			var active_status_converter = new EnumToStringConverter<ActiveStatus>();
 			var user_type_converter = new EnumToStringConverter<UserType>();
 			var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
@@ -28,12 +28,21 @@ namespace uni_cap_pro_be.Data
 				entity.HasIndex(e => e.Email).IsUnique();
 				entity.HasIndex(e => e.PhoneNumber).IsUnique();
 			});
-			modelBuilder.Entity<User>().Property(e => e.Active_Status).HasConversion(active_status_converter);
-			modelBuilder.Entity<User>().Property(e => e.User_Type).HasConversion(user_type_converter);
+			modelBuilder
+				.Entity<User>()
+				.Property(e => e.Active_Status)
+				.HasConversion(active_status_converter);
+			modelBuilder
+				.Entity<User>()
+				.Property(e => e.User_Type)
+				.HasConversion(user_type_converter);
 
 			// product table
 			modelBuilder.Entity<Product>().HasKey(entity => entity.Id);
-			modelBuilder.Entity<Product>().Property(e => e.Active_Status).HasConversion(active_status_converter);
+			modelBuilder
+				.Entity<Product>()
+				.Property(e => e.Active_Status)
+				.HasConversion(active_status_converter);
 
 			// product image table
 			modelBuilder.Entity<Product_Image>().HasKey(entity => entity.Id);
@@ -44,8 +53,36 @@ namespace uni_cap_pro_be.Data
 			{
 				entity.HasIndex(e => e.Name).IsUnique();
 			});
-			modelBuilder.Entity<Product_Category>().Property(e => e.Active_Status).HasConversion(active_status_converter);
+			modelBuilder
+				.Entity<Product_Category>()
+				.Property(e => e.Active_Status)
+				.HasConversion(active_status_converter);
+		}
 
+		public void CreateProductView()
+		{
+			var query =
+				@"
+                CREATE VIEW Product_View AS
+                SELECT 
+                    p.Id AS Id, 
+                    p.Description AS Description, 
+                    p.Price AS Price, 
+                    p.Total_Rating_Value AS Total_Rating_Value, 
+                    p.Total_Rating_Quantity AS Total_Rating_Quantity, 
+                    ps.Name AS Category, 
+                    pi.Name AS Image, 
+                    u.Name AS Owner
+                FROM 
+                    Products AS p
+                INNER JOIN 
+                    Product_Categories AS ps ON p.CategoryId = ps.Id
+                INNER JOIN 
+                    Product_Images AS pi ON p.Id = pi.ProductId
+                INNER JOIN 
+                    Users AS u ON p.OwnerId = u.Id;
+            ";
+			Database.ExecuteSqlRaw(query);
 		}
 	}
 }

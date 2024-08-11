@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240811115931_InitialMigrations1.0")]
+    [Migration("20240811141244_InitialMigrations1.0")]
     partial class InitialMigrations10
     {
         /// <inheritdoc />
