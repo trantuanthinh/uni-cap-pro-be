@@ -1,526 +1,405 @@
-﻿using uni_cap_pro_be.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be
 {
-	public class DatabaseSeeder(DataContext dataContext)
-	{
-		private readonly DataContext _dataContext = dataContext;
+    public class DatabaseSeeder
+    {
+        private readonly DataContext _dataContext;
 
-		public void SeedDataContext()
-		{
-			try
-			{
-				// Ensure the database is created
-				_dataContext.Database.EnsureCreated();
+        public DatabaseSeeder(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
 
-				// Seed users
-				var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
-				var user_company_1 = new User
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Username = "company1",
-					Name = "Company One",
-					Email = "company1@gmail.com",
-					Password = hashedPassword,
-					PhoneNumber = "1234567890",
-					Active_Status = ActiveStatus.ACTIVE,
-					User_Type = UserType.COMPANY,
-					Avatar = null,
-					Description = "First company"
-				};
+        public void SeedDataContext()
+        {
+            try
+            {
+                // Ensure the database is created
+                _dataContext.Database.EnsureCreated();
 
-				var user_company_2 = new User
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Username = "company2",
-					Name = "Company Two",
-					Email = "company2@gmail.com",
-					Password = hashedPassword,
-					PhoneNumber = "0987654321",
-					Active_Status = ActiveStatus.ACTIVE,
-					User_Type = UserType.COMPANY,
-					Avatar = null,
-					Description = "Second company"
-				};
+                // Seed users
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
 
-				var user_producer_1 = new User
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Username = "producer1",
-					Name = "Producer One",
-					Email = "producer1@gmail.com",
-					Password = hashedPassword,
-					PhoneNumber = "1122334455",
-					Active_Status = ActiveStatus.ACTIVE,
-					User_Type = UserType.PRODUCER,
-					Avatar = null,
-					Description = "First producer"
-				};
+                var users = new List<(
+                    string Username,
+                    string Name,
+                    string Email,
+                    string PhoneNumber,
+                    UserType UserType,
+                    string Description
+                )>
+                {
+                    (
+                        "company1",
+                        "Company One",
+                        "company1@gmail.com",
+                        "1234567890",
+                        UserType.COMPANY,
+                        "First company"
+                    ),
+                    (
+                        "company2",
+                        "Company Two",
+                        "company2@gmail.com",
+                        "0987654321",
+                        UserType.COMPANY,
+                        "Second company"
+                    ),
+                    (
+                        "producer1",
+                        "Producer One",
+                        "producer1@gmail.com",
+                        "1122334455",
+                        UserType.PRODUCER,
+                        "First producer"
+                    ),
+                    (
+                        "producer2",
+                        "Producer Two",
+                        "producer2@gmail.com",
+                        "5566778899",
+                        UserType.PRODUCER,
+                        "Second producer"
+                    )
+                };
 
-				var user_producer_2 = new User
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Username = "producer2",
-					Name = "Producer Two",
-					Email = "producer2@gmail.com",
-					Password = hashedPassword,
-					PhoneNumber = "5566778899",
-					Active_Status = ActiveStatus.ACTIVE,
-					User_Type = UserType.PRODUCER,
-					Avatar = null,
-					Description = "Second producer"
-				};
+                var userList = users
+                    .Select(user => new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Username = user.Username,
+                        Name = user.Name,
+                        Email = user.Email,
+                        Password = hashedPassword,
+                        PhoneNumber = user.PhoneNumber,
+                        Active_Status = ActiveStatus.ACTIVE,
+                        User_Type = user.UserType,
+                        Avatar = null,
+                        Description = user.Description
+                    })
+                    .ToList();
 
-				var users = new List<User>
-				{
-					user_company_1,
-					user_company_2,
-					user_producer_1,
-					user_producer_2
-				};
+                // Seed product categories
+                var productCategories = new List<string>
+                {
+                    "Fruits",
+                    "Vegetables",
+                    "Grains",
+                    "Dairy"
+                };
 
-				// Seed product categories
-				var product_category_1 = new Product_Category
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Fruits",
-					Active_Status = ActiveStatus.ACTIVE
-				};
+                var productCategoryList = productCategories
+                    .Select(category => new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = category,
+                        Active_Status = ActiveStatus.ACTIVE
+                    })
+                    .ToList();
 
-				var product_category_2 = new Product_Category
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Vegetables",
-					Active_Status = ActiveStatus.ACTIVE
-				};
+                // Seed products for each producer
+                var products = new List<(
+                    string Name,
+                    Guid CategoryId,
+                    Guid OwnerId,
+                    double Price,
+                    int TotalRatingValue,
+                    int TotalRatingQuantity,
+                    string Description
+                )>
+                {
+                    // Producer 1's products
+                    (
+                        "Organic Apples",
+                        productCategoryList[0].Id,
+                        userList[2].Id,
+                        30000,
+                        120,
+                        30,
+                        "Fresh organic apples, rich in flavor and nutrients."
+                    ),
+                    (
+                        "Ripe Bananas",
+                        productCategoryList[0].Id,
+                        userList[2].Id,
+                        20000,
+                        80,
+                        20,
+                        "Sweet and ripe bananas, perfect for a healthy snack."
+                    ),
+                    (
+                        "Organic Carrots",
+                        productCategoryList[1].Id,
+                        userList[2].Id,
+                        15000,
+                        90,
+                        20,
+                        "Crisp and fresh organic carrots, ideal for salads and snacking."
+                    ),
+                    (
+                        "Fresh Broccoli",
+                        productCategoryList[1].Id,
+                        userList[2].Id,
+                        18000,
+                        70,
+                        20,
+                        "Nutritious and fresh broccoli, perfect for a healthy diet."
+                    ),
+                    (
+                        "Whole Wheat Flour",
+                        productCategoryList[2].Id,
+                        userList[2].Id,
+                        12000,
+                        85,
+                        25,
+                        "High-quality whole wheat flour for baking and cooking."
+                    ),
+                    (
+                        "Brown Rice",
+                        productCategoryList[2].Id,
+                        userList[2].Id,
+                        10000,
+                        60,
+                        18,
+                        "Nutritious brown rice, ideal for a variety of dishes."
+                    ),
+                    (
+                        "Organic Strawberries",
+                        productCategoryList[0].Id,
+                        userList[2].Id,
+                        37000,
+                        110,
+                        22,
+                        "Juicy and sweet organic strawberries, perfect for desserts."
+                    ),
+                    (
+                        "Sweet Potatoes",
+                        productCategoryList[1].Id,
+                        userList[2].Id,
+                        24000,
+                        65,
+                        14,
+                        "Delicious sweet potatoes, great for baking or roasting."
+                    ),
+                    (
+                        "Bell Peppers",
+                        productCategoryList[1].Id,
+                        userList[2].Id,
+                        27500,
+                        65,
+                        13,
+                        "Fresh red bell peppers, ideal for salads and stir-fries."
+                    ),
+                    (
+                        "Quinoa",
+                        productCategoryList[2].Id,
+                        userList[2].Id,
+                        31000,
+                        80,
+                        16,
+                        "High-protein quinoa, perfect as a side dish or main course."
+                    ),
+                    (
+                        "Oats",
+                        productCategoryList[2].Id,
+                        userList[2].Id,
+                        18000,
+                        70,
+                        17,
+                        "Healthy oats for breakfast or baking."
+                    ),
+                    (
+                        "Pineapples",
+                        productCategoryList[0].Id,
+                        userList[2].Id,
+                        36000,
+                        95,
+                        19,
+                        "Tropical pineapples, sweet and juicy."
+                    ),
+                    (
+                        "Zucchini",
+                        productCategoryList[1].Id,
+                        userList[2].Id,
+                        15000,
+                        50,
+                        10,
+                        "Fresh zucchini, versatile for various dishes."
+                    ),
+                    (
+                        "Fresh Milk",
+                        productCategoryList[3].Id,
+                        userList[2].Id,
+                        22000,
+                        90,
+                        20,
+                        "Pure and fresh milk, sourced from local dairy farms."
+                    ),
+                    // Producer 2's products
+                    (
+                        "Baby Carrots",
+                        productCategoryList[1].Id,
+                        userList[3].Id,
+                        20000,
+                        50,
+                        11,
+                        "Sweet and tender baby carrots."
+                    ),
+                    (
+                        "Green Beans",
+                        productCategoryList[1].Id,
+                        userList[3].Id,
+                        22000,
+                        55,
+                        13,
+                        "Fresh green beans, ideal for stir-fries and sides."
+                    ),
+                    (
+                        "Millet",
+                        productCategoryList[2].Id,
+                        userList[3].Id,
+                        28000,
+                        50,
+                        14,
+                        "Nutritious millet, great for various recipes."
+                    ),
+                    (
+                        "Buckwheat",
+                        productCategoryList[2].Id,
+                        userList[3].Id,
+                        34000,
+                        0,
+                        0,
+                        "Healthy buckwheat, a great addition to your pantry."
+                    ),
+                    (
+                        "Mangoes",
+                        productCategoryList[0].Id,
+                        userList[3].Id,
+                        40000,
+                        85,
+                        22,
+                        "Sweet and juicy mangoes, perfect for smoothies and desserts."
+                    ),
+                    (
+                        "Papayas",
+                        productCategoryList[0].Id,
+                        userList[3].Id,
+                        32000,
+                        75,
+                        18,
+                        "Fresh papayas, great for fruit salads and juices."
+                    ),
+                    (
+                        "Cherry Tomatoes",
+                        productCategoryList[1].Id,
+                        userList[3].Id,
+                        25000,
+                        70,
+                        16,
+                        "Sweet cherry tomatoes, perfect for salads and snacks."
+                    ),
+                    (
+                        "Cheddar Cheese",
+                        productCategoryList[3].Id,
+                        userList[3].Id,
+                        50000,
+                        110,
+                        25,
+                        "Aged cheddar cheese with a rich, creamy flavor."
+                    )
+                };
 
-				var product_category_3 = new Product_Category
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Grains",
-					Active_Status = ActiveStatus.ACTIVE
-				};
+                var productList = products
+                    .Select(product => new Product
+                    {
+                        Id = Guid.NewGuid(),
+                        CategoryId = product.CategoryId,
+                        OwnerId = product.OwnerId,
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = product.Name,
+                        Price = product.Price,
+                        Active_Status = ActiveStatus.ACTIVE,
+                        Total_Rating_Value = product.TotalRatingValue,
+                        Total_Rating_Quantity = product.TotalRatingQuantity,
+                        Description = product.Description
+                    })
+                    .ToList();
 
-				var product_category_4 = new Product_Category
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Dairy",
-					Active_Status = ActiveStatus.ACTIVE
-				};
-				var productCategories = new List<Product_Category>
-				{
-					product_category_1,
-					product_category_2,
-					product_category_3,
-					product_category_4
-				};
+                // Seed product images
+                var productImages = new List<(string Name, Guid ProductId)>
+                {
+                    ("Organic Apples Image", productList[0].Id),
+                    ("Ripe Bananas Image", productList[1].Id),
+                    ("Organic Carrots Image", productList[2].Id),
+                    ("Fresh Broccoli Image", productList[3].Id),
+                    ("Whole Wheat Flour Image", productList[4].Id),
+                    ("Brown Rice Image", productList[5].Id),
+                    ("Organic Strawberries Image", productList[6].Id),
+                    ("Sweet Potatoes Image", productList[7].Id),
+                    ("Bell Peppers Image", productList[8].Id),
+                    ("Quinoa Image", productList[9].Id),
+                    ("Oats Image", productList[10].Id),
+                    ("Pineapples Image", productList[11].Id),
+                    ("Zucchini Image", productList[12].Id),
+                    ("Fresh Milk Image", productList[13].Id),
+                    ("Baby Carrots Image", productList[14].Id),
+                    ("Green Beans Image", productList[15].Id),
+                    ("Millet Image", productList[16].Id),
+                    ("Buckwheat Image", productList[17].Id),
+                    ("Mangoes Image", productList[18].Id),
+                    ("Papayas Image", productList[19].Id),
+                    ("Cherry Tomatoes Image", productList[20].Id),
+                    ("Cheddar Cheese Image", productList[21].Id)
+                };
 
-				// Seed products for each producer
-				// Producer 1's products
-				var product1 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Organic Apples",
-					Price = 30000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 120,
-					Total_Rating_Quantity = 30,
-					Description = "Fresh organic apples, rich in flavor and nutrients."
-				};
+                var productImageList = productImages
+                    .Select(image => new Product_Image
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = image.Name,
+                        Created_At = DateTime.UtcNow,
+                        ProductId = image.ProductId
+                    })
+                    .ToList();
 
-				var product2 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Ripe Bananas",
-					Price = 20000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 80,
-					Total_Rating_Quantity = 20,
-					Description = "Sweet and ripe bananas, perfect for a healthy snack."
-				};
+                // Check and seed data
+                if (!_dataContext.Users.Any())
+                {
+                    _dataContext.Users.AddRange(userList);
+                }
+                if (!_dataContext.Product_Categories.Any())
+                {
+                    _dataContext.Product_Categories.AddRange(productCategoryList);
+                }
+                if (!_dataContext.Products.Any())
+                {
+                    _dataContext.Products.AddRange(productList);
+                }
+                if (!_dataContext.Product_Images.Any())
+                {
+                    _dataContext.Product_Images.AddRange(productImageList);
+                }
 
-				var product3 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Organic Carrots",
-					Price = 15000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 90,
-					Total_Rating_Quantity = 20,
-					Description = "Crisp and fresh organic carrots, ideal for salads and snacking."
-				};
-
-				var product4 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Fresh Broccoli",
-					Price = 18000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 70,
-					Total_Rating_Quantity = 20,
-					Description = "Nutritious and fresh broccoli, perfect for a healthy diet."
-				};
-
-				var product5 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Whole Wheat Flour",
-					Price = 12000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 85,
-					Total_Rating_Quantity = 25,
-					Description = "High-quality whole wheat flour for baking and cooking."
-				};
-
-				var product6 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Brown Rice",
-					Price = 10000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 60,
-					Total_Rating_Quantity = 18,
-					Description = "Nutritious brown rice, ideal for a variety of dishes."
-				};
-
-				var product7 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Organic Strawberries",
-					Price = 37000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 110,
-					Total_Rating_Quantity = 22,
-					Description = "Juicy and sweet organic strawberries, perfect for desserts."
-				};
-
-				var product8 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Sweet Potatoes",
-					Price = 24000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 65,
-					Total_Rating_Quantity = 14,
-					Description = "Delicious sweet potatoes, great for baking or roasting."
-				};
-
-				var product9 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Bell Peppers",
-					Price = 27500,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 65,
-					Total_Rating_Quantity = 13,
-					Description = "Fresh red bell peppers, ideal for salads and stir-fries."
-				};
-
-				var product10 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Quinoa",
-					Price = 31000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 80,
-					Total_Rating_Quantity = 16,
-					Description = "High-protein quinoa, perfect as a side dish or main course."
-				};
-
-				var product11 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Oats",
-					Price = 18000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 70,
-					Total_Rating_Quantity = 17,
-					Description = "Healthy oats for breakfast or baking."
-				};
-
-				var product12 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Pineapples",
-					Price = 36000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 95,
-					Total_Rating_Quantity = 19,
-					Description = "Tropical pineapples, sweet and juicy."
-				};
-
-				var product13 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Zucchini",
-					Price = 15000, // VND
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 50,
-					Total_Rating_Quantity = 10,
-					Description = "Fresh zucchini, versatile for various dishes."
-				};
-
-				var product14 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[3].Id, // Dairy
-					OwnerId = users[2].Id, // Producer 1
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Fresh Milk",
-					Price = 22000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 90,
-					Total_Rating_Quantity = 20,
-					Description = "Pure and fresh milk, sourced from local dairy farms."
-				};
-
-				// Producer 2's products
-				var product15 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Baby Carrots",
-					Price = 20000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 50,
-					Total_Rating_Quantity = 11,
-					Description = "Sweet and tender baby carrots."
-				};
-
-				var product16 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Green Beans",
-					Price = 22000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 55,
-					Total_Rating_Quantity = 13,
-					Description = "Fresh green beans, ideal for stir-fries and sides."
-				};
-
-				var product17 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Millet",
-					Price = 28000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 50,
-					Total_Rating_Quantity = 14,
-					Description = "Nutritious millet, great for various recipes."
-				};
-
-				var product18 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[2].Id, // Grains
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Buckwheat",
-					Price = 34000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 0,
-					Total_Rating_Quantity = 0,
-					Description = "Healthy buckwheat, a great addition to your pantry."
-				};
-
-				var product19 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Mangoes",
-					Price = 40000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 85,
-					Total_Rating_Quantity = 22,
-					Description = "Sweet and juicy mangoes, perfect for smoothies and desserts."
-				};
-
-				var product20 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[0].Id, // Fruits
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Papayas",
-					Price = 32000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 75,
-					Total_Rating_Quantity = 18,
-					Description = "Fresh papayas, great for fruit salads and juices."
-				};
-
-				var product21 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[1].Id, // Vegetables
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Cherry Tomatoes",
-					Price = 25000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 70,
-					Total_Rating_Quantity = 16,
-					Description = "Sweet cherry tomatoes, perfect for salads and snacks."
-				};
-
-				var product22 = new Product
-				{
-					Id = Guid.NewGuid(),
-					CategoryId = productCategories[3].Id, // Dairy
-					OwnerId = users[3].Id, // Producer 2
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Name = "Cheddar Cheese",
-					Price = 50000,
-					Active_Status = ActiveStatus.ACTIVE,
-					Total_Rating_Value = 110,
-					Total_Rating_Quantity = 25,
-					Description = "Aged cheddar cheese with a rich, creamy flavor."
-				};
-				var productList = new List<Product>
-				{
-					product1,
-					product2,
-					product3,
-					product4,
-					product5,
-					product6,
-					product7,
-					product8,
-					product9,
-					product10,
-					product11,
-					product12,
-					product13,
-					product14,
-					product15,
-					product16,
-					product17,
-					product18,
-					product19,
-					product20,
-					product21,
-					product22
-				};
-
-				bool isUsers = _dataContext.Users.Any();
-				bool isProduct_Categories = _dataContext.Product_Categories.Any();
-				bool isProducts = _dataContext.Products.Any();
-				bool isProduct_Images = _dataContext.Product_Images.Any();
-
-				if (!isUsers)
-				{
-					_dataContext.Users.AddRange(users);
-				}
-				if (!isProduct_Categories)
-				{
-					_dataContext.Product_Categories.AddRange(productCategories);
-				}
-				if (!isProducts)
-				{
-					_dataContext.Products.AddRange(productList);
-				}
-				if (!isProduct_Images)
-				{
-					_dataContext.Product_Images.AddRange();
-				}
-
-				_dataContext.SaveChanges();
-				Console.WriteLine("Database seeding completed.");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error: {ex.Message}");
-				Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-			}
-		}
-	}
+                _dataContext.SaveChanges();
+                Console.WriteLine("Database seeding completed.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
+        }
+    }
 }

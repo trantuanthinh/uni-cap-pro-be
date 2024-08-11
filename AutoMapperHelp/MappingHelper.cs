@@ -17,10 +17,8 @@ namespace uni_cap_pro_be.AutoMapperHelp
 			CreateMap<Product_Category, Product_CategoryDTO>();
 			CreateMap<Product_CategoryDTO, Product_Category>();
 
-			CreateMap<Product_Image, Product_ImageDTO>();
+			CreateMap<Product_Image, Product_ImageDTO>().ForMember(dest => dest.OwnerId, opt => opt.Ignore());
 			CreateMap<Product_ImageDTO, Product_Image>();
-
 		}
-
 	}
 }
