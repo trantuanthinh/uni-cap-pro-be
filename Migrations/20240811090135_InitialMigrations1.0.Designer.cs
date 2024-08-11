@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240811072909_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20240811090135_InitialMigrations1.0")]
+    partial class InitialMigrations10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,12 @@ namespace uni_cap_pro_be.Migrations
 
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");

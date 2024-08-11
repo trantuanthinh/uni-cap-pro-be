@@ -1,12 +1,25 @@
-﻿using uni_cap_pro_be.Data;
+﻿using System.Text;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using uni_cap_pro_be;
+using uni_cap_pro_be.Data;
+using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be
 {
-    public class DatabaseSeeder(DataContext dataContext)
+    public class DatabaseSeeder
     {
-        private readonly DataContext _dataContext = dataContext;
+        private readonly DataContext _dataContext;
+
+        public DatabaseSeeder(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
 
         public void SeedDataContext()
         {
@@ -29,135 +42,156 @@ namespace uni_cap_pro_be
 
                 // Seed users
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
-                var user1 = new User
+                var users = new List<User>
                 {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Username = "trantuanthinh",
-                    Name = "Tran Tuan Thinh",
-                    Email = "thinh.tran.cit20@eiu.edu.vn",
-                    Password = hashedPassword,
-                    PhoneNumber = "1234567898",
-                    Active_Status = ActiveStatus.ACTIVE,
-                    User_Type = UserType.PRODUCER,
-                    Avatar =
-                        "https://aniyuki.com/wp-content/uploads/2022/04/aniyuki-anime-couple-avatars-10.jpg",
-                    Description = "trantuanthinh"
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Username = "company1",
+                        Name = "Company One",
+                        Email = "company1@example.com",
+                        Password = hashedPassword,
+                        PhoneNumber = "1234567890",
+                        Active_Status = ActiveStatus.ACTIVE,
+                        User_Type = UserType.COMPANY,
+                        Avatar = null,
+                        Description = "First company"
+                    },
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Username = "company2",
+                        Name = "Company Two",
+                        Email = "company2@example.com",
+                        Password = hashedPassword,
+                        PhoneNumber = "0987654321",
+                        Active_Status = ActiveStatus.ACTIVE,
+                        User_Type = UserType.COMPANY,
+                        Avatar = null,
+                        Description = "Second company"
+                    },
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Username = "producer1",
+                        Name = "Producer One",
+                        Email = "producer1@example.com",
+                        Password = hashedPassword,
+                        PhoneNumber = "1122334455",
+                        Active_Status = ActiveStatus.ACTIVE,
+                        User_Type = UserType.PRODUCER,
+                        Avatar = null,
+                        Description = "First producer"
+                    },
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Username = "producer2",
+                        Name = "Producer Two",
+                        Email = "producer2@example.com",
+                        Password = hashedPassword,
+                        PhoneNumber = "5566778899",
+                        Active_Status = ActiveStatus.ACTIVE,
+                        User_Type = UserType.PRODUCER,
+                        Avatar = null,
+                        Description = "Second producer"
+                    }
                 };
-                var user2 = new User
-                {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Username = "jane_smith",
-                    Name = "Jane Smith",
-                    Email = "jane.smith@example.com",
-                    PhoneNumber = "02345678901",
-                    Password = hashedPassword,
-                    Active_Status = ActiveStatus.ACTIVE,
-                    User_Type = UserType.PRODUCER,
-                    Avatar =
-                        "https://aniyuki.com/wp-content/uploads/2022/04/aniyuki-anime-couple-avatars-10.jpg",
-                    Description = "Regular user"
-                };
-                var user3 = new User
-                {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Username = "guest_user",
-                    Name = "Guest User",
-                    Email = "guest.user@example.com",
-                    Password = hashedPassword,
-                    PhoneNumber = "03456789012",
-                    Active_Status = ActiveStatus.ACTIVE,
-                    User_Type = UserType.PRODUCER,
-                    Avatar = null,
-                    Description = null
-                };
-
-                var users = new List<User> { user1, user2, user3 };
                 _dataContext.Users.AddRange(users);
 
-                var product_category1 = new Product_Category
+                // Seed product categories
+                var productCategories = new List<Product_Category>
                 {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Crops",
-                    Active_Status = ActiveStatus.ACTIVE
+                    new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = "Fruits",
+                        Active_Status = ActiveStatus.ACTIVE
+                    },
+                    new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = "Vegetables",
+                        Active_Status = ActiveStatus.ACTIVE
+                    },
+                    new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = "Grains",
+                        Active_Status = ActiveStatus.ACTIVE
+                    },
+                    new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = "Dairy Products",
+                        Active_Status = ActiveStatus.ACTIVE
+                    },
+                    new Product_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = "Meat",
+                        Active_Status = ActiveStatus.ACTIVE
+                    }
                 };
+                _dataContext.Product_Categories.AddRange(productCategories);
 
-                var product_category2 = new Product_Category
-                {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Livestock",
-                    Active_Status = ActiveStatus.ACTIVE
-                };
-                var product_category3 = new Product_Category
-                {
-                    Id = Guid.NewGuid(),
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Dairy Products",
-                    Active_Status = ActiveStatus.ACTIVE
-                };
+                // Seed products for each producer
+                var productList = new List<Product>();
 
-                var product_categories = new List<Product_Category>
+                for (int i = 1; i <= 10; i++)
                 {
-                    product_category1,
-                    product_category2,
-                    product_category3
-                };
-                _dataContext.Product_Categories.AddRange(product_categories);
+                    productList.Add(new Product
+                    {
+                        Id = Guid.NewGuid(),
+                        CategoryId = productCategories[i % productCategories.Count].Id,
+                        OwnerId = users[2].Id, // Producer 1
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = $"Producer1_Product{i}",
+                        Price = 10 + i * 5,
+                        Active_Status = ActiveStatus.ACTIVE,
+                        Total_Rating_Value = i * 2,
+                        Total_Rating_Quantity = i,
+                        Image = $"https://example.com/images/producer1_product{i}.jpg",
+                        Description = $"Description for Producer 1 Product {i}"
+                    });
 
-                var product1 = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    CategoryId = product_category1.Id,
-                    OwnerId = user1.Id,
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Product A",
-                    Price = 99.99,
-                    Active_Status = ActiveStatus.ACTIVE,
-                    Total_Rating_Value = 45,
-                    Total_Rating_Quantity = 10
-                };
+                    productList.Add(new Product
+                    {
+                        Id = Guid.NewGuid(),
+                        CategoryId = productCategories[(i + 1) % productCategories.Count].Id,
+                        OwnerId = users[3].Id, // Producer 2
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = $"Producer2_Product{i}",
+                        Price = 20 + i * 5,
+                        Active_Status = ActiveStatus.ACTIVE,
+                        Total_Rating_Value = i * 3,
+                        Total_Rating_Quantity = i + 1,
+                        Image = $"https://example.com/images/producer2_product{i}.jpg",
+                        Description = $"Description for Producer 2 Product {i}"
+                    });
+                }
 
-                var product2 = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    CategoryId = product_category2.Id,
-                    OwnerId = user2.Id,
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Product B",
-                    Price = 149.99,
-                    Active_Status = ActiveStatus.ACTIVE,
-                    Total_Rating_Value = 30,
-                    Total_Rating_Quantity = 5
-                };
-
-                var product3 = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    CategoryId = product_category3.Id,
-                    OwnerId = user3.Id,
-                    Created_At = DateTime.UtcNow,
-                    Modified_At = DateTime.UtcNow,
-                    Name = "Product C",
-                    Price = 199.99,
-                    Active_Status = ActiveStatus.INACTIVE,
-                    Total_Rating_Value = 20,
-                    Total_Rating_Quantity = 4
-                };
-
-                var products = new List<Product> { product1, product2, product3 };
-                _dataContext.Products.AddRange(products);
+                _dataContext.Products.AddRange(productList);
 
                 _dataContext.SaveChanges();
                 Console.WriteLine("Database seeding completed.");

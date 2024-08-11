@@ -38,6 +38,12 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
