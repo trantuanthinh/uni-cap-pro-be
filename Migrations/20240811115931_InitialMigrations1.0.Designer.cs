@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240811090135_InitialMigrations1.0")]
+    [Migration("20240811115931_InitialMigrations1.0")]
     partial class InitialMigrations10
     {
         /// <inheritdoc />
@@ -42,9 +42,6 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Image")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Modified_At")
@@ -131,6 +128,9 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Avatar")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Background")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Created_At")

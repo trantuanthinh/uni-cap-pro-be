@@ -41,9 +41,6 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
@@ -128,6 +125,9 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Avatar")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Background")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Created_At")

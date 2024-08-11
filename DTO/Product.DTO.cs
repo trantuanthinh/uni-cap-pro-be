@@ -22,8 +22,6 @@ namespace uni_cap_pro_be.DTO
         [Required]
         public required ActiveStatus Active_Status { get; set; }
         public string? Description { get; set; }
-        public string? Image { get; set; }
-
         public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
         public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
     }

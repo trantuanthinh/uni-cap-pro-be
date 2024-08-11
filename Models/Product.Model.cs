@@ -22,7 +22,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required double Price { get; set; }
         public string? Description { get; set; }
-        public string? Image { get; set; }
 
         [Required]
         public required ActiveStatus Active_Status { get; set; }

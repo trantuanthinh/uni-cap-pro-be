@@ -28,21 +28,8 @@ namespace uni_cap_pro_be
                 // Ensure the database is created
                 _dataContext.Database.EnsureCreated();
 
-                bool isUsers = _dataContext.Users.Any();
-                bool isProducts = _dataContext.Products.Any();
-
-                bool isSeeded = isUsers || isProducts;
-
-                // Check if data already exists
-                if (isSeeded)
-                {
-                    Console.WriteLine("Database already seeded.");
-                    return;
-                }
-
                 // Seed users
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
-
                 var user_company_1 = new User
                 {
                     Id = Guid.NewGuid(),
@@ -114,7 +101,6 @@ namespace uni_cap_pro_be
                     user_producer_1,
                     user_producer_2
                 };
-                _dataContext.Users.AddRange(users);
 
                 // Seed product categories
                 var product_category_1 = new Product_Category
@@ -152,7 +138,6 @@ namespace uni_cap_pro_be
                     Name = "Dairy",
                     Active_Status = ActiveStatus.ACTIVE
                 };
-
                 var productCategories = new List<Product_Category>
                 {
                     product_category_1,
@@ -160,11 +145,8 @@ namespace uni_cap_pro_be
                     product_category_3,
                     product_category_4
                 };
-                _dataContext.Product_Categories.AddRange(productCategories);
 
                 // Seed products for each producer
-                var productList = new List<Product>();
-
                 // Producer 1's products
                 var product1 = new Product
                 {
@@ -178,7 +160,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 120,
                     Total_Rating_Quantity = 30,
-                    Image = "https://example.com/images/organic_apples.jpg",
                     Description = "Fresh organic apples, rich in flavor and nutrients."
                 };
 
@@ -194,7 +175,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 80,
                     Total_Rating_Quantity = 20,
-                    Image = "https://example.com/images/ripe_bananas.jpg",
                     Description = "Sweet and ripe bananas, perfect for a healthy snack."
                 };
 
@@ -210,7 +190,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 90,
                     Total_Rating_Quantity = 15,
-                    Image = "https://example.com/images/organic_carrots.jpg",
                     Description = "Crisp and fresh organic carrots, ideal for salads and snacking."
                 };
 
@@ -226,7 +205,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 70,
                     Total_Rating_Quantity = 12,
-                    Image = "https://example.com/images/fresh_broccoli.jpg",
                     Description = "Nutritious and fresh broccoli, perfect for a healthy diet."
                 };
 
@@ -242,7 +220,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 85,
                     Total_Rating_Quantity = 25,
-                    Image = "https://example.com/images/whole_wheat_flour.jpg",
                     Description = "High-quality whole wheat flour for baking and cooking."
                 };
 
@@ -258,7 +235,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 60,
                     Total_Rating_Quantity = 18,
-                    Image = "https://example.com/images/brown_rice.jpg",
                     Description = "Nutritious brown rice, ideal for a variety of dishes."
                 };
 
@@ -274,7 +250,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 110,
                     Total_Rating_Quantity = 22,
-                    Image = "https://example.com/images/organic_strawberries.jpg",
                     Description = "Juicy and sweet organic strawberries, perfect for desserts."
                 };
 
@@ -290,7 +265,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 75,
                     Total_Rating_Quantity = 14,
-                    Image = "https://example.com/images/sweet_potatoes.jpg",
                     Description = "Delicious sweet potatoes, great for baking or roasting."
                 };
 
@@ -306,7 +280,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 65,
                     Total_Rating_Quantity = 13,
-                    Image = "https://example.com/images/red_bell_peppers.jpg",
                     Description = "Fresh red bell peppers, ideal for salads and stir-fries."
                 };
 
@@ -322,7 +295,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 80,
                     Total_Rating_Quantity = 16,
-                    Image = "https://example.com/images/quinoa.jpg",
                     Description = "High-protein quinoa, perfect as a side dish or main course."
                 };
 
@@ -338,7 +310,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 70,
                     Total_Rating_Quantity = 17,
-                    Image = "https://example.com/images/oats.jpg",
                     Description = "Healthy oats for breakfast or baking."
                 };
 
@@ -354,7 +325,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 95,
                     Total_Rating_Quantity = 19,
-                    Image = "https://example.com/images/pineapples.jpg",
                     Description = "Tropical pineapples, sweet and juicy."
                 };
 
@@ -370,7 +340,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 50,
                     Total_Rating_Quantity = 10,
-                    Image = "https://example.com/images/zucchini.jpg",
                     Description = "Fresh zucchini, versatile for various dishes."
                 };
 
@@ -386,7 +355,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 90,
                     Total_Rating_Quantity = 12,
-                    Image = "https://example.com/images/fresh_milk.jpg",
                     Description = "Pure and fresh milk, sourced from local dairy farms."
                 };
 
@@ -403,7 +371,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 60,
                     Total_Rating_Quantity = 11,
-                    Image = "https://example.com/images/baby_carrots.jpg",
                     Description = "Sweet and tender baby carrots."
                 };
 
@@ -419,7 +386,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 55,
                     Total_Rating_Quantity = 8,
-                    Image = "https://example.com/images/green_beans.jpg",
                     Description = "Fresh green beans, ideal for stir-fries and sides."
                 };
 
@@ -435,7 +401,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 90,
                     Total_Rating_Quantity = 14,
-                    Image = "https://example.com/images/millet.jpg",
                     Description = "Nutritious millet, great for various recipes."
                 };
 
@@ -451,7 +416,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 80,
                     Total_Rating_Quantity = 10,
-                    Image = "https://example.com/images/buckwheat.jpg",
                     Description = "Healthy buckwheat, a great addition to your pantry."
                 };
 
@@ -467,7 +431,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 85,
                     Total_Rating_Quantity = 22,
-                    Image = "https://example.com/images/mangoes.jpg",
                     Description = "Sweet and juicy mangoes, perfect for smoothies and desserts."
                 };
 
@@ -483,7 +446,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 75,
                     Total_Rating_Quantity = 18,
-                    Image = "https://example.com/images/papayas.jpg",
                     Description = "Fresh papayas, great for fruit salads and juices."
                 };
 
@@ -499,7 +461,6 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 70,
                     Total_Rating_Quantity = 16,
-                    Image = "https://example.com/images/cherry_tomatoes.jpg",
                     Description = "Sweet cherry tomatoes, perfect for salads and snacks."
                 };
 
@@ -515,10 +476,51 @@ namespace uni_cap_pro_be
                     Active_Status = ActiveStatus.ACTIVE,
                     Total_Rating_Value = 110,
                     Total_Rating_Quantity = 18,
-                    Image = "https://example.com/images/cheddar_cheese.jpg",
                     Description = "Aged cheddar cheese with a rich, creamy flavor."
                 };
-                _dataContext.Products.AddRange(productList);
+                var productList = new List<Product>
+                {
+                    product1,
+                    product2,
+                    product3,
+                    product4,
+                    product5,
+                    product6,
+                    product7,
+                    product8,
+                    product9,
+                    product10,
+                    product11,
+                    product12,
+                    product13,
+                    product14,
+                    product15,
+                    product16,
+                    product17,
+                    product18,
+                    product19,
+                    product20,
+                    product21,
+                    product22
+                };
+
+                bool isUsers = _dataContext.Users.Any();
+                bool isProduct_Categories = _dataContext.Product_Categories.Any();
+                bool isProducts = _dataContext.Products.Any();
+                bool isProduct_Images = _dataContext.Product_Images.Any();
+
+                if (!isUsers)
+                {
+                    _dataContext.Users.AddRange(users);
+                }
+                if (!isProduct_Categories)
+                {
+                    _dataContext.Product_Categories.AddRange(productCategories);
+                }
+                if (!isProducts)
+                {
+                    _dataContext.Products.AddRange(productList);
+                }
 
                 _dataContext.SaveChanges();
                 Console.WriteLine("Database seeding completed.");
