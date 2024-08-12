@@ -1,47 +1,56 @@
-﻿using uni_cap_pro_be.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class ProductService(DataContext dataContext, SharedService sharedService) : IProductService
+	public class ProductService<T> : IBaseService<T> where T : Product
 	{
-		public readonly DataContext _dataContext = dataContext;
-		public readonly SharedService _sharedService = sharedService;
+		private readonly DataContext _dataContext;
+		private readonly DbSet<T> _dataSet;
+		private readonly SharedService _sharedService;
 
-		public ICollection<Product> GetProducts()
+		public ProductService(DataContext dataContext, SharedService sharedService)
 		{
-			return _dataContext.Products.OrderBy(item => item.Id).ToList();
+			_dataContext = dataContext;
+			_dataSet = _dataContext.Set<T>();
+			_sharedService = sharedService;
 		}
 
-		public Product GetProduct(Guid id)
+		public ICollection<T> GetItems()
 		{
-			Product _item = _dataContext.Products.SingleOrDefault(item => item.Id == id);
+			return _dataSet.OrderBy(item => item.Id).ToList();
+		}
+
+		public T GetItem(Guid id)
+		{
+			T _item = _dataSet.SingleOrDefault(item => item.Id == id);
 			return _item;
 		}
 
 		// TODO
-		public bool CreateProduct(Product _item)
+		public bool CreateItem(T _item)
 		{
 			_item.Created_At = DateTime.UtcNow;
 			_item.Modified_At = DateTime.UtcNow;
-			_dataContext.Products.Add(_item);
+			_dataSet.Add(_item);
 			return Save();
 		}
 
 		// TODO
-		public bool UpdateProduct(Product _item, Product patchItem)
+		public bool UpdateItem(T _item, T patchItem)
 		{
 
 			_item.Modified_At = DateTime.UtcNow;
-			_dataContext.Products.Update(_item);
+			_dataSet.Update(_item);
 			return Save();
 		}
 
-		public bool DeleteProduct(Product _item)
+		public bool DeleteItem(T _item)
 		{
-			_dataContext.Products.Remove(_item);
+			_dataSet.Remove(_item);
 			return Save();
 		}
 

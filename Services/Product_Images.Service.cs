@@ -1,45 +1,51 @@
-﻿using uni_cap_pro_be.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class Product_ImageService(DataContext dataContext, SharedService sharedService) : IProduct_ImageService
+	public class Product_ImageService<T> : IBaseService<T> where T : Product_Image
 	{
-		public readonly DataContext _dataContext = dataContext;
-		public readonly SharedService _sharedService = sharedService;
+		private readonly DataContext _dataContext;
+		private readonly DbSet<T> _dataSet;
+		private readonly SharedService _sharedService;
 
-		public ICollection<Product_Image> GetProduct_Images()
+		public Product_ImageService(DataContext dataContext, SharedService sharedService)
 		{
-			return _dataContext.Product_Images.OrderBy(item => item.Id).ToList();
+			_dataContext = dataContext;
+			_dataSet = _dataContext.Set<T>();
+			_sharedService = sharedService;
 		}
 
-		public Product_Image GetProduct_Image(Guid id)
+		public ICollection<T> GetItems()
 		{
-			Product_Image _item = _dataContext.Product_Images.SingleOrDefault(item => item.Id == id);
+			return _dataSet.OrderBy(item => item.Id).ToList();
+		}
+
+		public T GetItem(Guid id)
+		{
+			T _item = _dataSet.SingleOrDefault(item => item.Id == id);
 			return _item;
 		}
 
-		public bool CreateProduct_Image(Product_Image _item)
+		public bool CreateItem(T _item)
 		{
 			_item.Created_At = DateTime.UtcNow;
-			//_item.Modified_At = DateTime.UtcNow;
-			_dataContext.Product_Images.Add(_item);
+			_dataSet.Add(_item);
 			return Save();
 		}
 
-		public bool UpdateProduct_Image(Product_Image _item, Product_Image patchItem)
+		public bool UpdateItem(T _item, T patchItem)
 		{
-
-			//_item.Modified_At = DateTime.UtcNow;
-			_dataContext.Product_Images.Update(_item);
+			_dataSet.Update(_item);
 			return Save();
 		}
 
-		public bool DeleteProduct_Image(Product_Image _item)
+		public bool DeleteItem(T _item)
 		{
-			_dataContext.Product_Images.Remove(_item);
+			_dataSet.Remove(_item);
 			return Save();
 		}
 

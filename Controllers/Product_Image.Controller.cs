@@ -11,13 +11,9 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("[controller]")]
 	[ApiController]
-	public class Product_ImagesController(
-		IProduct_ImageService product_ImageService,
-		IMapper mapper,
-		API_ResponseConvention api_Response
-		) : ControllerBase
+	public class Product_ImagesController(IBaseService<Product_Image> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IProduct_ImageService _product_ImageService = product_ImageService;
+		private readonly IBaseService<Product_Image> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -30,7 +26,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			ICollection<Product_Image> _items = _product_ImageService.GetProduct_Images();
+			ICollection<Product_Image> _items = _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -50,7 +46,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Image _item = _product_ImageService.GetProduct_Image(id);
+			Product_Image _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -90,7 +86,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Image _item = _mapper.Map<Product_Image>(item);
-			bool isCreated = _product_ImageService.CreateProduct_Image(_item);
+			bool isCreated = _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -109,7 +105,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Image _item = _product_ImageService.GetProduct_Image(id);
+			Product_Image _item = _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -123,7 +119,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Image patchItem = _mapper.Map<Product_Image>(item);
-			if (!_product_ImageService.UpdateProduct_Image(_item, patchItem))
+			if (!_service.UpdateItem(_item, patchItem))
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(500, failedMessage);
@@ -141,7 +137,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Image _item = _product_ImageService.GetProduct_Image(id);
+			Product_Image _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -149,7 +145,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _product_ImageService.DeleteProduct_Image(_item);
+			bool isDeleted = _service.DeleteItem(_item);
 
 			if (!isDeleted)
 			{

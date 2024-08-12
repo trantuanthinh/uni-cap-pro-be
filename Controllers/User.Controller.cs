@@ -11,12 +11,7 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class UsersController(
-		IUserService userService,
-		IMapper mapper,
-		SharedService sharedService,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class UsersController(IUserService userService, IMapper mapper, SharedService sharedService, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IUserService _userService = userService;
 		private readonly IMapper _mapper = mapper;

@@ -6,13 +6,13 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class Product_CategoryService<T> : IBaseService<T> where T : Product_Category
+	public class Order_DetailService<T> : IBaseService<T> where T : Order_Detail
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
 
-		public Product_CategoryService(DataContext dataContext, SharedService sharedService)
+		public Order_DetailService(DataContext dataContext, SharedService sharedService)
 		{
 			_dataContext = dataContext;
 			_dataSet = _dataContext.Set<T>();
@@ -30,33 +30,24 @@ namespace uni_cap_pro_be.Services
 			return _item;
 		}
 
-		public bool CreateItem(T _item)
+		public bool CreateItem(T item)
 		{
-			_item.Created_At = DateTime.UtcNow;
-			_item.Modified_At = DateTime.UtcNow;
-			_dataSet.Add(_item);
-			return Save();
+			throw new NotImplementedException();
 		}
 
-		public bool UpdateItem(T _item, T patchItem)
+		public bool UpdateItem(T item, T patchItem)
 		{
-
-			_item.Modified_At = DateTime.UtcNow;
-			_dataSet.Update(_item);
-			return Save();
+			throw new NotImplementedException();
 		}
 
-		public bool DeleteItem(T _item)
+		public bool DeleteItem(T item)
 		{
-			_dataSet.Remove(_item);
-			return Save();
+			throw new NotImplementedException();
 		}
-
 		public bool Save()
 		{
-			int saved = _dataContext.SaveChanges();
-			return saved > 0;
+			// Implement logic to save changes to the database
+			throw new NotImplementedException();
 		}
-
 	}
 }

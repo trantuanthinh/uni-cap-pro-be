@@ -7,6 +7,7 @@ using uni_cap_pro_be;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Middleware;
+using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
@@ -90,10 +91,10 @@ builder.Services.AddSingleton<API_ResponseConvention>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
 builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
-builder.Services.AddScoped(typeof(IBaseService<>), typeof(OrderService<>));
+builder.Services.AddScoped<IBaseService<Product>, ProductService<Product>>();
+builder.Services.AddScoped<IBaseService<Order>, OrderService<Order>>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

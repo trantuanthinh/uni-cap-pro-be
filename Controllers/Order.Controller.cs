@@ -9,10 +9,7 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class OrderController(
-		IBaseService<Order> service,
-		IMapper mapper,
-		API_ResponseConvention api_Response) : ControllerBase
+	public class OrderController(IBaseService<Order> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IBaseService<Order> _service = service;
 		private readonly IMapper _mapper = mapper;

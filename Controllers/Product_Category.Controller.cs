@@ -11,14 +11,9 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class Product_CategoriesController(
-		IProduct_CategoryService product_CategoryService,
-		IMapper mapper,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class Product_CategoriesController(IBaseService<Product_Category> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IProduct_CategoryService _product_CategoryService =
-			product_CategoryService;
+		private readonly IBaseService<Product_Category> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -29,7 +24,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			ICollection<Product_Category> _items = _product_CategoryService.GetProduct_Categories();
+			ICollection<Product_Category> _items = _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -49,7 +44,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Category _item = _product_CategoryService.GetProduct_Category(id);
+			Product_Category _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -77,7 +72,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Category _item = _mapper.Map<Product_Category>(item);
-			bool isCreated = _product_CategoryService.CreateProduct_Category(_item);
+			bool isCreated = _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -98,7 +93,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Category _item = _product_CategoryService.GetProduct_Category(id);
+			Product_Category _item = _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -112,7 +107,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Category patchItem = _mapper.Map<Product_Category>(item);
-			if (!_product_CategoryService.UpdateProduct_Category(_item, patchItem))
+			if (!_service.UpdateItem(_item, patchItem))
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
 				return StatusCode(500, failedMessage);
@@ -130,7 +125,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product_Category _item = _product_CategoryService.GetProduct_Category(id);
+			Product_Category _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -138,7 +133,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _product_CategoryService.DeleteProduct_Category(_item);
+			bool isDeleted = _service.DeleteItem(_item);
 
 			if (!isDeleted)
 			{

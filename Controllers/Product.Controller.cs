@@ -11,13 +11,9 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class ProductsController(
-		IProductService productService,
-		IMapper mapper,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class ProductsController(IBaseService<Product> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IProductService _productService = productService;
+		private readonly IBaseService<Product> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -28,7 +24,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			ICollection<Product> _items = _productService.GetProducts();
+			ICollection<Product> _items = _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -48,7 +44,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product _item = _productService.GetProduct(id);
+			Product _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -76,7 +72,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product _item = _mapper.Map<Product>(item);
-			bool isCreated = _productService.CreateProduct(_item);
+			bool isCreated = _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -97,7 +93,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product _item = _productService.GetProduct(id);
+			Product _item = _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -111,7 +107,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product patchItem = _mapper.Map<Product>(item);
-			if (!_productService.UpdateProduct(_item, patchItem))
+			if (!_service.UpdateItem(_item, patchItem))
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(500, failedMessage);
@@ -129,7 +125,7 @@ namespace uni_cap_pro_be.Controllers
 		{
 			string methodName = MethodBase.GetCurrentMethod().Name;
 
-			Product _item = _productService.GetProduct(id);
+			Product _item = _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -137,7 +133,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _productService.DeleteProduct(_item);
+			bool isDeleted = _service.DeleteItem(_item);
 
 			if (!isDeleted)
 			{
