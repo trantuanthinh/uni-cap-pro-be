@@ -89,12 +89,12 @@ builder.Services.AddSingleton<SharedService>();
 builder.Services.AddSingleton<API_ResponseConvention>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
-builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
+
 builder.Services.AddScoped<IBaseService<Product>, ProductService<Product>>();
 builder.Services.AddScoped<IBaseService<Order>, OrderService<Order>>();
+builder.Services.AddScoped<IBaseService<Product_Category>, Product_CategoryService<Product_Category>>();
+builder.Services.AddScoped<IBaseService<Product_Image>, Product_ImageService<Product_Image>>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 
