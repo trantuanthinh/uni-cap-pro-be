@@ -10,8 +10,5 @@ namespace uni_cap_pro_be.DTO
 
 		[Required]
 		public required string Name { get; set; }
-
-		[Required]
-		public required ActiveStatus Active_Status { get; set; }
 	}
 }

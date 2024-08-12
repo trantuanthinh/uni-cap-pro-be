@@ -22,7 +22,7 @@
     public enum DeliveryStatus
     {
         PENDING,
-        DELIVERING,
+        PROCESSING,
         DELIVERED
     }
 }

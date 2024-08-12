@@ -93,6 +93,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
 builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
+builder.Services.AddScoped(typeof(IBaseService<>), typeof(OrderService<>));
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

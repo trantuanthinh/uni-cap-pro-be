@@ -22,6 +22,72 @@ namespace uni_cap_pro_be.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Bundle")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Delivery_Status")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Is_Remained")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Remaining_Timer")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Timer")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double>("Total_Price")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Order_Detail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order_Details");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -62,6 +128,10 @@ namespace uni_cap_pro_be.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Products");
                 });
 
@@ -70,10 +140,6 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("Active_Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
@@ -110,6 +176,8 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Product_Images");
                 });
@@ -175,6 +243,86 @@ namespace uni_cap_pro_be.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.User", "Owner")
+                        .WithMany("Orders")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Order_Detail", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Product_Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.User", "Owner")
+                        .WithMany("Products")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
