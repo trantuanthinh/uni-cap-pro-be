@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using uni_cap_pro_be.Data;
+using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class OrderService<T> : IBaseService<T> where T : Order
+	public class OrderService<T> : IOrderService<T> where T : Order
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;

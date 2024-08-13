@@ -6,13 +6,13 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class Product_CategoryService<T> : IProduct_CategoryService<T> where T : Product_Category
+	public class DiscountService<T> : IDiscountService<T> where T : Discount
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
 
-		public Product_CategoryService(DataContext dataContext, SharedService sharedService)
+		public DiscountService(DataContext dataContext, SharedService sharedService)
 		{
 			_dataContext = dataContext;
 			_dataSet = _dataContext.Set<T>();
@@ -21,8 +21,8 @@ namespace uni_cap_pro_be.Services
 
 		public async Task<ICollection<T>> GetItems()
 		{
-			ICollection<T> _item = await _dataSet.OrderBy(item => item.Id).ToListAsync();
-			return _item;
+			var items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			return items;
 		}
 
 		public async Task<T> GetItem(Guid id)
@@ -57,6 +57,5 @@ namespace uni_cap_pro_be.Services
 			int saved = _dataContext.SaveChanges();
 			return saved > 0;
 		}
-
 	}
 }

@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240813055431_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240813084228_InitialMigration1.0")]
+    partial class InitialMigration10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,37 @@ namespace uni_cap_pro_be.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("ActiveStatus")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Discounts");
+                });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
@@ -248,6 +279,17 @@ namespace uni_cap_pro_be.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                        .WithMany("Discounts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.User", "Owner")
@@ -307,17 +349,17 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                    b.HasOne("uni_cap_pro_be.Models.Product", null)
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
+                    b.Navigation("Discounts");
+
                     b.Navigation("Images");
                 });
 

@@ -10,24 +10,24 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class Product_CategoriesController(
-		IProduct_CategoryService<Product_Category> service,
+	public class DiscountsController(
+		IDiscountService<Discount> service,
 		IMapper mapper,
 		API_ResponseConvention api_Response
 	) : ControllerBase
 	{
-		private readonly IProduct_CategoryService<Product_Category> _service = service;
+		private readonly IDiscountService<Discount> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> GetProductCategories()
+		public async Task<IActionResult> GetDiscounts()
 		{
-			string methodName = nameof(GetProductCategories);
+			string methodName = nameof(GetDiscounts);
 
-			ICollection<Product_Category> _items = await _service.GetItems();
+			ICollection<Discount> _items = await _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -43,11 +43,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetProductCategory(Guid id)
+		public async Task<IActionResult> GetDiscount(Guid id)
 		{
-			string methodName = nameof(GetProductCategory);
+			string methodName = nameof(GetDiscount);
 
-			Product_Category _item = await _service.GetItem(id);
+			Discount _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -64,9 +64,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateProductCategory([FromBody] Product_CategoryDTO item)
+		public async Task<IActionResult> CreateDiscount([FromBody] DiscountDTO item)
 		{
-			string methodName = nameof(CreateProductCategory);
+			string methodName = nameof(CreateDiscount);
 
 			if (!ModelState.IsValid)
 			{
@@ -74,7 +74,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
-			Product_Category _item = _mapper.Map<Product_Category>(item);
+			Discount _item = _mapper.Map<Discount>(item);
 			bool isCreated = await _service.CreateItem(_item);
 			if (!isCreated)
 			{
@@ -82,7 +82,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(500, failedMessage);
 			}
 
-			var okMessage = _api_Response.OkMessage(methodName, ModelState);
+			var okMessage = _api_Response.OkMessage(methodName, _item);
 			return StatusCode(200, okMessage);
 		}
 
@@ -92,14 +92,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchProductCategory(
-			Guid id,
-			[FromBody] Product_CategoryDTO item
-		)
+		public async Task<IActionResult> PatchDiscount(Guid id, [FromBody] DiscountDTO item)
 		{
-			string methodName = nameof(PatchProductCategory);
+			string methodName = nameof(PatchDiscount);
 
-			Product_Category _item = await _service.GetItem(id);
+			Discount _item = await _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -112,11 +109,11 @@ namespace uni_cap_pro_be.Controllers
 				return ValidationProblem(ModelState);
 			}
 
-			Product_Category patchItem = _mapper.Map<Product_Category>(item);
+			Discount patchItem = _mapper.Map<Discount>(item);
 			bool isUpdated = await _service.UpdateItem(_item, patchItem);
 			if (isUpdated)
 			{
-				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(500, failedMessage);
 			}
 
@@ -128,11 +125,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> DeleteProductCategory(Guid id)
+		public async Task<IActionResult> DeleteDiscount(Guid id)
 		{
-			string methodName = nameof(DeleteProductCategory);
+			string methodName = nameof(DeleteDiscount);
 
-			Product_Category _item = await _service.GetItem(id);
+			Discount _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -147,8 +144,8 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(500, failedMessage);
 			}
 
-			var responseMessage = _api_Response.OkMessage(methodName, _item);
-			return StatusCode(200, responseMessage);
+			var okMessage = _api_Response.OkMessage(methodName, _item);
+			return StatusCode(200, okMessage);
 		}
 	}
 }

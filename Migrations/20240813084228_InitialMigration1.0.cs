@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMigration10 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -129,6 +129,30 @@ namespace uni_cap_pro_be.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Discounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Amount = table.Column<double>(type: "double", nullable: false),
+                    ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ActiveStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Discounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Discounts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Order_Details",
                 columns: table => new
                 {
@@ -182,6 +206,11 @@ namespace uni_cap_pro_be.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Discounts_ProductId",
+                table: "Discounts",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_Details_OrderId",
@@ -246,6 +275,9 @@ namespace uni_cap_pro_be.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Discounts");
+
             migrationBuilder.DropTable(
                 name: "Order_Details");
 
