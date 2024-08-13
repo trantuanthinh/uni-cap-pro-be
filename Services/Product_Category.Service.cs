@@ -6,7 +6,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class Product_CategoryService<T> : IBaseService<T> where T : Product_Category
+	public class Product_CategoryService<T> : IProduct_CategoryService<T> where T : Product_Category
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
@@ -19,18 +19,19 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
-		public ICollection<T> GetItems()
+		public async Task<ICollection<T>> GetItems()
 		{
-			return _dataSet.OrderBy(item => item.Id).ToList();
-		}
-
-		public T GetItem(Guid id)
-		{
-			T _item = _dataSet.SingleOrDefault(item => item.Id == id);
+			ICollection<T> _item = await _dataSet.OrderBy(item => item.Id).ToListAsync();
 			return _item;
 		}
 
-		public bool CreateItem(T _item)
+		public async Task<T> GetItem(Guid id)
+		{
+			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
+			return _item;
+		}
+
+		public async Task<bool> CreateItem(T _item)
 		{
 			_item.Created_At = DateTime.UtcNow;
 			_item.Modified_At = DateTime.UtcNow;
@@ -38,7 +39,7 @@ namespace uni_cap_pro_be.Services
 			return Save();
 		}
 
-		public bool UpdateItem(T _item, T patchItem)
+		public async Task<bool> UpdateItem(T _item, T patchItem)
 		{
 
 			_item.Modified_At = DateTime.UtcNow;
@@ -46,7 +47,7 @@ namespace uni_cap_pro_be.Services
 			return Save();
 		}
 
-		public bool DeleteItem(T _item)
+		public async Task<bool> DeleteItem(T _item)
 		{
 			_dataSet.Remove(_item);
 			return Save();

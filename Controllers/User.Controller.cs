@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 using uni_cap_pro_be.DTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
@@ -11,9 +10,9 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class UsersController(IUserService userService, IMapper mapper, SharedService sharedService, API_ResponseConvention api_Response) : ControllerBase
+	public class UsersController(IUserService<User> service, IMapper mapper, SharedService sharedService, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IUserService _userService = userService;
+		private readonly IUserService<User> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly SharedService _sharedService = sharedService;
 		private readonly API_ResponseConvention _api_Response = api_Response;
@@ -21,11 +20,11 @@ namespace uni_cap_pro_be.Controllers
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult GetUsers()
+		public async Task<IActionResult> GetUsers()
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetUsers);
 
-			ICollection<User> _items = _userService.GetUsers();
+			ICollection<User> _items = await _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -41,11 +40,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult GetUser(Guid id)
+		public async Task<IActionResult> GetUser(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetUser);
 
-			User _item = _userService.GetUser(id);
+			User _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -62,9 +61,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult CreateUser([FromBody] UserDTO item)
+		public async Task<IActionResult> CreateUser([FromBody] UserDTO item)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(CreateUser);
 
 			if (!_sharedService.IsValidGmail(item.Email))
 			{
@@ -80,8 +79,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			User _item = _mapper.Map<User>(item);
-
-			bool isCreated = _userService.CreateUser(_item);
+			bool isCreated = await _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -98,11 +96,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult PatchUser(Guid id, [FromBody] UserDTO item)
+		public async Task<IActionResult> PatchUser(Guid id, [FromBody] UserDTO item)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(PatchUser);
 
-			User _item = _userService.GetUser(id);
+			User _item = await _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -116,7 +114,8 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			User patchItem = _mapper.Map<User>(item);
-			if (!_userService.UpdateUser(_item, patchItem))
+			bool isUpdated = await _service.UpdateItem(_item, patchItem);
+			if (isUpdated)
 			{
 				ModelState.AddModelError("", "Invalid - Something went wrong updating the User");
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
@@ -132,11 +131,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult DeleteUser(Guid id)
+		public async Task<IActionResult> DeleteUser(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(DeleteUser);
 
-			User _item = _userService.GetUser(id);
+			User _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -144,7 +143,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _userService.DeleteUser(_item);
+			bool isDeleted = await _service.DeleteItem(_item);
 			if (!isDeleted)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);

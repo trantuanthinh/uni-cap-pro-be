@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 using uni_cap_pro_be.DTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Middleware;
@@ -25,7 +24,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public ActionResult<User> Signin([FromBody] SignInDTO item)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(Signin);
 
 			User _user = _authService.AuthenticatedUser(item);
 

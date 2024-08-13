@@ -383,7 +383,7 @@ namespace uni_cap_pro_be
 					.ToList();
 
 				// Seed product images
-				var productImages = new List<(string Name, Guid ProductId, Product Product)>
+				var productImages = new List<(string URL, Guid ProductId, Product Product)>
 				{
                     // Producer 1's images
                     ("Organic Apples Image", productList[0].Id, productList[0]),
@@ -415,10 +415,10 @@ namespace uni_cap_pro_be
 					.Select(image => new Product_Image
 					{
 						Id = Guid.NewGuid(),
-						Name = image.Name,
+						URL = image.URL,
 						Created_At = DateTime.UtcNow,
 						ProductId = image.ProductId,
-						Product = image.Product
+						//Product = image.Product
 					})
 					.ToList();
 

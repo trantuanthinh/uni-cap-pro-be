@@ -19,6 +19,12 @@ namespace uni_cap_pro_be.AutoMapperHelp
 
 			CreateMap<Product_Image, Product_ImageDTO>().ForMember(dest => dest.OwnerId, opt => opt.Ignore());
 			CreateMap<Product_ImageDTO, Product_Image>();
+
+			CreateMap<Order, OrderDTO>();
+			CreateMap<OrderDTO, Order>();
+
+			CreateMap<Order_Detail, Order_DetailDTO>();
+			CreateMap<Order_DetailDTO, Order_Detail>();
 		}
 	}
 }

@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
 {
 	var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 	if (!builder.Environment.IsDevelopment())
 	{
 		var server = builder.Configuration["DB_HOST"] ?? "localhost";
@@ -25,8 +24,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 		var user = builder.Configuration["DB_USER"] ?? "root";
 		var port = builder.Configuration["DB_PORT"] ?? "3306";
 		var password = builder.Configuration["DB_PASSWORD"] ?? "trantuanthinh";
-		connectionString =
-			$"server={server};database={database};user={user};password={password};port={port}";
+		connectionString = $"server={server};database={database};user={user};password={password};port={port}";
 	}
 	options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
@@ -49,23 +47,20 @@ builder.Services.AddControllers(options =>
 );
 
 // Add Controllers with JSON options
-builder
-	.Services.AddControllers()
-	.AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
 	{
 		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+		options.JsonSerializerOptions.MaxDepth = 128;
 	});
 
 builder.Services.AddAuthorization();
-builder
-	.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 	{
 		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 		options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-	})
-	.AddJwtBearer(o =>
+	}).AddJwtBearer(o =>
 	{
 		o.TokenValidationParameters = new TokenValidationParameters
 		{
@@ -89,12 +84,12 @@ builder.Services.AddSingleton<SharedService>();
 builder.Services.AddSingleton<API_ResponseConvention>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<IBaseService<Product>, ProductService<Product>>();
+builder.Services.AddScoped<IUserService<User>, UserService<User>>();
+builder.Services.AddScoped<IProductService<Product>, ProductService<Product>>();
+builder.Services.AddScoped<IProduct_CategoryService<Product_Category>, Product_CategoryService<Product_Category>>();
+builder.Services.AddScoped<IProduct_ImageService<Product_Image>, Product_ImageService<Product_Image>>();
 builder.Services.AddScoped<IBaseService<Order>, OrderService<Order>>();
-builder.Services.AddScoped<IBaseService<Product_Category>, Product_CategoryService<Product_Category>>();
-builder.Services.AddScoped<IBaseService<Product_Image>, Product_ImageService<Product_Image>>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 
@@ -133,10 +128,10 @@ static void SeedData(IHost app)
 {
 	using var scope = app.Services.CreateScope();
 	var seed_service = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-	var view_service = scope.ServiceProvider.GetRequiredService<DataContext>();
+	//var view_service = scope.ServiceProvider.GetRequiredService<DataContext>();
 
 	seed_service.SeedDataContext();
-	view_service.CreateProductView();
+	//view_service.CreateProductView();
 
 	Console.WriteLine("Database seeded");
 }

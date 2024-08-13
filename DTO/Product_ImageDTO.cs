@@ -10,7 +10,7 @@ namespace uni_cap_pro_be.DTO
 		public Guid OwnerId { get; set; }
 
 		[Required]
-		public required string Name { get; set; }
+		public required string URL { get; set; }
 
 		[Required]
 		public Guid ProductId { get; set; }

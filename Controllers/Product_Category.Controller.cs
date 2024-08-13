@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 using uni_cap_pro_be.DTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
@@ -11,20 +10,20 @@ namespace uni_cap_pro_be.Controllers
 {
 	[Route("/[controller]")]
 	[ApiController]
-	public class Product_CategoriesController(IBaseService<Product_Category> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
+	public class Product_CategoriesController(IProduct_CategoryService<Product_Category> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IBaseService<Product_Category> _service = service;
+		private readonly IProduct_CategoryService<Product_Category> _service = service;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult GetProductCategories()
+		public async Task<IActionResult> GetProductCategories()
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetProductCategories);
 
-			ICollection<Product_Category> _items = _service.GetItems();
+			ICollection<Product_Category> _items = await _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -40,11 +39,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult GetProductCategory(Guid id)
+		public async Task<IActionResult> GetProductCategory(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetProductCategory);
 
-			Product_Category _item = _service.GetItem(id);
+			Product_Category _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -61,9 +60,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult CreateProductCategory([FromBody] Product_CategoryDTO item)
+		public async Task<IActionResult> CreateProductCategory([FromBody] Product_CategoryDTO item)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(CreateProductCategory);
 
 			if (!ModelState.IsValid)
 			{
@@ -72,7 +71,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Category _item = _mapper.Map<Product_Category>(item);
-			bool isCreated = _service.CreateItem(_item);
+			bool isCreated = await _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -89,11 +88,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult PatchProductCategory(Guid id, [FromBody] Product_CategoryDTO item)
+		public async Task<IActionResult> PatchProductCategory(Guid id, [FromBody] Product_CategoryDTO item)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(PatchProductCategory);
 
-			Product_Category _item = _service.GetItem(id);
+			Product_Category _item = await _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -107,7 +106,8 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Product_Category patchItem = _mapper.Map<Product_Category>(item);
-			if (!_service.UpdateItem(_item, patchItem))
+			bool isUpdated = await _service.UpdateItem(_item, patchItem);
+			if (isUpdated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
 				return StatusCode(500, failedMessage);
@@ -121,11 +121,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult DeleteProductCategory(Guid id)
+		public async Task<IActionResult> DeleteProductCategory(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(DeleteProductCategory);
 
-			Product_Category _item = _service.GetItem(id);
+			Product_Category _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -133,8 +133,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _service.DeleteItem(_item);
-
+			bool isDeleted = await _service.DeleteItem(_item);
 			if (!isDeleted)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);

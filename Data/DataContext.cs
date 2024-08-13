@@ -50,8 +50,6 @@ namespace uni_cap_pro_be.Data
 
 			// product image
 			modelBuilder.Entity<Product_Image>().HasKey(entity => entity.Id);
-			modelBuilder.Entity<Product_Image>().HasOne(pi => pi.Product).WithMany(p => p.Images).HasForeignKey(pi => pi.ProductId);
-
 
 			// product category
 			modelBuilder.Entity<Product_Category>().HasKey(entity => entity.Id);

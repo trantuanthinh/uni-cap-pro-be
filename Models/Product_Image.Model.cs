@@ -9,12 +9,12 @@ namespace uni_cap_pro_be.Models
 		public DateTime Created_At { get; set; }
 
 		[Required]
-		public required string Name { get; set; }
+		public required string URL { get; set; }
 
 		[Required]
 		public Guid ProductId { get; set; }
 
-		[Required]
-		public required Product Product { get; set; }
+		//[Required]
+		//public required Product Product { get; set; }
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Data;
-using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
@@ -19,35 +18,37 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
-		public ICollection<T> GetItems()
+		public async Task<ICollection<T>> GetItems()
 		{
-			return _dataSet.OrderBy(item => item.Id).ToList();
+			var items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			return items;
 		}
 
-		public T GetItem(Guid id)
+		public async Task<T> GetItem(Guid id)
 		{
-			T _item = _dataSet.SingleOrDefault(item => item.Id == id);
+			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
 			return _item;
 		}
 
-		public bool CreateItem(T item)
+		public async Task<bool> CreateItem(T _item)
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool UpdateItem(T item, T patchItem)
+		public async Task<bool> UpdateItem(T _item, T patchItem)
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool DeleteItem(T item)
+		public async Task<bool> DeleteItem(T _item)
 		{
-			throw new NotImplementedException();
+			_dataSet.Remove(_item);
+			return Save();
 		}
 		public bool Save()
 		{
-			// Implement logic to save changes to the database
-			throw new NotImplementedException();
+			int saved = _dataContext.SaveChanges();
+			return saved > 0;
 		}
 	}
 }

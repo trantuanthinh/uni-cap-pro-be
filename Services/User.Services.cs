@@ -1,29 +1,39 @@
-﻿using uni_cap_pro_be.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class UserService(DataContext dataContext, SharedService sharedService) : IUserService
+	public class UserService<T> : IUserService<T> where T : User
 	{
-		public readonly DataContext _dataContext = dataContext;
-		public readonly SharedService _sharedService = sharedService;
+		private readonly DataContext _dataContext;
+		private readonly DbSet<T> _dataSet;
+		private readonly SharedService _sharedService;
 
-		public ICollection<User> GetUsers()
+		public UserService(DataContext dataContext, SharedService sharedService)
 		{
-			return _dataContext.Users.OrderBy(item => item.Id).ToList();
+			_dataContext = dataContext;
+			_dataSet = _dataContext.Set<T>();
+			_sharedService = sharedService;
 		}
 
-		public User GetUser(Guid id)
+		public async Task<ICollection<T>> GetItems()
 		{
-			User _item = _dataContext.Users.SingleOrDefault(item => item.Id == id);
+			ICollection<T> _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			return _items;
+		}
+
+		public async Task<T> GetItem(Guid id)
+		{
+			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
 			return _item;
 		}
 
-		public bool CreateUser(User _item)
+		public async Task<bool> CreateItem(T _item)
 		{
-			bool validUser = CheckValidUser(_item);
+			bool validUser = await IsUserUniqueAsync(_item);
 			if (!validUser)
 			{
 				return false;
@@ -35,7 +45,7 @@ namespace uni_cap_pro_be.Services
 			return Save();
 		}
 
-		public bool UpdateUser(User _item, User patchItem)
+		public async Task<bool> UpdateItem(T _item, T patchItem)
 		{
 			_item.Modified_At = DateTime.UtcNow;
 			_item.Username = patchItem.Username;
@@ -55,22 +65,22 @@ namespace uni_cap_pro_be.Services
 			return Save();
 		}
 
-		public bool DeleteUser(User _item)
+		public async Task<bool> DeleteItem(T _item)
 		{
 			_dataContext.Users.Remove(_item);
 			return Save();
 		}
 
-		public bool CheckValidUser(User userCreate)
+		public async Task<bool> IsUserUniqueAsync(T _item)
 		{
-			var trimmedUpperUsername = userCreate.Username.Trim().ToUpper();
-			var trimmedUpperEmail = userCreate.Email.Trim().ToUpper();
-			var phoneNumber = userCreate.PhoneNumber;
+			string trimmedUpperUsername = _item.Username.Trim().ToUpperInvariant();
+			string trimmedUpperEmail = _item.Email.Trim().ToUpperInvariant();
 
-			return !GetUsers().Any(user =>
+			bool isUnique = !await _dataSet.AnyAsync(user =>
 				user.Username.Trim().Equals(trimmedUpperUsername, StringComparison.CurrentCultureIgnoreCase) ||
 				user.Email.Trim().Equals(trimmedUpperEmail, StringComparison.CurrentCultureIgnoreCase) ||
-				user.PhoneNumber == phoneNumber);
+				user.PhoneNumber == _item.PhoneNumber);
+			return isUnique;
 		}
 
 		public bool Save()

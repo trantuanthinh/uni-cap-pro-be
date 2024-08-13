@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 using uni_cap_pro_be.DTO;
-using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
@@ -20,11 +18,11 @@ namespace uni_cap_pro_be.Controllers
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult GetProducts()
+		public async Task<IActionResult> GetOrders()
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetOrders);
 
-			ICollection<Order> _items = _service.GetItems();
+			ICollection<Order> _items = await _service.GetItems();
 
 			if (!ModelState.IsValid)
 			{
@@ -40,11 +38,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult GetProduct(Guid id)
+		public async Task<IActionResult> GetOrder(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(GetOrder);
 
-			Order _item = _service.GetItem(id);
+			Order _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -61,9 +59,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult CreateProduct([FromBody] ProductDTO item) // TODO: change to OrderDTO
+		public async Task<IActionResult> CreateOrder([FromBody] OrderDTO item) // TODO: change to OrderDTO
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(CreateOrder);
 
 			if (!ModelState.IsValid)
 			{
@@ -72,7 +70,7 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Order _item = _mapper.Map<Order>(item);
-			bool isCreated = _service.CreateItem(_item);
+			bool isCreated = await _service.CreateItem(_item);
 			if (!isCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
@@ -89,11 +87,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult PatchProduct(Guid id, [FromBody] ProductDTO item) // TODO: change to OrderDTO
+		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] ProductDTO item) // TODO: change to OrderDTO
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(PatchOrder);
 
-			Order _item = _service.GetItem(id);
+			Order _item = await _service.GetItem(id);
 
 			if (item == null || _item == null)
 			{
@@ -107,7 +105,8 @@ namespace uni_cap_pro_be.Controllers
 			}
 
 			Order patchItem = _mapper.Map<Order>(item);
-			if (!_service.UpdateItem(_item, patchItem))
+			bool isUpdated = await _service.UpdateItem(_item, patchItem);
+			if (isUpdated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(500, failedMessage);
@@ -121,11 +120,11 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public IActionResult DeleteProduct(Guid id)
+		public async Task<IActionResult> DeleteOrder(Guid id)
 		{
-			string methodName = MethodBase.GetCurrentMethod().Name;
+			string methodName = nameof(DeleteOrder);
 
-			Order _item = _service.GetItem(id);
+			Order _item = await _service.GetItem(id);
 
 			if (_item == null)
 			{
@@ -133,8 +132,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			bool isDeleted = _service.DeleteItem(_item);
-
+			bool isDeleted = await _service.DeleteItem(_item);
 			if (!isDeleted)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);

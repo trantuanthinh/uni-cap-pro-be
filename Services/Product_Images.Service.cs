@@ -6,7 +6,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	public class Product_ImageService<T> : IBaseService<T> where T : Product_Image
+	public class Product_ImageService<T> : IProduct_ImageService<T> where T : Product_Image
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
@@ -19,31 +19,38 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
-		public ICollection<T> GetItems()
+		public async Task<ICollection<T>> GetImages(Guid ProductId)
 		{
-			return _dataSet.OrderBy(item => item.Id).ToList();
+			ICollection<T> _items = await _dataSet.Where(item => item.ProductId == ProductId).ToListAsync();
+			return _items;
 		}
 
-		public T GetItem(Guid id)
+		public async Task<ICollection<T>> GetItems()
 		{
-			T _item = _dataSet.SingleOrDefault(item => item.Id == id);
+			ICollection<T> _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			return _items;
+		}
+
+		public async Task<T> GetItem(Guid id)
+		{
+			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
 			return _item;
 		}
 
-		public bool CreateItem(T _item)
+		public async Task<bool> CreateItem(T _item)
 		{
 			_item.Created_At = DateTime.UtcNow;
 			_dataSet.Add(_item);
 			return Save();
 		}
 
-		public bool UpdateItem(T _item, T patchItem)
+		public async Task<bool> UpdateItem(T _item, T patchItem)
 		{
 			_dataSet.Update(_item);
 			return Save();
 		}
 
-		public bool DeleteItem(T _item)
+		public async Task<bool> DeleteItem(T _item)
 		{
 			_dataSet.Remove(_item);
 			return Save();

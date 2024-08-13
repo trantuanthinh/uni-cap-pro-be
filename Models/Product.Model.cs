@@ -26,6 +26,7 @@ namespace uni_cap_pro_be.Models
 
 		[Required]
 		public required double Price { get; set; }
+		//public required double Discount { get; set; }
 		public string? Description { get; set; }
 
 		[Required]
