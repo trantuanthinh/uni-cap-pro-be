@@ -4,6 +4,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO
 {
+	// DONE
 	public class OrderDTO
 	{
 		public Guid OwnerId { get; set; }

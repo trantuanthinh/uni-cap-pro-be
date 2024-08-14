@@ -6,65 +6,66 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-    public class Product_ImageService<T> : IProduct_ImageService<T>
-        where T : Product_Image
-    {
-        private readonly DataContext _dataContext;
-        private readonly DbSet<T> _dataSet;
-        private readonly SharedService _sharedService;
+	// DONE
+	public class Product_ImageService<T> : IProduct_ImageService<T>
+		where T : Product_Image
+	{
+		private readonly DataContext _dataContext;
+		private readonly DbSet<T> _dataSet;
+		private readonly SharedService _sharedService;
 
-        public Product_ImageService(DataContext dataContext, SharedService sharedService)
-        {
-            _dataContext = dataContext;
-            _dataSet = _dataContext.Set<T>();
-            _sharedService = sharedService;
-        }
+		public Product_ImageService(DataContext dataContext, SharedService sharedService)
+		{
+			_dataContext = dataContext;
+			_dataSet = _dataContext.Set<T>();
+			_sharedService = sharedService;
+		}
 
-        public async Task<List<string>> GetImagesURL(Guid ProductId)
-        {
-            var imageUrls = await _dataSet
-                .Where(item => item.ProductId == ProductId)
-                .Select(item => item.URL)
-                .ToListAsync();
+		public async Task<List<string>> GetImagesURL(Guid ProductId)
+		{
+			var imageUrls = await _dataSet
+				.Where(item => item.ProductId == ProductId)
+				.Select(item => item.URL)
+				.ToListAsync();
 
-            return imageUrls;
-        }
+			return imageUrls;
+		}
 
-        public async Task<ICollection<T>> GetItems()
-        {
-            ICollection<T> _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
-            return _items;
-        }
+		public async Task<ICollection<T>> GetItems()
+		{
+			ICollection<T> _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			return _items;
+		}
 
-        public async Task<T> GetItem(Guid id)
-        {
-            T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
-            return _item;
-        }
+		public async Task<T> GetItem(Guid id)
+		{
+			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
+			return _item;
+		}
 
-        public async Task<bool> CreateItem(T _item)
-        {
-            _item.Created_At = DateTime.UtcNow;
-            _dataSet.Add(_item);
-            return Save();
-        }
+		public async Task<bool> CreateItem(T _item)
+		{
+			_item.Created_At = DateTime.UtcNow;
+			_dataSet.Add(_item);
+			return Save();
+		}
 
-        public async Task<bool> UpdateItem(T _item, T patchItem)
-        {
-            _dataSet.Update(_item);
-            return Save();
-        }
+		public async Task<bool> UpdateItem(T _item, T patchItem)
+		{
+			_dataSet.Update(_item);
+			return Save();
+		}
 
-        public async Task<bool> DeleteItem(T _item)
-        {
-            _dataSet.Remove(_item);
-            return Save();
-        }
+		public async Task<bool> DeleteItem(T _item)
+		{
+			_dataSet.Remove(_item);
+			return Save();
+		}
 
-        public bool Save()
-        {
-            int saved = _dataContext.SaveChanges();
-            return saved > 0;
-        }
-    }
+		public bool Save()
+		{
+			int saved = _dataContext.SaveChanges();
+			return saved > 0;
+		}
+	}
 }

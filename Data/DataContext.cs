@@ -5,6 +5,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Data
 {
+	// ZZZ
 	public class DataContext : DbContext
 	{
 		public DataContext(DbContextOptions<DataContext> options) : base(options)

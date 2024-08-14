@@ -2,6 +2,7 @@
 
 namespace uni_cap_pro_be.DTO
 {
+	// DONE
 	public class Product_ImageDTO
 	{
 		public DateTime Created_At { get; set; }

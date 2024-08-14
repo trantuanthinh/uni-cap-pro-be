@@ -7,13 +7,13 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.Services
 {
 	// TODO
-	public class DiscountService<T> : IDiscountService<T> where T : Discount
+	public class Sub_OrderService<T> : ISub_OrderService<T> where T : Sub_Order
 	{
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
 
-		public DiscountService(DataContext dataContext, SharedService sharedService)
+		public Sub_OrderService(DataContext dataContext, SharedService sharedService)
 		{
 			_dataContext = dataContext;
 			_dataSet = _dataContext.Set<T>();

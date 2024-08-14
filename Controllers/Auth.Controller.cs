@@ -7,6 +7,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
+	// DONE
 	[Route("/[controller]")]
 	[ApiController]
 	public class AuthController(

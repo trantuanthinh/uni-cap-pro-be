@@ -6,6 +6,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
+	// DONE
 	public class AuthService(DataContext dataContext, SharedService sharedService) : IAuthService
 	{
 		public readonly DataContext _dataContext = dataContext;
