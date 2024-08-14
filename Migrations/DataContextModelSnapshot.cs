@@ -71,10 +71,13 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<bool>("Is_Remained")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Remaining_Timer")
@@ -86,9 +89,12 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<double>("Total_Price")
                         .HasColumnType("double");
 
+                    b.Property<int>("Total_Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders");
                 });
@@ -136,6 +142,9 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Images")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Modified_At")
@@ -208,9 +217,34 @@ namespace uni_cap_pro_be.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Product_Images");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Sub_Orders");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
@@ -289,13 +323,13 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.User", "Owner")
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
                         .WithMany("Orders")
-                        .HasForeignKey("OwnerId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order_Detail", b =>
@@ -344,27 +378,42 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>
+            modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Product", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("uni_cap_pro_be.Models.Order", "Order")
+                        .WithMany("Sub_Orders")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                        .WithMany("Sub_Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
+                {
+                    b.Navigation("Sub_Orders");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
                     b.Navigation("Discounts");
 
-                    b.Navigation("Images");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("Products");
+
+                    b.Navigation("Sub_Orders");
                 });
 #pragma warning restore 612, 618
         }

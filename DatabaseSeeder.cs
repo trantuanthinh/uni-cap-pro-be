@@ -116,8 +116,8 @@ namespace uni_cap_pro_be
 					string Description
 				)>
 				{
-                    // Producer 1's products
-                    (
+			                 // Producer 1's products
+			                 (
 						"Organic Apples",
 						productCategoryList[0].Id,
 						productCategoryList[0],
@@ -271,8 +271,8 @@ namespace uni_cap_pro_be
 						20,
 						"Pure and fresh milk, sourced from local dairy farms."
 					),
-                    // Producer 2's products
-                    (
+			                 // Producer 2's products
+			                 (
 						"Baby Carrots",
 						productCategoryList[1].Id,
 						productCategoryList[1],
@@ -379,15 +379,16 @@ namespace uni_cap_pro_be
 						Total_Rating_Quantity = product.TotalRatingQuantity,
 						Description = product.Description,
 						Images = [],
-						Discounts = []
+						Discounts = [],
+						Orders = [],
 					})
 					.ToList();
 
 				// Seed product images
 				var productImages = new List<(string URL, Guid ProductId)>
 				{
-                    // Producer 1's images
-                    ("Organic Apples Image", productList[0].Id),
+			                 // Producer 1's images
+			                 ("Organic Apples Image", productList[0].Id),
 					("Ripe Bananas Image", productList[1].Id),
 					("Organic Carrots Image", productList[2].Id),
 					("Fresh Broccoli Image", productList[3].Id),
@@ -401,8 +402,8 @@ namespace uni_cap_pro_be
 					("Pineapples Image", productList[11].Id),
 					("Zucchini Image", productList[12].Id),
 					("Fresh Milk Image", productList[13].Id),
-                    // Producer 2's images
-                    ("Baby Carrots Image", productList[14].Id),
+			                 // Producer 2's images
+			                 ("Baby Carrots Image", productList[14].Id),
 					("Green Beans Image", productList[15].Id),
 					("Millet Image", productList[16].Id),
 					("Buckwheat Image", productList[17].Id),
@@ -424,43 +425,43 @@ namespace uni_cap_pro_be
 
 				// List of orders with specific details
 				var orders = new List<(
-					Guid OwnerId,
-					ICollection<User> Owners,
-					ICollection<Product> Products,
-					double TotalPrice,
-					int Bundle,
-					DeliveryStatus DeliveryStatus
-				)>
-				{
-					(userList[1].Id, [userList[1]],[productList[2]], 100000, 1, DeliveryStatus.PENDING),
-					(userList[1].Id, [userList[1]],[productList[2]], 150000, 1, DeliveryStatus.PROCESSING),
-					(userList[1].Id, [userList[1]],[productList[2]], 200000, 4, DeliveryStatus.DELIVERED),
-					(userList[1].Id, [userList[1]],[productList[2]], 120000, 2, DeliveryStatus.PENDING),
-					(userList[1].Id, [userList[1]],[productList[2]], 180000, 5, DeliveryStatus.PROCESSING),
-					(userList[1].Id, [userList[1]],[productList[2]], 170000, 5, DeliveryStatus.DELIVERED),
-					(userList[1].Id, [userList[1]],[productList[2]], 160000, 5, DeliveryStatus.PENDING),
-					(userList[1].Id, [userList[1]],[productList[2]], 140000, 4, DeliveryStatus.PROCESSING),
-					(userList[1].Id, [userList[1]],[productList[2]], 130000, 3, DeliveryStatus.DELIVERED),
-					(userList[1].Id, [userList[1]],[productList[2]], 110000, 1, DeliveryStatus.PENDING)
-				};
+		   Guid OwnerId,
+		   ICollection<User> Owners,
+		   Product Product,
+		   double TotalPrice,
+		   int TotalQuantity,
+		   int Bundle,
+		   DeliveryStatus DeliveryStatus
+	   )>
+		{
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 100000, 10, 1, DeliveryStatus.PENDING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 150000, 15, 1, DeliveryStatus.PROCESSING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 200000, 20, 4, DeliveryStatus.DELIVERED),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 120000, 12, 2, DeliveryStatus.PENDING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 180000, 18, 5, DeliveryStatus.PROCESSING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 170000, 17, 5, DeliveryStatus.DELIVERED),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 160000, 16, 5, DeliveryStatus.PENDING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 140000, 14, 4, DeliveryStatus.PROCESSING),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 130000, 13, 3, DeliveryStatus.DELIVERED),
+			(userList[1].Id, new List<User> { userList[1] }, productList[2], 110000, 11, 1, DeliveryStatus.PENDING)
+		};
 
-				// Convert tuples to Order objects and associate with users
 				var orderList = orders.Select(order => new Order
 				{
 					Id = Guid.NewGuid(),
-					OwnerId = order.OwnerId,
 					Created_At = DateTime.UtcNow,
 					Modified_At = DateTime.UtcNow,
 					Total_Price = order.TotalPrice,
+					Total_Quantity = order.TotalQuantity,
 					Bundle = order.Bundle,
 					Timer = DateTime.UtcNow,
 					Remaining_Timer = DateTime.UtcNow.AddHours(24),
 					Is_Remained = true,
 					Delivery_Status = order.DeliveryStatus,
-					Owners = order.Owners,
-					Products = order.Products
-				})
-					.ToList();
+					ProductId = order.Product.Id,
+					Product = order.Product,
+					Sub_Orders = new List<Sub_Order>()
+				}).ToList();
 
 				// List of order details with specific details
 				var orderDetails = new List<(
@@ -582,6 +583,33 @@ namespace uni_cap_pro_be
 					Product = productList[17],
 				}).ToList();
 
+				// Seed Sub_Orders
+				var subOrders = new List<(
+					Guid UserId,
+					Guid OrderId,
+					int Quantity,
+					double Price
+				)>
+		{
+			(userList[1].Id, orderList[0].Id, 2, 30000),
+			(userList[2].Id, orderList[1].Id, 1, 20000),
+			(userList[3].Id, orderList[2].Id, 3, 90000),
+            // Add more sub orders as needed
+        };
+
+				var subOrderList = subOrders
+					.Select(subOrder => new Sub_Order
+					{
+						Id = Guid.NewGuid(),
+						UserId = subOrder.UserId,
+						OrderId = subOrder.OrderId,
+						User = userList.First(u => u.Id == subOrder.UserId),
+						Order = orderList.First(o => o.Id == subOrder.OrderId),
+						Quantity = subOrder.Quantity,
+						Price = subOrder.Price
+					})
+					.ToList();
+
 				// Check and seed data
 				_dataContext.Users.AddRange(userList);
 				_dataContext.Product_Categories.AddRange(productCategoryList);
@@ -590,6 +618,7 @@ namespace uni_cap_pro_be
 				_dataContext.Orders.AddRange(orderList);
 				_dataContext.Order_Details.AddRange(orderDetailList);
 				_dataContext.Discounts.AddRange(discountDetailList);
+				_dataContext.Sub_Orders.AddRange(subOrderList);
 
 				_dataContext.SaveChanges();
 				Console.WriteLine("Database seeding completed.");

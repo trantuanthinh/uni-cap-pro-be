@@ -35,7 +35,11 @@ namespace uni_cap_pro_be.Models
 		public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
 		public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
 
-		public required ICollection<Product_Image> Images { get; set; }
+		public List<string>? Images { get; set; }
+
+
+
 		public required ICollection<Discount> Discounts { get; set; }
+		public required ICollection<Order> Orders { get; set; }
 	}
 }

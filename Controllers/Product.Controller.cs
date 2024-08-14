@@ -39,8 +39,8 @@ namespace uni_cap_pro_be.Controllers
 
 			foreach (var item in _items)
 			{
-				ICollection<Product_Image> images = await _imageSerivce.GetImages(item.Id);
-				item.Images = images;
+				List<string> imagesURL = await _imageSerivce.GetImagesURL(item.Id);
+				item.Images = imagesURL;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);
@@ -63,7 +63,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			ICollection<Product_Image> images = await _imageSerivce.GetImages(_item.Id);
+			List<string> images = await _imageSerivce.GetImagesURL(_item.Id);
 			_item.Images = images;
 
 			var okMessage = _api_Response.OkMessage(methodName, _item);
