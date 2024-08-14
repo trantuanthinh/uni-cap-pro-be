@@ -22,9 +22,6 @@ namespace uni_cap_pro_be.AutoMapperHelp
 
 			CreateMap<Order, OrderDTO>();
 			CreateMap<OrderDTO, Order>();
-
-			CreateMap<Order_Detail, Order_DetailDTO>();
-			CreateMap<Order_DetailDTO, Order_Detail>();
 		}
 	}
 }

@@ -555,18 +555,18 @@ namespace uni_cap_pro_be
 					)
 				};
 
-				var orderDetailList = orderDetails
-					.Select(detail => new Order_Detail
-					{
-						Id = Guid.NewGuid(),
-						OrderId = detail.OrderId,
-						ProductId = detail.ProductId,
-						UserId = detail.UserId,
-						Order = detail.Order,
-						Product = detail.Product,
-						User = detail.Owner
-					})
-					.ToList();
+				//var orderDetailList = orderDetails
+				//	.Select(detail => new Order_Detail
+				//	{
+				//		Id = Guid.NewGuid(),
+				//		OrderId = detail.OrderId,
+				//		ProductId = detail.ProductId,
+				//		UserId = detail.UserId,
+				//		Order = detail.Order,
+				//		Product = detail.Product,
+				//		User = detail.Owner
+				//	})
+				//	.ToList();
 
 				var discountDetails = new List<(int Level, double Amount)>
 				{ (1, 0.1), (2, 0.15), (3, 0.2), (4, 0.25), (5, 0.4) };
@@ -616,7 +616,7 @@ namespace uni_cap_pro_be
 				_dataContext.Products.AddRange(productList);
 				_dataContext.Product_Images.AddRange(productImageList);
 				_dataContext.Orders.AddRange(orderList);
-				_dataContext.Order_Details.AddRange(orderDetailList);
+				//_dataContext.Order_Details.AddRange(orderDetailList);
 				_dataContext.Discounts.AddRange(discountDetailList);
 				_dataContext.Sub_Orders.AddRange(subOrderList);
 

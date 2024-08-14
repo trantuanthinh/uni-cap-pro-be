@@ -17,7 +17,6 @@ namespace uni_cap_pro_be.Data
 		public DbSet<Product_Category> Product_Categories { get; set; }
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<Sub_Order> Sub_Orders { get; set; }
-		public DbSet<Order_Detail> Order_Details { get; set; }
 		public DbSet<Discount> Discounts { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
