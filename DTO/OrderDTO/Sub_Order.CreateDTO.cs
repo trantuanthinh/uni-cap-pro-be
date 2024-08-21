@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace uni_cap_pro_be.Models
+namespace uni_cap_pro_be.DTO.OrderDTO
 {
-	// DONE
-	public class Sub_Order
+	// TODO
+	public class Sub_OrderCreateDTO
 	{
 		[Key]
 		public Guid Id { get; set; }

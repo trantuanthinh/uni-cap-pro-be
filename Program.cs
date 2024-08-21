@@ -48,9 +48,7 @@ builder.Services.AddControllers(options =>
 );
 
 // Add Controllers with JSON options
-builder
-	.Services.AddControllers()
-	.AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
 	{
 		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
@@ -58,8 +56,7 @@ builder
 	});
 
 builder.Services.AddAuthorization();
-builder
-	.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 	{
 		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -95,7 +92,8 @@ builder.Services.AddScoped<IProductService<Product>, ProductService<Product>>();
 builder.Services.AddScoped<IProduct_CategoryService<Product_Category>, Product_CategoryService<Product_Category>>();
 builder.Services.AddScoped<IProduct_ImageService<Product_Image>, Product_ImageService<Product_Image>>();
 builder.Services.AddScoped<IDiscountService<Discount>, DiscountService<Discount>>();
-builder.Services.AddScoped<IBaseService<Order>, OrderService<Order>>();
+builder.Services.AddScoped<IOrderService<Order>, OrderService<Order>>();
+builder.Services.AddScoped<ISub_OrderService<Sub_Order>, Sub_OrderService<Sub_Order>>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

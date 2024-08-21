@@ -2,10 +2,10 @@
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
-namespace uni_cap_pro_be.DTO
+namespace uni_cap_pro_be.DTO.OrderDTO
 {
 	// DONE
-	public class OrderDTO
+	public class OrderCreateDTO
 	{
 		public Guid OwnerId { get; set; }
 

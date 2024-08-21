@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.ProductDTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
@@ -65,7 +65,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateProductCategory([FromBody] Product_CategoryDTO item)
+		public async Task<IActionResult> CreateProductCategory([FromBody] Product_CategoryCreateDTO item)
 		{
 			string methodName = nameof(CreateProductCategory);
 
@@ -93,10 +93,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchProductCategory(
-			Guid id,
-			[FromBody] Product_CategoryDTO item
-		)
+		public async Task<IActionResult> PatchProductCategory(Guid id, [FromBody] Product_CategoryCreateDTO item)
 		{
 			string methodName = nameof(PatchProductCategory);
 

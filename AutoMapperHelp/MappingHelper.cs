@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.OrderDTO;
+using uni_cap_pro_be.DTO.ProductDTO;
+using uni_cap_pro_be.DTO.UserDTO;
 using uni_cap_pro_be.Models;
 
 namespace uni_cap_pro_be.AutoMapperHelp
@@ -14,8 +16,8 @@ namespace uni_cap_pro_be.AutoMapperHelp
 			CreateMap<Product, ProductDTO>();
 			CreateMap<ProductDTO, Product>();
 
-			CreateMap<Product_Category, Product_CategoryDTO>();
-			CreateMap<Product_CategoryDTO, Product_Category>();
+			//CreateMap<Product_Category, Product_CategoryDTO>();
+			//CreateMap<Product_CategoryDTO, Product_Category>();
 
 			CreateMap<Product_Image, Product_ImageDTO>().ForMember(dest => dest.OwnerId, opt => opt.Ignore());
 			CreateMap<Product_ImageDTO, Product_Image>();

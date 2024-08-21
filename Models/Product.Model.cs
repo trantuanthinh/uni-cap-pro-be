@@ -13,13 +13,8 @@ namespace uni_cap_pro_be.Models
 		public required Guid CategoryId { get; set; }
 
 		[Required]
-		public required Product_Category Category { get; set; }
-
-		[Required]
 		public required Guid OwnerId { get; set; } // the owner of the product
 
-		[Required]
-		public required User Owner { get; set; } // the owner of the product
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
 
@@ -36,10 +31,13 @@ namespace uni_cap_pro_be.Models
 		public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
 		public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
 
+
+
+		[Required]
+		public required User Owner { get; set; } // the owner of the product
+		[Required]
+		public required Product_Category Category { get; set; }
 		public List<string>? Images { get; set; }
-
-
-
 		public required ICollection<Discount> Discounts { get; set; }
 		public required ICollection<Order> Orders { get; set; }
 	}

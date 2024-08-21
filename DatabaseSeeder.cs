@@ -92,7 +92,6 @@ namespace uni_cap_pro_be
 					"Grains",
 					"Dairy"
 				};
-
 				var productCategoryList = productCategories
 					.Select(category => new Product_Category
 					{
@@ -361,7 +360,6 @@ namespace uni_cap_pro_be
 						"Aged cheddar cheese with a rich, creamy flavor."
 					)
 				};
-
 				var productList = products
 					.Select(product => new Product
 					{
@@ -385,192 +383,47 @@ namespace uni_cap_pro_be
 					.ToList();
 
 				// Seed product images
-				var productImages = new List<(string URL, Guid ProductId)>
-				{
-			                 // Producer 1's images
-			                 ("Organic Apples Image", productList[0].Id),
-					("Ripe Bananas Image", productList[1].Id),
-					("Organic Carrots Image", productList[2].Id),
-					("Fresh Broccoli Image", productList[3].Id),
-					("Whole Wheat Flour Image", productList[4].Id),
-					("Brown Rice Image", productList[5].Id),
-					("Organic Strawberries Image", productList[6].Id),
-					("Sweet Potatoes Image", productList[7].Id),
-					("Bell Peppers Image", productList[8].Id),
-					("Quinoa Image", productList[9].Id),
-					("Oats Image", productList[10].Id),
-					("Pineapples Image", productList[11].Id),
-					("Zucchini Image", productList[12].Id),
-					("Fresh Milk Image", productList[13].Id),
-			                 // Producer 2's images
-			                 ("Baby Carrots Image", productList[14].Id),
-					("Green Beans Image", productList[15].Id),
-					("Millet Image", productList[16].Id),
-					("Buckwheat Image", productList[17].Id),
-					("Mangoes Image", productList[18].Id),
-					("Papayas Image", productList[19].Id),
-					("Cherry Tomatoes Image", productList[20].Id),
-					("Cheddar Cheese Image", productList[21].Id)
-				};
+				// Images for Producer 1
+				var productImages = new List<(string Name, Guid ProductId)>
+{
+	("Organic Apples.jpg", productList[0].Id),
+	("Ripe Bananas.jpg", productList[1].Id),
+	("Organic Carrots.jpg", productList[2].Id),
+	("Fresh Broccoli.jpg", productList[3].Id),
+	("Whole Wheat Flour.jpg", productList[4].Id),
+	("Brown Rice.jpg", productList[5].Id),
+	("Organic Strawberries.jpg", productList[6].Id),
+	("Sweet Potatoes.jpg", productList[7].Id),
+	("Bell Peppers.jpg", productList[8].Id),
+	("Quinoa.jpg", productList[9].Id),
+	("Oats.jpg", productList[10].Id),
+	("Pineapples.jpg", productList[11].Id),
+	("Zucchini.jpg", productList[12].Id),
+	("Fresh Milk.jpg", productList[13].Id),
+    // Producer 2's images
+    ("Baby Carrots.jpg", productList[14].Id),
+	("Green Beans.jpg", productList[15].Id),
+	("Millet.jpg", productList[16].Id),
+	("Buckwheat.jpg", productList[17].Id),
+	("Mangoes.jpg", productList[18].Id),
+	("Papayas.jpg", productList[19].Id),
+	("Cherry Tomatoes.jpg", productList[20].Id),
+	("Cheddar Cheese.jpg", productList[21].Id)
+};
 
 				var productImageList = productImages
 					.Select(image => new Product_Image
 					{
 						Id = Guid.NewGuid(),
-						URL = image.URL,
+						Name = image.Name,
 						Created_At = DateTime.UtcNow,
 						ProductId = image.ProductId,
 					})
 					.ToList();
 
-				// List of orders with specific details
-				var orders = new List<(
-		   Guid OwnerId,
-		   ICollection<User> Owners,
-		   Product Product,
-		   double TotalPrice,
-		   int TotalQuantity,
-		   int Bundle,
-		   DeliveryStatus DeliveryStatus
-	   )>
-		{
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 100000, 10, 1, DeliveryStatus.PENDING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 150000, 15, 1, DeliveryStatus.PROCESSING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 200000, 20, 4, DeliveryStatus.DELIVERED),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 120000, 12, 2, DeliveryStatus.PENDING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 180000, 18, 5, DeliveryStatus.PROCESSING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 170000, 17, 5, DeliveryStatus.DELIVERED),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 160000, 16, 5, DeliveryStatus.PENDING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 140000, 14, 4, DeliveryStatus.PROCESSING),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 130000, 13, 3, DeliveryStatus.DELIVERED),
-			(userList[1].Id, new List<User> { userList[1] }, productList[2], 110000, 11, 1, DeliveryStatus.PENDING)
-		};
-
-				var orderList = orders.Select(order => new Order
-				{
-					Id = Guid.NewGuid(),
-					Created_At = DateTime.UtcNow,
-					Modified_At = DateTime.UtcNow,
-					Total_Price = order.TotalPrice,
-					Total_Quantity = order.TotalQuantity,
-					Bundle = order.Bundle,
-					Timer = DateTime.UtcNow,
-					Remaining_Timer = DateTime.UtcNow.AddHours(24),
-					Is_Remained = true,
-					Delivery_Status = order.DeliveryStatus,
-					ProductId = order.Product.Id,
-					Product = order.Product,
-					Sub_Orders = new List<Sub_Order>()
-				}).ToList();
-
-				// List of order details with specific details
-				var orderDetails = new List<(
-					Guid OrderId,
-					Guid ProductId,
-					Guid UserId,
-					Order Order,
-					Product Product,
-					User Owner
-				)>
-				{
-					(
-						orderList[0].Id,
-						productList.First(p => p.Name == "Organic Apples").Id,
-						userList.First(u => u.Username == "company1").Id,
-						orderList[0],
-						productList.First(p => p.Name == "Organic Apples"),
-						userList.First(u => u.Username == "company1")
-					),
-					(
-						orderList[1].Id,
-						productList.First(p => p.Name == "Cheddar Cheese").Id,
-						userList.First(u => u.Username == "company2").Id,
-						orderList[1],
-						productList.First(p => p.Name == "Cheddar Cheese"),
-						userList.First(u => u.Username == "company2")
-					),
-					(
-						orderList[2].Id,
-						productList.First(p => p.Name == "Papayas").Id,
-						userList.First(u => u.Username == "company1").Id,
-						orderList[2],
-						productList.First(p => p.Name == "Papayas"),
-						userList.First(u => u.Username == "company1")
-					),
-					(
-						orderList[3].Id,
-						productList.First(p => p.Name == "Organic Carrots").Id,
-						userList.First(u => u.Username == "company2").Id,
-						orderList[3],
-						productList.First(p => p.Name == "Organic Carrots"),
-						userList.First(u => u.Username == "company2")
-					),
-					(
-						orderList[4].Id,
-						productList.First(p => p.Name == "Fresh Milk").Id,
-						userList.First(u => u.Username == "company1").Id,
-						orderList[4],
-						productList.First(p => p.Name == "Fresh Milk"),
-						userList.First(u => u.Username == "company1")
-					),
-					(
-						orderList[5].Id,
-						productList.First(p => p.Name == "Cherry Tomatoes").Id,
-						userList.First(u => u.Username == "company2").Id,
-						orderList[5],
-						productList.First(p => p.Name == "Cherry Tomatoes"),
-						userList.First(u => u.Username == "company2")
-					),
-					(
-						orderList[6].Id,
-						productList.First(p => p.Name == "Mangoes").Id,
-						userList.First(u => u.Username == "company1").Id,
-						orderList[6],
-						productList.First(p => p.Name == "Mangoes"),
-						userList.First(u => u.Username == "company1")
-					),
-					(
-						orderList[7].Id,
-						productList.First(p => p.Name == "Whole Wheat Flour").Id,
-						userList.First(u => u.Username == "company2").Id,
-						orderList[7],
-						productList.First(p => p.Name == "Whole Wheat Flour"),
-						userList.First(u => u.Username == "company2")
-					),
-					(
-						orderList[8].Id,
-						productList.First(p => p.Name == "Oats").Id,
-						userList.First(u => u.Username == "company1").Id,
-						orderList[8],
-						productList.First(p => p.Name == "Oats"),
-						userList.First(u => u.Username == "company1")
-					),
-					(
-						orderList[9].Id,
-						productList.First(p => p.Name == "Buckwheat").Id,
-						userList.First(u => u.Username == "company2").Id,
-						orderList[9],
-						productList.First(p => p.Name == "Buckwheat"),
-						userList.First(u => u.Username == "company2")
-					)
-				};
-
-				//var orderDetailList = orderDetails
-				//	.Select(detail => new Order_Detail
-				//	{
-				//		Id = Guid.NewGuid(),
-				//		OrderId = detail.OrderId,
-				//		ProductId = detail.ProductId,
-				//		UserId = detail.UserId,
-				//		Order = detail.Order,
-				//		Product = detail.Product,
-				//		User = detail.Owner
-				//	})
-				//	.ToList();
-
+				// seed discount
 				var discountDetails = new List<(int Level, double Amount)>
 				{ (1, 0.1), (2, 0.15), (3, 0.2), (4, 0.25), (5, 0.4) };
-
 				var discountDetailList = discountDetails.Select(discount => new Discount
 				{
 					Id = Guid.NewGuid(),
@@ -579,46 +432,52 @@ namespace uni_cap_pro_be
 					Modified_At = DateTime.Now,
 					Amount = discount.Amount,
 					ActiveStatus = ActiveStatus.ACTIVE,
-					ProductId = productList[17].Id,
-					Product = productList[17],
+					//ProductId = productList[17].Id,
+					//Product = productList[17],
 				}).ToList();
 
-				// Seed Sub_Orders
-				var subOrders = new List<(
-					Guid UserId,
-					Guid OrderId,
-					int Quantity,
-					double Price
-				)>
-		{
-			(userList[1].Id, orderList[0].Id, 2, 30000),
-			(userList[2].Id, orderList[1].Id, 1, 20000),
-			(userList[3].Id, orderList[2].Id, 3, 90000),
-            // Add more sub orders as needed
-        };
+				// seed order
+				var orders = new List<(Guid ProductId, double Total_Price, Product Product)> {
+				(               productList[0].Id,productList[0].Price, productList[0]              )               };
+				var orderList = orders.Select(order => new Order
+				{
+					Id = Guid.NewGuid(),
+					Created_At = DateTime.Now,
+					Modified_At = DateTime.Now,
+					ProductId = order.ProductId,
+					Total_Price = order.Total_Price,
+					Total_Quantity = 1,
+					Timer = DateTime.UtcNow.AddDays(1) - DateTime.UtcNow,
+					Remaining_Timer = DateTime.UtcNow.AddDays(1),
+					Level = 1,
+					Delivery_Status = DeliveryStatus.PENDING,
+					Product = order.Product,
+				}).ToList();
 
-				var subOrderList = subOrders
-					.Select(subOrder => new Sub_Order
-					{
-						Id = Guid.NewGuid(),
-						UserId = subOrder.UserId,
-						OrderId = subOrder.OrderId,
-						User = userList.First(u => u.Id == subOrder.UserId),
-						Order = orderList.First(o => o.Id == subOrder.OrderId),
-						Quantity = subOrder.Quantity,
-						Price = subOrder.Price
-					})
-					.ToList();
+				// seed sub order
+				var sub_orders = new List<(Guid UserId, User User, Guid OrderId, Order Order, int Quantity, double Price)>
+				{(userList[0].Id,userList[0],orderList[0].Id,orderList[0],1,productList[0].Price)};
+				var sub_orderList = sub_orders.Select(sub_order => new Sub_Order
+				{
+					Id = Guid.NewGuid(),
+					Created_At = DateTime.Now,
+					Modified_At = DateTime.Now,
+					UserId = sub_order.UserId,
+					OrderId = sub_order.OrderId,
+					Quantity = sub_order.Quantity,
+					Price = sub_order.Price,
+					//User = sub_order.User,
+					//Order = sub_order.Order,
+				}).ToList();
 
 				// Check and seed data
 				_dataContext.Users.AddRange(userList);
 				_dataContext.Product_Categories.AddRange(productCategoryList);
 				_dataContext.Products.AddRange(productList);
 				_dataContext.Product_Images.AddRange(productImageList);
-				_dataContext.Orders.AddRange(orderList);
-				//_dataContext.Order_Details.AddRange(orderDetailList);
 				_dataContext.Discounts.AddRange(discountDetailList);
-				_dataContext.Sub_Orders.AddRange(subOrderList);
+				_dataContext.Orders.AddRange(orderList);
+				_dataContext.Sub_Orders.AddRange(sub_orderList);
 
 				_dataContext.SaveChanges();
 				Console.WriteLine("Database seeding completed.");

@@ -20,6 +20,12 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
+		public async Task<ICollection<T>> GetSubOrdersById(Guid OrderId)
+		{
+			var subOrders = await _dataSet.Where(item => item.OrderId == OrderId).ToListAsync();
+			return subOrders;
+		}
+
 		public async Task<ICollection<T>> GetItems()
 		{
 			var items = await _dataSet.OrderBy(item => item.Id).ToListAsync();

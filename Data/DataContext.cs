@@ -41,9 +41,9 @@ namespace uni_cap_pro_be.Data
 					  .WithOne(dest => dest.Owner)
 					  .HasForeignKey(dest => dest.OwnerId);
 
-				entity.HasMany(origin => origin.Sub_Orders)
-					  .WithOne(dest => dest.User)
-					  .HasForeignKey(dest => dest.UserId);
+				//entity.HasMany(origin => origin.Sub_Orders)
+				//	  .WithOne(dest => dest.User)
+				//	  .HasForeignKey(dest => dest.UserId);
 			});
 
 			// product
@@ -64,9 +64,9 @@ namespace uni_cap_pro_be.Data
 					  .WithOne(dest => dest.Product)
 					  .HasForeignKey(origin => origin.ProductId);
 
-				entity.HasMany(origin => origin.Discounts)
-					  .WithOne()
-					  .HasForeignKey(origin => origin.ProductId);
+				//entity.HasMany(origin => origin.Discounts)
+				//	  .WithOne()
+				//	  .HasForeignKey(origin => origin.ProductId);
 			});
 
 			// product image
@@ -96,22 +96,22 @@ namespace uni_cap_pro_be.Data
 			{
 				entity.HasKey(e => e.Id);
 
-				entity.HasOne(origin => origin.User)
-					  .WithMany(dest => dest.Sub_Orders)
-					  .HasForeignKey(origin => origin.UserId);
+				//entity.HasOne(origin => origin.User)
+				//	  .WithMany(dest => dest.Sub_Orders)
+				//	  .HasForeignKey(origin => origin.UserId);
 
-				entity.HasOne(origin => origin.Order)
-					  .WithMany(dest => dest.Sub_Orders)
-					  .HasForeignKey(origin => origin.OrderId);
+				//entity.HasOne(origin => origin.Order)
+				//	  .WithMany(dest => dest.Sub_Orders)
+				//	  .HasForeignKey(origin => origin.OrderId);
 			});
 
 			// discount
 			modelBuilder.Entity<Discount>(entity =>
 			{
 				entity.HasKey(e => e.Id);
-				entity.HasOne(origin => origin.Product)
-					  .WithMany(dest => dest.Discounts)
-					  .HasForeignKey(origin => origin.ProductId);
+				//entity.HasOne(origin => origin.Product)
+				//	  .WithMany(dest => dest.Discounts)
+				//	  .HasForeignKey(origin => origin.ProductId);
 			});
 		}
 

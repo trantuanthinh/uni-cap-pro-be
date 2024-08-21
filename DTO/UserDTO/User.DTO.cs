@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using uni_cap_pro_be.Utils;
 
-namespace uni_cap_pro_be.DTO
+namespace uni_cap_pro_be.DTO.UserDTO
 {
 	// DONE
 	public class UserDTO
 	{
+		public Guid Id { get; set; }
+
+		public DateTime Created_At { get; set; }
+		public DateTime Modified_At { get; set; }
+
 		[Required]
 		public required string Username { get; set; }
 
@@ -14,14 +18,12 @@ namespace uni_cap_pro_be.DTO
 		public required string Name { get; set; }
 
 		[Required]
-		[DefaultValue("string@gmail.com")]
 		public required string Email { get; set; }
 
 		[Required]
 		public required string Password { get; set; }
 
 		[Required]
-		[DefaultValue("0327858682")]
 		public required string PhoneNumber { get; set; }
 
 		[Required]

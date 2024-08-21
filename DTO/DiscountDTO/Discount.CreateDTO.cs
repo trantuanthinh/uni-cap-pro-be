@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace uni_cap_pro_be.DTO
+namespace uni_cap_pro_be.DTO.DiscountDTO
 {
 	// DONE
-	public class DiscountDTO
+	public class DiscountCreateDTO
 	{
 		[Required]
 		public required short Level { get; set; }

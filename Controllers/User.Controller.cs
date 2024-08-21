@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.UserDTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
@@ -11,12 +11,7 @@ namespace uni_cap_pro_be.Controllers
 	// DONE
 	[Route("/[controller]")]
 	[ApiController]
-	public class UsersController(
-		IUserService<User> service,
-		IMapper mapper,
-		SharedService sharedService,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class UsersController(IUserService<User> service, IMapper mapper, SharedService sharedService, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IUserService<User> _service = service;
 		private readonly IMapper _mapper = mapper;
@@ -67,7 +62,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateUser([FromBody] UserDTO item)
+		public async Task<IActionResult> CreateUser([FromBody] UserCreateDTO item)
 		{
 			string methodName = nameof(CreateUser);
 
@@ -102,7 +97,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchUser(Guid id, [FromBody] UserDTO item)
+		public async Task<IActionResult> PatchUser(Guid id, [FromBody] UserCreateDTO item)
 		{
 			string methodName = nameof(PatchUser);
 

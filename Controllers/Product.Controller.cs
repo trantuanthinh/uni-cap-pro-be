@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.ProductDTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
@@ -40,8 +40,8 @@ namespace uni_cap_pro_be.Controllers
 
 			foreach (var item in _items)
 			{
-				List<string> imagesURL = await _imageSerivce.GetImagesURL(item.Id);
-				item.Images = imagesURL;
+				List<string> imagesName = await _imageSerivce.GetImagesNameById(item.Id);
+				item.Images = imagesName;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);
@@ -64,8 +64,8 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			List<string> images = await _imageSerivce.GetImagesURL(_item.Id);
-			_item.Images = images;
+			List<string> imagesName = await _imageSerivce.GetImagesNameById(_item.Id);
+			_item.Images = imagesName;
 
 			var okMessage = _api_Response.OkMessage(methodName, _item);
 			return StatusCode(200, okMessage);
@@ -76,7 +76,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateProduct([FromBody] ProductDTO item)
+		public async Task<IActionResult> CreateProduct([FromBody] ProductCreateDTO item)
 		{
 			string methodName = nameof(CreateProduct);
 
@@ -104,7 +104,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchProduct(Guid id, [FromBody] ProductDTO item)
+		public async Task<IActionResult> PatchProduct(Guid id, [FromBody] ProductCreateDTO item)
 		{
 			string methodName = nameof(PatchProduct);
 

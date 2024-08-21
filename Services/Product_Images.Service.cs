@@ -21,14 +21,14 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
-		public async Task<List<string>> GetImagesURL(Guid ProductId)
+		public async Task<List<string>> GetImagesNameById(Guid ProductId)
 		{
-			var imageUrls = await _dataSet
+			var imagesName = await _dataSet
 				.Where(item => item.ProductId == ProductId)
-				.Select(item => item.URL)
+				.Select(item => item.Name)
 				.ToListAsync();
 
-			return imageUrls;
+			return imagesName;
 		}
 
 		public async Task<ICollection<T>> GetItems()

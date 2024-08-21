@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.OrderDTO;
+using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
@@ -10,9 +11,12 @@ namespace uni_cap_pro_be.Controllers
 	// TODO
 	[Route("/[controller]")]
 	[ApiController]
-	public class OrderController(IBaseService<Order> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
+	public class OrdersController(IOrderService<Order> service,
+		ISub_OrderService<Sub_Order> subOrderService,
+		IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
-		private readonly IBaseService<Order> _service = service;
+		private readonly IOrderService<Order> _service = service;
+		private readonly ISub_OrderService<Sub_Order> _subOrderService = subOrderService;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -29,6 +33,12 @@ namespace uni_cap_pro_be.Controllers
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
 				return StatusCode(400, failedMessage);
+			}
+
+			foreach (var item in _items)
+			{
+				ICollection<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
+				item.Sub_Orders = sub_orders;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);
@@ -51,6 +61,9 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
+			ICollection<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
+			_item.Sub_Orders = sub_orders;
+
 			var okMessage = _api_Response.OkMessage(methodName, _item);
 			return StatusCode(200, okMessage);
 		}
@@ -60,7 +73,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateOrder([FromBody] OrderDTO item)
+		public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO item)
 		{
 			string methodName = nameof(CreateOrder);
 
@@ -88,7 +101,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] ProductDTO item) // TODO: change to OrderDTO
+		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO item)
 		{
 			string methodName = nameof(PatchOrder);
 

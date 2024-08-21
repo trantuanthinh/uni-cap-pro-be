@@ -19,10 +19,7 @@ namespace uni_cap_pro_be.Models
 		[Required]
 		public required int Total_Quantity { get; set; }
 
-		[Required]
-		public required int Bundle { get; set; }
-
-		public DateTime Timer { get; set; }
+		public TimeSpan Timer { get; set; }
 		public DateTime Remaining_Timer { get; set; }
 		public bool Is_Remained { get; set; }
 		public int Level { get; set; } //number of people joined together
@@ -33,6 +30,6 @@ namespace uni_cap_pro_be.Models
 
 
 		public required Product Product { get; set; }
-		public required ICollection<Sub_Order> Sub_Orders { get; set; }
+		public ICollection<Sub_Order>? Sub_Orders { get; set; }
 	}
 }
