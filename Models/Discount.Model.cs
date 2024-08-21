@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	// DONE
 	public class Discount
 	{
 		[Key]
@@ -11,11 +10,8 @@ namespace uni_cap_pro_be.Models
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
 
-		[Required]
-		public required int Level { get; set; }
-
-		[Required]
-		public required double Amount { get; set; }
 		public ActiveStatus ActiveStatus { get; set; }
+
+		public ICollection<Discount_Detail>? Discount_Details { get; set; } // Changed to Discount_Detail
 	}
 }

@@ -11,14 +11,10 @@ namespace uni_cap_pro_be.Controllers
 	// TODO
 	[Route("/[controller]")]
 	[ApiController]
-	public class ProductsController(
-		IProductService<Product> service,
-		IProduct_ImageService<Product_Image> imageSerivce,
-		IMapper mapper,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class ProductsController(IProductService<Product> service, IProduct_CategoryService<Product_Category> categoryService, IProduct_ImageService<Product_Image> imageSerivce, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IProductService<Product> _service = service;
+		private readonly IProduct_CategoryService<Product_Category> _categoryService = categoryService;
 		private readonly IProduct_ImageService<Product_Image> _imageSerivce = imageSerivce;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
@@ -42,6 +38,8 @@ namespace uni_cap_pro_be.Controllers
 			{
 				List<string> imagesName = await _imageSerivce.GetImagesNameById(item.Id);
 				item.Images = imagesName;
+				//item.Category = await _categoryService(item.CategoryId);
+
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);

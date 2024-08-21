@@ -13,6 +13,9 @@ namespace uni_cap_pro_be.Models
 		public required Guid CategoryId { get; set; }
 
 		[Required]
+		public required Guid DiscountId { get; set; }
+
+		[Required]
 		public required Guid OwnerId { get; set; } // the owner of the product
 
 		public DateTime Created_At { get; set; }
@@ -35,10 +38,10 @@ namespace uni_cap_pro_be.Models
 
 		[Required]
 		public required User Owner { get; set; } // the owner of the product
+
 		[Required]
-		public required Product_Category Category { get; set; }
+		public Product_Category? Category { get; set; }
+		public Discount? Discount { get; set; }
 		public List<string>? Images { get; set; }
-		public required ICollection<Discount> Discounts { get; set; }
-		public required ICollection<Order> Orders { get; set; }
 	}
 }

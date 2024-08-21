@@ -9,24 +9,18 @@ namespace uni_cap_pro_be.Controllers
 	// DONE
 	[Route("/[controller]")]
 	[ApiController]
-	public class DiscountsController(
-		IDiscountService<Discount> service,
-		IDiscount_DetailService<Discount_Detail> detailService,
-		IMapper mapper,
-		API_ResponseConvention api_Response
-	) : ControllerBase
+	public class Discount_DetailsController(IDiscountService<Discount> service, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IDiscountService<Discount> _service = service;
-		private readonly IDiscount_DetailService<Discount_Detail> _detailService = detailService;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> GetDiscounts()
+		public async Task<IActionResult> GetDiscount_Details()
 		{
-			string methodName = nameof(GetDiscounts);
+			string methodName = nameof(GetDiscount_Details);
 
 			ICollection<Discount> _items = await _service.GetItems();
 
@@ -34,12 +28,6 @@ namespace uni_cap_pro_be.Controllers
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
 				return StatusCode(400, failedMessage);
-			}
-
-			foreach (var item in _items)
-			{
-				List<Discount_Detail> details = await _detailService.GetDetailsById(item.Id);
-				item.Discount_Details = details;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);
@@ -50,9 +38,9 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetDiscount(Guid id)
+		public async Task<IActionResult> GetDiscount_Detail(Guid id)
 		{
-			string methodName = nameof(GetDiscount);
+			string methodName = nameof(GetDiscount_Detail);
 
 			Discount _item = await _service.GetItem(id);
 

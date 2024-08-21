@@ -15,5 +15,13 @@ namespace uni_cap_pro_be.Models
 
 		public int Quantity { get; set; }
 		public double Price { get; set; }
+
+
+
+		[Required]
+		public required User User { get; set; }
+
+		[Required]
+		public required Order Order { get; set; }
 	}
 }

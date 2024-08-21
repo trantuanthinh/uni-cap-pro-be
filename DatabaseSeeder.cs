@@ -20,6 +20,35 @@ namespace uni_cap_pro_be
 				// Ensure the database is created
 				_dataContext.Database.EnsureCreated();
 
+				// seed discount
+				var discountList = new List<Discount>
+{
+	new Discount
+	{
+		Id = Guid.NewGuid(),
+		Created_At = DateTime.Now,
+		Modified_At = DateTime.Now,
+		ActiveStatus = ActiveStatus.ACTIVE
+	}
+};
+
+				var discountDetails = new List<(int Level, double Amount)>
+{
+	(1, 0.1),
+	(2, 0.15),
+	(3, 0.2),
+	(4, 0.25),
+	(5, 0.4)
+};
+
+				var discountDetailList = discountDetails.Select(detail => new Discount_Detail
+				{
+					DiscountId = discountList[0].Id,
+					Level = detail.Level,
+					Amount = detail.Amount,
+					//Discount = discountList[0],
+				}).ToList();
+
 				// Seed users
 				var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
 
@@ -365,6 +394,7 @@ namespace uni_cap_pro_be
 					{
 						Id = Guid.NewGuid(),
 						CategoryId = product.CategoryId,
+						DiscountId = discountList[0].Id,
 						Category = product.Category,
 						OwnerId = product.OwnerId,
 						Owner = product.Owner,
@@ -377,39 +407,38 @@ namespace uni_cap_pro_be
 						Total_Rating_Quantity = product.TotalRatingQuantity,
 						Description = product.Description,
 						Images = [],
-						Discounts = [],
-						Orders = [],
-					})
-					.ToList();
+						Discount = discountList[0]
+					}).ToList();
 
 				// Seed product images
 				// Images for Producer 1
-				var productImages = new List<(string Name, Guid ProductId)>
+				var productImages = new List<(string Name, Guid ProductId, Product Product)>
 {
-	("Organic Apples.jpg", productList[0].Id),
-	("Ripe Bananas.jpg", productList[1].Id),
-	("Organic Carrots.jpg", productList[2].Id),
-	("Fresh Broccoli.jpg", productList[3].Id),
-	("Whole Wheat Flour.jpg", productList[4].Id),
-	("Brown Rice.jpg", productList[5].Id),
-	("Organic Strawberries.jpg", productList[6].Id),
-	("Sweet Potatoes.jpg", productList[7].Id),
-	("Bell Peppers.jpg", productList[8].Id),
-	("Quinoa.jpg", productList[9].Id),
-	("Oats.jpg", productList[10].Id),
-	("Pineapples.jpg", productList[11].Id),
-	("Zucchini.jpg", productList[12].Id),
-	("Fresh Milk.jpg", productList[13].Id),
+	("Organic Apples.jpg", productList[0].Id, productList[0]),
+	("Ripe Bananas.jpg", productList[1].Id, productList[1]),
+	("Organic Carrots.jpg", productList[2].Id, productList[2]),
+	("Fresh Broccoli.jpg", productList[3].Id, productList[3]),
+	("Whole Wheat Flour.jpg", productList[4].Id, productList[4]),
+	("Brown Rice.jpg", productList[5].Id, productList[5]),
+	("Organic Strawberries.jpg", productList[6].Id, productList[6]),
+	("Sweet Potatoes.jpg", productList[7].Id, productList[7]),
+	("Bell Peppers.jpg", productList[8].Id, productList[8]),
+	("Quinoa.jpg", productList[9].Id, productList[9]),
+	("Oats.jpg", productList[10].Id, productList[10]),
+	("Pineapples.jpg", productList[11].Id, productList[11]),
+	("Zucchini.jpg", productList[12].Id, productList[12]),
+	("Fresh Milk.jpg", productList[13].Id, productList[13]),
     // Producer 2's images
-    ("Baby Carrots.jpg", productList[14].Id),
-	("Green Beans.jpg", productList[15].Id),
-	("Millet.jpg", productList[16].Id),
-	("Buckwheat.jpg", productList[17].Id),
-	("Mangoes.jpg", productList[18].Id),
-	("Papayas.jpg", productList[19].Id),
-	("Cherry Tomatoes.jpg", productList[20].Id),
-	("Cheddar Cheese.jpg", productList[21].Id)
+    ("Baby Carrots.jpg", productList[14].Id, productList[14]),
+	("Green Beans.jpg", productList[15].Id, productList[15]),
+	("Millet.jpg", productList[16].Id, productList[16]),
+	("Buckwheat.jpg", productList[17].Id, productList[17]),
+	("Mangoes.jpg", productList[18].Id, productList[18]),
+	("Papayas.jpg", productList[19].Id, productList[19]),
+	("Cherry Tomatoes.jpg", productList[20].Id, productList[20]),
+	("Cheddar Cheese.jpg", productList[21].Id, productList[21])
 };
+
 
 				var productImageList = productImages
 					.Select(image => new Product_Image
@@ -418,23 +447,9 @@ namespace uni_cap_pro_be
 						Name = image.Name,
 						Created_At = DateTime.UtcNow,
 						ProductId = image.ProductId,
+						Product = image.Product
 					})
 					.ToList();
-
-				// seed discount
-				var discountDetails = new List<(int Level, double Amount)>
-				{ (1, 0.1), (2, 0.15), (3, 0.2), (4, 0.25), (5, 0.4) };
-				var discountDetailList = discountDetails.Select(discount => new Discount
-				{
-					Id = Guid.NewGuid(),
-					Level = discount.Level,
-					Created_At = DateTime.Now,
-					Modified_At = DateTime.Now,
-					Amount = discount.Amount,
-					ActiveStatus = ActiveStatus.ACTIVE,
-					//ProductId = productList[17].Id,
-					//Product = productList[17],
-				}).ToList();
 
 				// seed order
 				var orders = new List<(Guid ProductId, double Total_Price, Product Product)> {
@@ -466,8 +481,8 @@ namespace uni_cap_pro_be
 					OrderId = sub_order.OrderId,
 					Quantity = sub_order.Quantity,
 					Price = sub_order.Price,
-					//User = sub_order.User,
-					//Order = sub_order.Order,
+					User = sub_order.User,
+					Order = sub_order.Order,
 				}).ToList();
 
 				// Check and seed data
@@ -475,9 +490,12 @@ namespace uni_cap_pro_be
 				_dataContext.Product_Categories.AddRange(productCategoryList);
 				_dataContext.Products.AddRange(productList);
 				_dataContext.Product_Images.AddRange(productImageList);
-				_dataContext.Discounts.AddRange(discountDetailList);
+
 				_dataContext.Orders.AddRange(orderList);
 				_dataContext.Sub_Orders.AddRange(sub_orderList);
+
+				_dataContext.Discounts.AddRange(discountList);
+				_dataContext.Discount_Details.AddRange(discountDetailList);
 
 				_dataContext.SaveChanges();
 				Console.WriteLine("Database seeding completed.");

@@ -88,10 +88,14 @@ builder.Services.AddSingleton<API_ResponseConvention>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IUserService<User>, UserService<User>>();
+
 builder.Services.AddScoped<IProductService<Product>, ProductService<Product>>();
 builder.Services.AddScoped<IProduct_CategoryService<Product_Category>, Product_CategoryService<Product_Category>>();
 builder.Services.AddScoped<IProduct_ImageService<Product_Image>, Product_ImageService<Product_Image>>();
+
 builder.Services.AddScoped<IDiscountService<Discount>, DiscountService<Discount>>();
+builder.Services.AddScoped<IDiscount_DetailService<Discount_Detail>, Discount_DetailService<Discount_Detail>>();
+
 builder.Services.AddScoped<IOrderService<Order>, OrderService<Order>>();
 builder.Services.AddScoped<ISub_OrderService<Sub_Order>, Sub_OrderService<Sub_Order>>();
 
