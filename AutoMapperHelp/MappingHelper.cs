@@ -11,6 +11,8 @@ namespace uni_cap_pro_be.AutoMapperHelp
 	{
 		public MappingHelper()
 		{
+			//CreateMap<A,B> => Map from A to B
+
 			CreateMap<User, UserDTO>();
 			CreateMap<UserDTO, User>();
 
@@ -26,12 +28,6 @@ namespace uni_cap_pro_be.AutoMapperHelp
 			CreateMap<Order, OrderDTO>();
 			CreateMap<OrderDTO, Order>();
 
-			//// Map from Discount_Detail to Discount_DetailDTO
-			//CreateMap<Discount_Detail, Discount_DetailDTO>()
-			//	.ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Level))
-			//	.ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
-
-			// Map from Discount_DetailDTO to Discount_Detail
 			CreateMap<Discount_DetailDTO, Discount_Detail>()
 				.ForMember(dest => dest.DiscountId, opt => opt.Ignore());
 		}

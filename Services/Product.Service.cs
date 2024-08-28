@@ -12,23 +12,45 @@ namespace uni_cap_pro_be.Services
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
+		private readonly IProduct_ImageService<Product_Image> _imageSerivce;
+		private readonly IDiscountService<Discount> _discountService;
 
-		public ProductService(DataContext dataContext, SharedService sharedService)
+
+
+		public ProductService(DataContext dataContext,
+			SharedService sharedService,
+			IProduct_ImageService<Product_Image> imageSerivce,
+			IDiscountService<Discount> discountService)
 		{
 			_dataContext = dataContext;
 			_dataSet = _dataContext.Set<T>();
 			_sharedService = sharedService;
+			_imageSerivce = imageSerivce;
+			_discountService = discountService;
 		}
 
 		public async Task<ICollection<T>> GetItems()
 		{
-			var items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
-			return items;
+			var _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			foreach (var item in _items)
+			{
+				List<string> imagesName = await _imageSerivce.GetImagesNameById(item.Id);
+				item.Images = imagesName;
+
+				Discount discount = await _discountService.GetItem(item.DiscountId);
+				item.Discount = discount;
+			}
+			return _items;
 		}
 
 		public async Task<T> GetItem(Guid id)
 		{
 			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
+			List<string> imagesName = await _imageSerivce.GetImagesNameById(_item.Id);
+			_item.Images = imagesName;
+
+			Discount discount = await _discountService.GetItem(_item.DiscountId);
+			_item.Discount = discount;
 			return _item;
 		}
 

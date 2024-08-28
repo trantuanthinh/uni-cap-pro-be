@@ -11,7 +11,11 @@ namespace uni_cap_pro_be.Controllers
 	// TODO
 	[Route("/[controller]")]
 	[ApiController]
-	public class ProductsController(IProductService<Product> service, IProduct_CategoryService<Product_Category> categoryService, IProduct_ImageService<Product_Image> imageSerivce, IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
+	public class ProductsController(IProductService<Product> service,
+		IProduct_CategoryService<Product_Category> categoryService,
+		IProduct_ImageService<Product_Image> imageSerivce,
+		IMapper mapper,
+		API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IProductService<Product> _service = service;
 		private readonly IProduct_CategoryService<Product_Category> _categoryService = categoryService;
@@ -34,14 +38,6 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
-			foreach (var item in _items)
-			{
-				List<string> imagesName = await _imageSerivce.GetImagesNameById(item.Id);
-				item.Images = imagesName;
-				//item.Category = await _categoryService(item.CategoryId);
-
-			}
-
 			var okMessage = _api_Response.OkMessage(methodName, _items);
 			return StatusCode(200, okMessage);
 		}
@@ -61,9 +57,6 @@ namespace uni_cap_pro_be.Controllers
 				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(404, failedMessage);
 			}
-
-			List<string> imagesName = await _imageSerivce.GetImagesNameById(_item.Id);
-			_item.Images = imagesName;
 
 			var okMessage = _api_Response.OkMessage(methodName, _item);
 			return StatusCode(200, okMessage);

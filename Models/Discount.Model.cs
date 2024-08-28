@@ -12,6 +12,6 @@ namespace uni_cap_pro_be.Models
 
 		public ActiveStatus ActiveStatus { get; set; }
 
-		public ICollection<Discount_Detail>? Discount_Details { get; set; } // Changed to Discount_Detail
+		public ICollection<Discount_Detail>? Discount_Details { get; set; }
 	}
 }

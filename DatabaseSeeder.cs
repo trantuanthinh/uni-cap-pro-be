@@ -481,8 +481,8 @@ namespace uni_cap_pro_be
 					OrderId = sub_order.OrderId,
 					Quantity = sub_order.Quantity,
 					Price = sub_order.Price,
-					User = sub_order.User,
-					Order = sub_order.Order,
+					//User = sub_order.User,
+					//Order = sub_order.Order,
 				}).ToList();
 
 				// Check and seed data

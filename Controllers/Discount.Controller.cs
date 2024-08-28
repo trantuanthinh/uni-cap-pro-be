@@ -17,7 +17,6 @@ namespace uni_cap_pro_be.Controllers
 	) : ControllerBase
 	{
 		private readonly IDiscountService<Discount> _service = service;
-		private readonly IDiscount_DetailService<Discount_Detail> _detailService = detailService;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -34,12 +33,6 @@ namespace uni_cap_pro_be.Controllers
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
 				return StatusCode(400, failedMessage);
-			}
-
-			foreach (var item in _items)
-			{
-				List<Discount_Detail> details = await _detailService.GetDetailsById(item.Id);
-				item.Discount_Details = details;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);

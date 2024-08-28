@@ -22,15 +22,7 @@ namespace uni_cap_pro_be.Services
 
 		public async Task<List<T>> GetDetailsById(Guid discountId)
 		{
-			var details = await _dataSet
-				.Where(item => item.DiscountId == discountId)
-				.ToListAsync();
-			//.Select(item => new Discount_DetailDTO
-			//{
-			//	Level = item.Level,
-			//	Amount = item.Amount
-			//})
-
+			var details = await _dataSet.Where(item => item.DiscountId == discountId).ToListAsync();
 			return details;
 		}
 

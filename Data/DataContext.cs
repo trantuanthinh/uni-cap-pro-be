@@ -41,9 +41,9 @@ public class DataContext : DbContext
 				  .WithOne(dest => dest.Owner)
 				  .HasForeignKey(dest => dest.OwnerId);
 
-			entity.HasMany(origin => origin.Sub_Orders)
-				  .WithOne(dest => dest.User)
-				  .HasForeignKey(dest => dest.UserId);
+			//entity.HasMany(origin => origin.Sub_Orders)
+			//	  .WithOne(dest => dest.User)
+			//	  .HasForeignKey(dest => dest.UserId);
 		});
 
 		// product
@@ -92,13 +92,13 @@ public class DataContext : DbContext
 		{
 			entity.HasKey(e => e.Id);
 
-			entity.HasOne(origin => origin.User)
-				  .WithMany(dest => dest.Sub_Orders)
-				  .HasForeignKey(origin => origin.UserId);
+			//entity.HasOne(origin => origin.User)
+			//	  .WithMany(dest => dest.Sub_Orders)
+			//	  .HasForeignKey(origin => origin.UserId);
 
-			entity.HasOne(origin => origin.Order)
-				  .WithMany(dest => dest.Sub_Orders)
-				  .HasForeignKey(origin => origin.OrderId);
+			//entity.HasOne(origin => origin.Order)
+			//	  .WithMany(dest => dest.Sub_Orders)
+			//	  .HasForeignKey(origin => origin.OrderId);
 		});
 
 		// discount
