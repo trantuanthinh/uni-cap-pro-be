@@ -10,10 +10,18 @@ namespace uni_cap_pro_be.Models
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
 
-		public Guid UserId { get; set; }
+		[Required]
+		public required Guid ProductId { get; set; }
+
+		[Required]
+		public required Guid UserId { get; set; }
 		public Guid OrderId { get; set; }
 
 		public int Quantity { get; set; }
 		public double Price { get; set; }
+
+
+
+		public required Product Product { get; set; }
 	}
 }

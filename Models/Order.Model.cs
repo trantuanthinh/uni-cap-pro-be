@@ -11,7 +11,6 @@ namespace uni_cap_pro_be.Models
 
 		public DateTime Created_At { get; set; }
 		public DateTime Modified_At { get; set; }
-		public required Guid ProductId { get; set; }
 
 		[Required]
 		public required double Total_Price { get; set; }
@@ -23,13 +22,10 @@ namespace uni_cap_pro_be.Models
 		public DateTime Remaining_Timer { get; set; }
 		public bool Is_Remained { get; set; }
 		public int Level { get; set; } //number of people joined together
-
-		[Required]
 		public DeliveryStatus Delivery_Status { get; set; }
 
 
 
-		public required Product Product { get; set; }
-		public ICollection<Sub_Order>? Sub_Orders { get; set; }
+		public List<Sub_Order>? Sub_Orders { get; set; }
 	}
 }

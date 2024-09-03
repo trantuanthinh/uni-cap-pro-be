@@ -13,12 +13,10 @@ namespace uni_cap_pro_be.Controllers
 	[ApiController]
 	public class OrdersController(IOrderService<Order> service,
 		ISub_OrderService<Sub_Order> subOrderService,
-		IProductService<Product> productService,
 		IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IOrderService<Order> _service = service;
 		private readonly ISub_OrderService<Sub_Order> _subOrderService = subOrderService;
-		private readonly IProductService<Product> _productService = productService;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -39,10 +37,8 @@ namespace uni_cap_pro_be.Controllers
 
 			foreach (var item in _items)
 			{
-				ICollection<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
+				List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
 				item.Sub_Orders = sub_orders;
-				Product product = await _productService.GetItem(item.ProductId);
-				item.Product = product;
 			}
 
 			var okMessage = _api_Response.OkMessage(methodName, _items);
@@ -65,7 +61,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(404, failedMessage);
 			}
 
-			ICollection<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
+			List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
 			_item.Sub_Orders = sub_orders;
 
 			var okMessage = _api_Response.OkMessage(methodName, _item);

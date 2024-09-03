@@ -27,7 +27,7 @@ namespace uni_cap_pro_be.Services
 			var _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
 			foreach (var item in _items)
 			{
-				ICollection<Discount_Detail> details = await _detailService.GetDetailsById(item.Id);
+				List<Discount_Detail> details = await _detailService.GetDetailsById(item.Id);
 				item.Discount_Details = details;
 			}
 			return _items;
@@ -36,7 +36,7 @@ namespace uni_cap_pro_be.Services
 		public async Task<T> GetItem(Guid id)
 		{
 			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
-			ICollection<Discount_Detail> details = await _detailService.GetDetailsById(_item.Id);
+			List<Discount_Detail> details = await _detailService.GetDetailsById(_item.Id);
 			_item.Discount_Details = details;
 			return _item;
 		}

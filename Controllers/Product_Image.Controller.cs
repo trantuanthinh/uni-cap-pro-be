@@ -21,6 +21,7 @@ namespace uni_cap_pro_be.Controllers
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
 		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		[HttpGet("{name}")]
 		public async Task<IActionResult> GetProduct_Image(Guid ownerId, string name)

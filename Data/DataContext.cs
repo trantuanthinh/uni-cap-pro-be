@@ -23,6 +23,7 @@ public class DataContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
+
 		var active_status_converter = new EnumToStringConverter<ActiveStatus>();
 		var user_type_converter = new EnumToStringConverter<UserType>();
 		var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
@@ -37,6 +38,7 @@ public class DataContext : DbContext
 			entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 			entity.Property(e => e.User_Type).HasConversion(user_type_converter);
 
+			// user has many products, many products can be had within a user
 			entity.HasMany(origin => origin.Products)
 				  .WithOne(dest => dest.Owner)
 				  .HasForeignKey(dest => dest.OwnerId);
@@ -82,23 +84,16 @@ public class DataContext : DbContext
 		modelBuilder.Entity<Order>(entity =>
 		{
 			entity.HasKey(e => e.Id);
-			entity.HasOne(origin => origin.Product)
-				  .WithMany()
-				  .HasForeignKey(origin => origin.ProductId);
+
+			entity.HasMany(origin => origin.Sub_Orders)
+				  .WithOne()
+				  .HasForeignKey(origin => origin.OrderId);
 		});
 
 		// sub order
 		modelBuilder.Entity<Sub_Order>(entity =>
 		{
 			entity.HasKey(e => e.Id);
-
-			//entity.HasOne(origin => origin.User)
-			//	  .WithMany(dest => dest.Sub_Orders)
-			//	  .HasForeignKey(origin => origin.UserId);
-
-			//entity.HasOne(origin => origin.Order)
-			//	  .WithMany(dest => dest.Sub_Orders)
-			//	  .HasForeignKey(origin => origin.OrderId);
 		});
 
 		// discount
@@ -106,45 +101,15 @@ public class DataContext : DbContext
 		{
 			entity.HasKey(e => e.Id);
 
-			//entity.HasMany(origin => origin.Discount_Details)
-			//.WithOne(dest => dest.Discount)
-			//.HasForeignKey(origin => origin.Id);
+			entity.HasMany(origin => origin.Discount_Details)
+				  .WithOne()
+				  .HasForeignKey(origin => origin.DiscountId);
 		});
 
 		// discount detail
 		modelBuilder.Entity<Discount_Detail>(entity =>
 		{
 			entity.HasKey(e => e.Id);
-
-			//entity.HasOne(origin => origin.Discount)
-			//	  .WithMany(dest => dest.Discount_Details)
-			//	  .HasForeignKey(origin => origin.DiscountId);
 		});
-	}
-
-	public void CreateProductView()
-	{
-		var query =
-			@"
-            CREATE VIEW Product_View AS
-            SELECT 
-                p.Id AS Id, 
-                p.Description AS Description, 
-                p.Price AS Price, 
-                p.Total_Rating_Value AS Total_Rating_Value, 
-                p.Total_Rating_Quantity AS Total_Rating_Quantity, 
-                ps.Name AS Category, 
-                pi.Name AS Image, 
-                u.Name AS Owner
-            FROM 
-                Products AS p
-            INNER JOIN 
-                Product_Categories AS ps ON p.CategoryId = ps.Id
-            INNER JOIN 
-                Product_Images AS pi ON p.Id = pi.ProductId
-            INNER JOIN 
-                Users AS u ON p.OwnerId = u.Id;
-        ";
-		Database.ExecuteSqlRaw(query);
 	}
 }

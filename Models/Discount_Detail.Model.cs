@@ -7,7 +7,8 @@ namespace uni_cap_pro_be.Models
 		[Key]
 		public int Id { get; set; }
 
-		public Guid DiscountId { get; set; }
+		[Required]
+		public required Guid DiscountId { get; set; }
 		public int Level { get; set; }
 		public double Amount { get; set; }
 	}

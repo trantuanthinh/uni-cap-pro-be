@@ -12,30 +12,25 @@ namespace uni_cap_pro_be.Services
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
+		private readonly IProductService<Product> _productService;
 
-		public Sub_OrderService(DataContext dataContext, SharedService sharedService)
+		public Sub_OrderService(DataContext dataContext, SharedService sharedService, IProductService<Product> productService)
 		{
 			_dataContext = dataContext;
 			_dataSet = _dataContext.Set<T>();
 			_sharedService = sharedService;
+			_productService = productService;
 		}
 
 		public async Task<List<T>> GetSubOrdersById(Guid OrderId)
 		{
 			var subOrders = await _dataSet.Where(item => item.OrderId == OrderId).ToListAsync();
+			foreach (var item in subOrders)
+			{
+				Product product = await _productService.GetItem(item.ProductId);
+				item.Product = product;
+			}
 			return subOrders;
-		}
-
-		public async Task<ICollection<T>> GetItems()
-		{
-			var items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
-			return items;
-		}
-
-		public async Task<T> GetItem(Guid id)
-		{
-			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
-			return _item;
 		}
 
 		public async Task<bool> CreateItem(T _item)
@@ -63,6 +58,16 @@ namespace uni_cap_pro_be.Services
 		{
 			int saved = _dataContext.SaveChanges();
 			return saved > 0;
+		}
+
+		public Task<ICollection<T>> GetItems()
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<T> GetItem(Guid id)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

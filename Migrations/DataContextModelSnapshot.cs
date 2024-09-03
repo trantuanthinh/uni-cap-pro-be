@@ -87,9 +87,6 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime>("Remaining_Timer")
                         .HasColumnType("datetime(6)");
 
@@ -103,8 +100,6 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders");
                 });
@@ -229,6 +224,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -238,6 +236,8 @@ namespace uni_cap_pro_be.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -316,17 +316,6 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
-                {
-                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Product_Category", "Category")
@@ -373,11 +362,19 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("uni_cap_pro_be.Models.User", null)
                         .WithMany("Sub_Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>

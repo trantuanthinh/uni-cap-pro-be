@@ -123,8 +123,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -136,10 +134,8 @@ static void SeedData(IHost app)
 {
 	using var scope = app.Services.CreateScope();
 	var seed_service = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-	//var view_service = scope.ServiceProvider.GetRequiredService<DataContext>();
 
 	seed_service.SeedDataContext();
-	//view_service.CreateProductView();
 
 	Console.WriteLine("Database seeded");
 }
