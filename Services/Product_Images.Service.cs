@@ -13,6 +13,7 @@ namespace uni_cap_pro_be.Services
 		private readonly DataContext _dataContext;
 		private readonly DbSet<T> _dataSet;
 		private readonly SharedService _sharedService;
+		private readonly string _baseUrl = "http://localhost:5130/api/product_images/";
 
 		public Product_ImageService(DataContext dataContext, SharedService sharedService)
 		{
@@ -21,25 +22,64 @@ namespace uni_cap_pro_be.Services
 			_sharedService = sharedService;
 		}
 
-		public async Task<List<string>> GetImagesNameById(Guid ProductId)
+		public async Task<List<string>> GetImagesURLByProductId(Guid OwnerId, Guid ProductId)
 		{
 			var imagesName = await _dataSet
 				.Where(item => item.ProductId == ProductId)
 				.Select(item => item.Name)
 				.ToListAsync();
 
-			return imagesName;
+			//var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources\\{OwnerId}\\{ProductId}");
+			var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources");
+
+
+			//if (!Directory.Exists(directoryPath))
+			//{
+			//	return null;
+			//}
+
+			var imageUrls = new List<string>();
+
+			try
+			{
+				foreach (var name in imagesName)
+				{
+					var filePath = Path.Combine(directoryPath, name);
+					//if (File.Exists(filePath))
+					//{
+					//var fileUrl = Path.Combine(_baseUrl, $"{OwnerId}/{ProductId}/{name}").Replace("\\", "/");
+					var fileUrl = Path.Combine(_baseUrl, $"{name}").Replace("\\", "/");
+					imageUrls.Add(fileUrl);
+					//}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error: ", ex);
+				return null;
+			}
+
+			return imageUrls;
 		}
 
-		public async Task<ICollection<T>> GetItems()
+
+
+		public async Task<ICollection<T>> GetItems(Guid OwnerId)
 		{
 			ICollection<T> _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
+			foreach (var item in _items)
+			{
+				var url = Path.Combine(Directory.GetCurrentDirectory(), OwnerId.ToString(), item.ProductId.ToString(), item.Name);
+				item.Name = url;
+			}
 			return _items;
 		}
 
-		public async Task<T> GetItem(Guid id)
+		public async Task<T> GetItem(Guid id, Guid OwnerId)
 		{
 			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
+			var url = Path.Combine(Directory.GetCurrentDirectory(), OwnerId.ToString(), _item.ProductId.ToString(), _item.Name);
+			_item.Name = url;
 			return _item;
 		}
 
@@ -66,6 +106,23 @@ namespace uni_cap_pro_be.Services
 		{
 			int saved = _dataContext.SaveChanges();
 			return saved > 0;
+		}
+
+		private string GetImageUrl(Product_Image item)
+		{
+			string baseUrl = "https://example.com/images/";
+
+			return baseUrl + item.Name;
+		}
+
+		public Task<ICollection<T>> GetItems()
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<T> GetItem(Guid id)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

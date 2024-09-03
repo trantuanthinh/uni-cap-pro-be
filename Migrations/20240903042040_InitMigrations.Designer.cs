@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240821114044_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20240903042040_InitMigrations")]
+    partial class InitMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -370,21 +370,17 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Order", "Order")
+                    b.HasOne("uni_cap_pro_be.Models.Order", null)
                         .WithMany("Sub_Orders")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                    b.HasOne("uni_cap_pro_be.Models.User", null)
                         .WithMany("Sub_Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>

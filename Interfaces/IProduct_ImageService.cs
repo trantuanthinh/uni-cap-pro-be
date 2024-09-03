@@ -6,6 +6,8 @@ namespace uni_cap_pro_be.Interfaces
 	// DONE
 	public interface IProduct_ImageService<T> : IBaseService<T> where T : Product_Image
 	{
-		Task<List<string>> GetImagesNameById(Guid ProductId);
+		Task<ICollection<T>> GetItems(Guid OwnerId);
+		Task<T> GetItem(Guid id, Guid OwnerId);
+		Task<List<string>> GetImagesURLByProductId(Guid OwnerId, Guid ProductId);
 	}
 }

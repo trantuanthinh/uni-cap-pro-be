@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.DTO.ProductDTO;
 using uni_cap_pro_be.Interfaces;
@@ -21,85 +20,92 @@ namespace uni_cap_pro_be.Controllers
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
-		private string _uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
-
-		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> GetProductImageImages()
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		[HttpGet("{name}")]
+		public async Task<IActionResult> GetProduct_Image(Guid ownerId, string name)
 		{
-			string methodName = nameof(GetProductImageImages);
+			var filePath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources", name);
 
-			ICollection<Product_Image> _items = await _service.GetItems();
-
-			if (!ModelState.IsValid)
+			if (!System.IO.File.Exists(filePath))
 			{
-				var failedMessage = _api_Response.FailedMessage(methodName);
-				return StatusCode(400, failedMessage);
+				return StatusCode(404, new { message = "Image not found!" });
 			}
 
-			var okMessage = _api_Response.OkMessage(methodName, _items);
-			return StatusCode(200, okMessage);
-		}
-
-		[HttpGet("{id:guid}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetProductImage(Guid id)
-		{
-			string methodName = nameof(GetProductImage);
-
-			Product_Image _item = await _service.GetItem(id);
-
-			if (_item == null)
+			try
 			{
-				var failedMessage = _api_Response.FailedMessage(methodName);
-				return StatusCode(404, failedMessage);
-			}
+				var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
-			var okMessage = _api_Response.OkMessage(methodName, _item);
-			return StatusCode(200, okMessage);
+				var extension = Path.GetExtension(name).ToLowerInvariant();
+				string contentType = extension switch
+				{
+					".jpg" or ".jpeg" => "image/jpeg",
+					".png" => "image/png",
+					".gif" => "image/gif",
+					".bmp" => "image/bmp",
+					_ => "application/octet-stream",
+				};
+				return File(fileBytes, contentType);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "Unable to retrieve image!", error = ex.Message });
+			}
 		}
 
-		[Authorize]
+
+
+		//[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		[HttpPost]
-		public async Task<IActionResult> CreateProduct_Image([FromBody] Product_ImageDTO item, IFormFile file)
+		public async Task<IActionResult> CreateProduct_Image(Product_ImageDTO item, IFormFile file)
 		{
 			string methodName = nameof(CreateProduct_Image);
-			var ownerId = item.OwnerId;
-			var productId = item.ProductId;
-			_uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources/{ownerId}/{productId}");
 
-			if (!Directory.Exists(_uploadFolderPath))
+			string _uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources/{item.OwnerId}/{item.ProductId}");
+
+			try
 			{
-				Directory.CreateDirectory(_uploadFolderPath);
-			}
+				if (!Directory.Exists(_uploadFolderPath))
+				{
+					Directory.CreateDirectory(_uploadFolderPath);
+				}
 
-			if (file == null || file.Length == 0)
+				if (file == null || file.Length == 0)
+				{
+					var failedMessage = _api_Response.FailedMessage(methodName, "File is null or empty");
+					return StatusCode(400, failedMessage);
+				}
+
+				var filePath = Path.Combine(_uploadFolderPath, file.FileName);
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await file.CopyToAsync(stream);
+				}
+
+				item.Name = file.FileName;
+
+				Product_Image _item = _mapper.Map<Product_Image>(item);
+
+				bool isCreated = await _service.CreateItem(_item);
+				if (!isCreated)
+				{
+					var failedMessage = _api_Response.FailedMessage(methodName);
+					return StatusCode(500, failedMessage);
+				}
+
+				var okMessage = _api_Response.OkMessage(methodName, _item);
+				return StatusCode(200, okMessage);
+			}
+			catch (Exception ex)
 			{
-				var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
-				return StatusCode(400, failedMessage);
+				var errorMessage = _api_Response.FailedMessage(methodName, ex.Message);
+				return StatusCode(500, errorMessage);
 			}
-
-			var filePath = Path.Combine(_uploadFolderPath, file.FileName);
-
-			using (var stream = new FileStream(filePath, FileMode.Create))
-			{
-				await file.CopyToAsync(stream);
-			}
-
-			Product_Image _item = _mapper.Map<Product_Image>(item);
-			bool isCreated = await _service.CreateItem(_item);
-			if (!isCreated)
-			{
-				var failedMessage = _api_Response.FailedMessage(methodName);
-				return StatusCode(500, failedMessage);
-			}
-
-			var okMessage = _api_Response.OkMessage(methodName, _item);
-			return StatusCode(200, okMessage);
 		}
+
 
 		//[Authorize]
 		//[HttpPatch("{id:guid}")]

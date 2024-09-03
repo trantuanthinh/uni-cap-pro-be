@@ -11,7 +11,6 @@ namespace uni_cap_pro_be.Controllers
 	[ApiController]
 	public class DiscountsController(
 		IDiscountService<Discount> service,
-		IDiscount_DetailService<Discount_Detail> detailService,
 		IMapper mapper,
 		API_ResponseConvention api_Response
 	) : ControllerBase

@@ -15,8 +15,6 @@ namespace uni_cap_pro_be.Services
 		private readonly IProduct_ImageService<Product_Image> _imageSerivce;
 		private readonly IDiscountService<Discount> _discountService;
 
-
-
 		public ProductService(DataContext dataContext,
 			SharedService sharedService,
 			IProduct_ImageService<Product_Image> imageSerivce,
@@ -34,7 +32,7 @@ namespace uni_cap_pro_be.Services
 			var _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
 			foreach (var item in _items)
 			{
-				List<string> imagesName = await _imageSerivce.GetImagesNameById(item.Id);
+				List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(item.OwnerId, item.Id);
 				item.Images = imagesName;
 
 				Discount discount = await _discountService.GetItem(item.DiscountId);
@@ -46,7 +44,7 @@ namespace uni_cap_pro_be.Services
 		public async Task<T> GetItem(Guid id)
 		{
 			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
-			List<string> imagesName = await _imageSerivce.GetImagesNameById(_item.Id);
+			List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(_item.OwnerId, _item.Id);
 			_item.Images = imagesName;
 
 			Discount discount = await _discountService.GetItem(_item.DiscountId);
