@@ -35,13 +35,17 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
+			var _dtos = new List<OrderDTO>();
 			foreach (var item in _items)
 			{
 				List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
 				item.Sub_Orders = sub_orders;
+
+				OrderDTO _item = _mapper.Map<OrderDTO>(item);
+				_dtos.Add(_item);
 			}
 
-			var okMessage = _api_Response.OkMessage(methodName, _items);
+			var okMessage = _api_Response.OkMessage(methodName, _dtos);
 			return StatusCode(200, okMessage);
 		}
 
@@ -63,8 +67,9 @@ namespace uni_cap_pro_be.Controllers
 
 			List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
 			_item.Sub_Orders = sub_orders;
+			OrderDTO _dto = _mapper.Map<OrderDTO>(_item);
 
-			var okMessage = _api_Response.OkMessage(methodName, _item);
+			var okMessage = _api_Response.OkMessage(methodName, _dto);
 			return StatusCode(200, okMessage);
 		}
 

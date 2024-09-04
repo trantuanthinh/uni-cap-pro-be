@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240903110505_InitMigrations")]
+    [Migration("20240904054821_InitMigrations")]
     partial class InitMigrations
     {
         /// <inheritdoc />
@@ -53,8 +53,8 @@ namespace uni_cap_pro_be.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("double");
+                    b.Property<float>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("DiscountId")
                         .HasColumnType("char(36)");
@@ -96,8 +96,8 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<TimeSpan>("Timer")
                         .HasColumnType("time(6)");
 
-                    b.Property<double>("Total_Price")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Total_Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("Total_Quantity")
                         .HasColumnType("int");
@@ -142,8 +142,8 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("char(36)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("Total_Rating_Quantity")
                         .HasColumnType("int");
@@ -224,8 +224,8 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("char(36)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("char(36)");
