@@ -78,7 +78,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO item)
+		public async Task<IActionResult> CreateOrder([FromBody] Sub_OrderCreateDTO orderDto)
 		{
 			string methodName = nameof(CreateOrder);
 
@@ -88,7 +88,7 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
-			Order _item = _mapper.Map<Order>(item);
+			Order _item = _mapper.Map<Order>(orderDto);
 			bool isCreated = await _service.CreateItem(_item);
 			if (!isCreated)
 			{

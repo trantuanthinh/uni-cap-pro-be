@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigrations : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,7 +37,7 @@ namespace uni_cap_pro_be.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Total_Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Total_Price = table.Column<double>(type: "double", nullable: false),
                     Total_Quantity = table.Column<int>(type: "int", nullable: false),
                     Timer = table.Column<TimeSpan>(type: "time(6)", nullable: false),
                     Remaining_Timer = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -109,7 +109,7 @@ namespace uni_cap_pro_be.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     DiscountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<float>(type: "float", nullable: false)
+                    Amount = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,7 +135,7 @@ namespace uni_cap_pro_be.Migrations
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Price = table.Column<double>(type: "double", nullable: false),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Active_Status = table.Column<string>(type: "longtext", nullable: false)
@@ -202,7 +202,7 @@ namespace uni_cap_pro_be.Migrations
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                    Price = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {

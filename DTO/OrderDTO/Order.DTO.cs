@@ -12,7 +12,7 @@ namespace uni_cap_pro_be.DTO.OrderDTO
 		public DateTime Modified_At { get; set; }
 
 		[Required]
-		public required decimal Total_Price { get; set; }
+		public required double Total_Price { get; set; }
 
 		[Required]
 		public required int Total_Quantity { get; set; }

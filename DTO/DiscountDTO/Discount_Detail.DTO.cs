@@ -3,6 +3,6 @@
 	public class Discount_DetailDTO
 	{
 		public int Level { get; set; }
-		public float Amount { get; set; }
+		public double Amount { get; set; }
 	}
 }

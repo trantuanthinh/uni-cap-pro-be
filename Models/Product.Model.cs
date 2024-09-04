@@ -25,7 +25,7 @@ namespace uni_cap_pro_be.Models
 		public required string Name { get; set; }
 
 		[Required]
-		public required decimal Price { get; set; }
+		public required double Price { get; set; }
 		public string? Description { get; set; }
 
 		[Required]

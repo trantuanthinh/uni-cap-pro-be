@@ -14,7 +14,7 @@ namespace uni_cap_pro_be.DTO.DiscountDTO
 		public DateTime Modified_At { get; set; }
 
 		[Required]
-		public required float Amount { get; set; }
+		public required double Amount { get; set; }
 		public ActiveStatus ActiveStatus { get; set; }
 	}
 }
