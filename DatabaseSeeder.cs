@@ -26,8 +26,8 @@ namespace uni_cap_pro_be
 					new Discount
 					{
 						Id = Guid.NewGuid(),
-						Created_At = DateTime.Now,
-						Modified_At = DateTime.Now,
+						Created_At = DateTime.UtcNow,
+						Modified_At = DateTime.UtcNow,
 						ActiveStatus = ActiveStatus.ACTIVE
 					}
 				};
@@ -453,19 +453,24 @@ namespace uni_cap_pro_be
 					.ToList();
 
 				// seed order
-				var orders = new List<double> { 0 };
+				TimeSpan timeSpan = new(24, 0, 0);
+				var orders = new List<(Guid ProductId, Product Product)>
+				{
+					(productList[0].Id,productList[0])
+				};
 				var orderList = orders
 					.Select(order => new Order
 					{
 						Id = Guid.NewGuid(),
-						Created_At = DateTime.Now,
-						Modified_At = DateTime.Now,
+						Created_At = DateTime.UtcNow,
+						Modified_At = DateTime.UtcNow,
+						ProductId = order.ProductId,
 						Total_Price = 0,
 						Total_Quantity = 1,
-						Timer = DateTime.UtcNow.AddDays(1) - DateTime.UtcNow,
-						Remaining_Timer = DateTime.UtcNow.AddDays(1),
+						Remaining_Timer = DateTime.UtcNow + timeSpan,
 						Level = 1,
 						Delivery_Status = DeliveryStatus.PENDING,
+						Product = order.Product
 					})
 					.ToList();
 
@@ -501,14 +506,12 @@ namespace uni_cap_pro_be
 					.Select(sub_order => new Sub_Order
 					{
 						Id = Guid.NewGuid(),
-						Created_At = DateTime.Now,
-						Modified_At = DateTime.Now,
-						ProductId = sub_order.ProductId,
+						Created_At = DateTime.UtcNow,
+						Modified_At = DateTime.UtcNow,
 						UserId = sub_order.UserId,
 						OrderId = sub_order.OrderId,
 						Quantity = sub_order.Quantity,
 						Price = sub_order.Price,
-						Product = sub_order.Product,
 					})
 					.ToList();
 

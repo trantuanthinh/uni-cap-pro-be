@@ -25,11 +25,11 @@ namespace uni_cap_pro_be.Services
 		public async Task<List<T>> GetSubOrdersById(Guid OrderId)
 		{
 			var subOrders = await _dataSet.Where(item => item.OrderId == OrderId).ToListAsync();
-			foreach (var item in subOrders)
-			{
-				Product product = await _productService.GetItem(item.ProductId);
-				item.Product = product;
-			}
+			//foreach (var item in subOrders)
+			//{
+			//	Product product = await _productService.GetItem(item.ProductId);
+			//	item.Product = product;
+			//}
 			return subOrders;
 		}
 

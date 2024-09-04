@@ -13,10 +13,12 @@ namespace uni_cap_pro_be.Controllers
 	[ApiController]
 	public class OrdersController(IOrderService<Order> service,
 		ISub_OrderService<Sub_Order> subOrderService,
+		IProductService<Product> productService,
 		IMapper mapper, API_ResponseConvention api_Response) : ControllerBase
 	{
 		private readonly IOrderService<Order> _service = service;
 		private readonly ISub_OrderService<Sub_Order> _subOrderService = subOrderService;
+		private readonly IProductService<Product> _productService = productService;
 		private readonly IMapper _mapper = mapper;
 		private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -41,7 +43,12 @@ namespace uni_cap_pro_be.Controllers
 				List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
 				item.Sub_Orders = sub_orders;
 
+				Product product = await _productService.GetItem(item.ProductId);
+				item.Product = product;
+
 				OrderDTO _item = _mapper.Map<OrderDTO>(item);
+				_item.TimeLeft = _item.Remaining_Timer - DateTime.UtcNow;
+				_item.Is_Remained = _item.TimeLeft > TimeSpan.Zero;
 				_dtos.Add(_item);
 			}
 
@@ -67,7 +74,13 @@ namespace uni_cap_pro_be.Controllers
 
 			List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
 			_item.Sub_Orders = sub_orders;
+
+			Product product = await _productService.GetItem(_item.ProductId);
+			_item.Product = product;
+
 			OrderDTO _dto = _mapper.Map<OrderDTO>(_item);
+			_dto.TimeLeft = _dto.Remaining_Timer - DateTime.UtcNow;
+			_dto.Is_Remained = _dto.TimeLeft > TimeSpan.Zero;
 
 			var okMessage = _api_Response.OkMessage(methodName, _dto);
 			return StatusCode(200, okMessage);
@@ -78,7 +91,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateOrder([FromBody] Sub_OrderCreateDTO sub_orderDto)
+		public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO orderDto)
 		{
 			string methodName = nameof(CreateOrder);
 
@@ -88,16 +101,15 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
+			Sub_Order _suborder = _mapper.Map<Sub_Order>(orderDto);
+
 			Order _order = new Order
 			{
-				Total_Price = 0,
-				Total_Quantity = 0
+				ProductId = orderDto.ProductId,
+				Total_Price = orderDto.Price,
+				Total_Quantity = orderDto.Quantity,
+				Level = 1,
 			};
-			Sub_Order _suborder = _mapper.Map<Sub_Order>(sub_orderDto);
-
-			_order.Level = 1;
-			_order.Total_Price += _suborder.Price;
-			_order.Total_Quantity += _suborder.Quantity;
 
 			bool isOrderCreated = await _service.CreateItem(_order);
 			if (!isOrderCreated)
@@ -124,7 +136,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] Sub_OrderCreateDTO sub_orderDto)
+		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO orderDto)
 		{
 			//string methodName = nameof(PatchOrder);
 

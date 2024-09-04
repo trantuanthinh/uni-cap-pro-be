@@ -85,6 +85,9 @@ public class DataContext : DbContext
 		{
 			entity.HasKey(e => e.Id);
 
+			entity.HasOne(origin => origin.Product)
+				  .WithMany()
+				  .HasForeignKey(origin => origin.ProductId);
 			entity.HasMany(origin => origin.Sub_Orders)
 				  .WithOne()
 				  .HasForeignKey(origin => origin.OrderId);

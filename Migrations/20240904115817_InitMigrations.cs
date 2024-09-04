@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class InitMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,27 +27,6 @@ namespace uni_cap_pro_be.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Discounts", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Total_Price = table.Column<double>(type: "double", nullable: false),
-                    Total_Quantity = table.Column<int>(type: "int", nullable: false),
-                    Timer = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    Remaining_Timer = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Is_Remained = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Level = table.Column<int>(type: "int", nullable: false),
-                    Delivery_Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -170,6 +149,32 @@ namespace uni_cap_pro_be.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Total_Price = table.Column<double>(type: "double", nullable: false),
+                    Total_Quantity = table.Column<int>(type: "int", nullable: false),
+                    Remaining_Timer = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Delivery_Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Product_Images",
                 columns: table => new
                 {
@@ -198,7 +203,6 @@ namespace uni_cap_pro_be.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -214,12 +218,6 @@ namespace uni_cap_pro_be.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sub_Orders_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Sub_Orders_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -232,6 +230,11 @@ namespace uni_cap_pro_be.Migrations
                 name: "IX_Discount_Details_DiscountId",
                 table: "Discount_Details",
                 column: "DiscountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ProductId",
+                table: "Orders",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_Categories_Name",
@@ -263,11 +266,6 @@ namespace uni_cap_pro_be.Migrations
                 name: "IX_Sub_Orders_OrderId",
                 table: "Sub_Orders",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sub_Orders_ProductId",
-                table: "Sub_Orders",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sub_Orders_UserId",
