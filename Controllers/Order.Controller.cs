@@ -78,7 +78,7 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> CreateOrder([FromBody] Sub_OrderCreateDTO orderDto)
+		public async Task<IActionResult> CreateOrder([FromBody] Sub_OrderCreateDTO sub_orderDto)
 		{
 			string methodName = nameof(CreateOrder);
 
@@ -88,15 +88,33 @@ namespace uni_cap_pro_be.Controllers
 				return StatusCode(400, failedMessage);
 			}
 
-			Order _item = _mapper.Map<Order>(orderDto);
-			bool isCreated = await _service.CreateItem(_item);
-			if (!isCreated)
+			Order _order = new Order
+			{
+				Total_Price = 0,
+				Total_Quantity = 0
+			};
+			Sub_Order _suborder = _mapper.Map<Sub_Order>(sub_orderDto);
+
+			_order.Level = 1;
+			_order.Total_Price += _suborder.Price;
+			_order.Total_Quantity += _suborder.Quantity;
+
+			bool isOrderCreated = await _service.CreateItem(_order);
+			if (!isOrderCreated)
 			{
 				var failedMessage = _api_Response.FailedMessage(methodName);
 				return StatusCode(500, failedMessage);
 			}
 
-			var okMessage = _api_Response.OkMessage(methodName, _item);
+			_suborder.OrderId = _order.Id;
+			bool isSubOrderCreated = await _subOrderService.CreateItem(_suborder);
+			if (!isSubOrderCreated)
+			{
+				var failedMessage = _api_Response.FailedMessage(methodName);
+				return StatusCode(500, failedMessage);
+			}
+
+			var okMessage = _api_Response.OkMessage(methodName, _order);
 			return StatusCode(200, okMessage);
 		}
 
@@ -106,33 +124,34 @@ namespace uni_cap_pro_be.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO item)
+		public async Task<IActionResult> PatchOrder(Guid id, [FromBody] Sub_OrderCreateDTO sub_orderDto)
 		{
-			string methodName = nameof(PatchOrder);
+			//string methodName = nameof(PatchOrder);
 
-			Order _item = await _service.GetItem(id);
+			//Order _item = await _service.GetItem(id);
 
-			if (item == null || _item == null)
-			{
-				var failedMessage = _api_Response.FailedMessage(methodName);
-				return StatusCode(404, failedMessage);
-			}
+			//if (item == null || _item == null)
+			//{
+			//	var failedMessage = _api_Response.FailedMessage(methodName);
+			//	return StatusCode(404, failedMessage);
+			//}
 
-			if (!TryValidateModel(_item))
-			{
-				return ValidationProblem(ModelState);
-			}
+			//if (!TryValidateModel(_item))
+			//{
+			//	return ValidationProblem(ModelState);
+			//}
 
-			Order patchItem = _mapper.Map<Order>(item);
-			bool isUpdated = await _service.UpdateItem(_item, patchItem);
-			if (isUpdated)
-			{
-				var failedMessage = _api_Response.FailedMessage(methodName);
-				return StatusCode(500, failedMessage);
-			}
+			//Order patchItem = _mapper.Map<Order>(item);
+			//bool isUpdated = await _service.UpdateItem(_item, patchItem);
+			//if (isUpdated)
+			//{
+			//	var failedMessage = _api_Response.FailedMessage(methodName);
+			//	return StatusCode(500, failedMessage);
+			//}
 
-			var okMessage = _api_Response.OkMessage(methodName, _item);
-			return StatusCode(200, okMessage);
+			//var okMessage = _api_Response.OkMessage(methodName, _item);
+			//return StatusCode(200, okMessage);
+			return Ok(200);
 		}
 
 		[HttpDelete("{id:guid}")]

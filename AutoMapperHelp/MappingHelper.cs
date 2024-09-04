@@ -30,6 +30,9 @@ namespace uni_cap_pro_be.AutoMapperHelp
 
 			CreateMap<Discount_DetailDTO, Discount_Detail>()
 				.ForMember(dest => dest.DiscountId, opt => opt.Ignore());
+
+			CreateMap<Sub_OrderCreateDTO, Sub_Order>();
+
 		}
 	}
 }

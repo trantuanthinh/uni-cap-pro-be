@@ -35,7 +35,17 @@ namespace uni_cap_pro_be.Services
 
 		public async Task<bool> CreateItem(T _item)
 		{
-			throw new NotImplementedException();
+			_item.Created_At = DateTime.UtcNow;
+			_item.Modified_At = DateTime.UtcNow;
+			_item.Timer = new TimeSpan(1, 30, 0);
+			_item.Remaining_Timer = DateTime.Now + _item.Timer;
+			_item.Is_Remained = true;
+			_item.Delivery_Status = DeliveryStatus.PENDING;
+
+
+			//TimeSpan timeLeft = _item.Remaining_Timer - DateTime.Now;
+			_dataContext.Orders.Add(_item);
+			return Save();
 		}
 
 		public async Task<bool> UpdateItem(T _item, T patchItem)
