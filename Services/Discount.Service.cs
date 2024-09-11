@@ -7,22 +7,11 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class DiscountService : IDiscountService
+    public class DiscountService(DataContext dataContext, IDiscount_DetailService detailService)
+        : IDiscountService
     {
-        private readonly DataContext _dataContext;
-        private readonly SharedService _sharedService;
-        private readonly IDiscount_DetailService _detailService;
-
-        public DiscountService(
-            DataContext dataContext,
-            SharedService sharedService,
-            IDiscount_DetailService detailService
-        )
-        {
-            _dataContext = dataContext;
-            _sharedService = sharedService;
-            _detailService = detailService;
-        }
+        private readonly DataContext _dataContext = dataContext;
+        private readonly IDiscount_DetailService _detailService = detailService;
 
         public async Task<ICollection<Discount>> GetDiscounts()
         {

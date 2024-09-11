@@ -18,11 +18,6 @@ namespace uni_cap_pro_be.Services
             var subOrders = await _dataContext
                 .Sub_Orders.Where(item => item.OrderId == OrderId)
                 .ToListAsync();
-            //foreach (var item in subOrders)
-            //{
-            //	Product product = await _productService.GetItem(item.ProductId);
-            //	item.Product = product;
-            //}
             return subOrders;
         }
 
