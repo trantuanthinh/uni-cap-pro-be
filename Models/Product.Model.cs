@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using uni_cap_pro_be.DTO.UserDTO;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models

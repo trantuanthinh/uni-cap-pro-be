@@ -1,20 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Data;
+using uni_cap_pro_be.DTO.UserDTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-    // DONE
+    // TODO
     public class ProductService(
         DataContext dataContext,
+        IMapper mapper,
+        IUserService userSerivce,
         IProduct_ImageService imageSerivce,
         IProduct_CategoryService categorySerivce,
         IDiscountService discountService
     ) : IProductService
     {
         private readonly DataContext _dataContext = dataContext;
+        private readonly IMapper _mapper = mapper;
+        private readonly IUserService _userSerivce = userSerivce;
         private readonly IProduct_ImageService _imageSerivce = imageSerivce;
         private readonly IProduct_CategoryService _categorySerivce = categorySerivce;
         private readonly IDiscountService _discountSerivce = discountService;
@@ -30,8 +36,9 @@ namespace uni_cap_pro_be.Services
                 );
                 item.Images = imagesName;
 
-                // User user = await _userSerivce.GetItem(item.OwnerId);
-                // item.Owner = user;
+                User user = await _userSerivce.GetUser(item.OwnerId);
+                // UserDTO userDTO = _mapper.Map<UserDTO>(user);
+                // item.Owner = userDTO;
 
                 Discount discount = await _discountSerivce.GetDiscount(item.DiscountId);
                 item.Discount = discount;
@@ -52,6 +59,10 @@ namespace uni_cap_pro_be.Services
                 _item.Id
             );
             _item.Images = imagesName;
+
+            User user = await _userSerivce.GetUser(_item.OwnerId);
+            // UserDTO userDTO = _mapper.Map<UserDTO>(user);
+            // _item.Owner = userDTO;
 
             Discount discount = await _discountSerivce.GetDiscount(_item.DiscountId);
             _item.Discount = discount;

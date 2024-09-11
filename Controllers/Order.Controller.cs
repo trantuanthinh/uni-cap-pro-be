@@ -13,17 +13,19 @@ namespace uni_cap_pro_be.Controllers
     [ApiController]
     public class OrdersController(
         IOrderService service,
-        ISub_OrderService subOrderService,
         IProductService productService,
+        ISub_OrderService subOrderService,
         IMapper mapper,
-        API_ResponseConvention api_Response
+        API_ResponseConvention api_Response,
+        SharedService sharedService
     ) : ControllerBase
     {
         private readonly IOrderService _service = service;
-        private readonly ISub_OrderService _subOrderService = subOrderService;
         private readonly IProductService _productService = productService;
+        private readonly ISub_OrderService _subOrderService = subOrderService;
         private readonly IMapper _mapper = mapper;
         private readonly API_ResponseConvention _api_Response = api_Response;
+        private readonly SharedService _sharedService = sharedService;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -43,8 +45,8 @@ namespace uni_cap_pro_be.Controllers
             var _dtos = new List<OrderDTO>();
             foreach (var item in _items)
             {
-                List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
-                item.Sub_Orders = sub_orders;
+                // List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
+                // item.Sub_Orders = sub_orders;
 
                 Product product = await _productService.GetProduct(item.ProductId);
                 item.Product = product;
@@ -52,6 +54,7 @@ namespace uni_cap_pro_be.Controllers
                 OrderDTO _item = _mapper.Map<OrderDTO>(item);
                 _item.TimeLeft = _item.EndTime - DateTime.UtcNow;
                 _item.Is_Remained = _item.TimeLeft > TimeSpan.Zero;
+
                 _dtos.Add(_item);
             }
 
