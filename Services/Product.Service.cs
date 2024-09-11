@@ -6,80 +6,89 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	// TODO
-	public class ProductService<T> : IProductService<T> where T : Product
-	{
-		private readonly DataContext _dataContext;
-		private readonly DbSet<T> _dataSet;
-		private readonly SharedService _sharedService;
-		private readonly IProduct_ImageService<Product_Image> _imageSerivce;
-		private readonly IDiscountService<Discount> _discountService;
+    // DONE
+    public class ProductService(
+        DataContext dataContext,
+        IProduct_ImageService imageSerivce,
+        IProduct_CategoryService categorySerivce,
+        IDiscountService discountService
+    ) : IProductService
+    {
+        private readonly DataContext _dataContext = dataContext;
+        private readonly IProduct_ImageService _imageSerivce = imageSerivce;
+        private readonly IProduct_CategoryService _categorySerivce = categorySerivce;
+        private readonly IDiscountService _discountSerivce = discountService;
 
-		public ProductService(DataContext dataContext,
-			SharedService sharedService,
-			IProduct_ImageService<Product_Image> imageSerivce,
-			IDiscountService<Discount> discountService)
-		{
-			_dataContext = dataContext;
-			_dataSet = _dataContext.Set<T>();
-			_sharedService = sharedService;
-			_imageSerivce = imageSerivce;
-			_discountService = discountService;
-		}
+        public async Task<ICollection<Product>> GetProducts()
+        {
+            var _items = await _dataContext.Products.OrderBy(item => item.Id).ToListAsync();
+            foreach (var item in _items)
+            {
+                List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(
+                    item.OwnerId,
+                    item.Id
+                );
+                item.Images = imagesName;
 
-		public async Task<ICollection<T>> GetItems()
-		{
-			var _items = await _dataSet.OrderBy(item => item.Id).ToListAsync();
-			foreach (var item in _items)
-			{
-				List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(item.OwnerId, item.Id);
-				item.Images = imagesName;
+                // User user = await _userSerivce.GetItem(item.OwnerId);
+                // item.Owner = user;
 
-				Discount discount = await _discountService.GetItem(item.DiscountId);
-				item.Discount = discount;
-			}
-			return _items;
-		}
+                Discount discount = await _discountSerivce.GetDiscount(item.DiscountId);
+                item.Discount = discount;
 
-		public async Task<T> GetItem(Guid id)
-		{
-			T _item = await _dataSet.SingleOrDefaultAsync(item => item.Id == id);
-			List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(_item.OwnerId, _item.Id);
-			_item.Images = imagesName;
+                Product_Category category = await _categorySerivce.GetProduct_Category(
+                    item.CategoryId
+                );
+                item.Category = category;
+            }
+            return _items;
+        }
 
-			Discount discount = await _discountService.GetItem(_item.DiscountId);
-			_item.Discount = discount;
-			return _item;
-		}
+        public async Task<Product> GetProduct(Guid id)
+        {
+            Product _item = await _dataContext.Products.SingleOrDefaultAsync(item => item.Id == id);
+            List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(
+                _item.OwnerId,
+                _item.Id
+            );
+            _item.Images = imagesName;
 
-		// TODO
-		public async Task<bool> CreateItem(T _item)
-		{
-			_item.Created_At = DateTime.UtcNow;
-			_item.Modified_At = DateTime.UtcNow;
-			_dataSet.Add(_item);
-			return Save();
-		}
+            Discount discount = await _discountSerivce.GetDiscount(_item.DiscountId);
+            _item.Discount = discount;
 
-		// TODO
-		public async Task<bool> UpdateItem(T _item, T patchItem)
-		{
+            Product_Category category = await _categorySerivce.GetProduct_Category(
+                _item.CategoryId
+            );
+            _item.Category = category;
 
-			_item.Modified_At = DateTime.UtcNow;
-			_dataSet.Update(_item);
-			return Save();
-		}
+            return _item;
+        }
 
-		public async Task<bool> DeleteItem(T _item)
-		{
-			_dataSet.Remove(_item);
-			return Save();
-		}
+        public async Task<bool> CreateProduct(Product _item)
+        {
+            _item.Created_At = DateTime.UtcNow;
+            _item.Modified_At = DateTime.UtcNow;
+            _dataContext.Products.Add(_item);
+            return Save();
+        }
 
-		public bool Save()
-		{
-			int saved = _dataContext.SaveChanges();
-			return saved > 0;
-		}
-	}
+        public async Task<bool> UpdateProduct(Product _item, Product patchItem)
+        {
+            _item.Modified_At = DateTime.UtcNow;
+            _dataContext.Products.Update(_item);
+            return Save();
+        }
+
+        public async Task<bool> DeleteProduct(Product _item)
+        {
+            _dataContext.Products.Remove(_item);
+            return Save();
+        }
+
+        private bool Save()
+        {
+            int saved = _dataContext.SaveChanges();
+            return saved > 0;
+        }
+    }
 }

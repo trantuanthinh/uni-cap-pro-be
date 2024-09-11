@@ -6,60 +6,65 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	// TODO
-	public class Discount_DetailService<T> : IDiscount_DetailService<T> where T : Discount_Detail
-	{
-		private readonly DataContext _dataContext;
-		private readonly DbSet<T> _dataSet;
-		private readonly SharedService _sharedService;
+    // DONE
+    public class Discount_DetailService(DataContext dataContext, SharedService sharedService)
+        : IDiscount_DetailService
+    {
+        private readonly DataContext _dataContext = dataContext;
+        private readonly SharedService _sharedService = sharedService;
 
-		public Discount_DetailService(DataContext dataContext, SharedService sharedService)
-		{
-			_dataContext = dataContext;
-			_dataSet = _dataContext.Set<T>();
-			_sharedService = sharedService;
-		}
+        public async Task<List<Discount_Detail>> GetDetailsByDiscountId(Guid discountId)
+        {
+            var details = await _dataContext
+                .Discount_Details.Where(item => item.DiscountId == discountId)
+                .ToListAsync();
+            return details;
+        }
 
-		public async Task<List<T>> GetDetailsById(Guid discountId)
-		{
-			var details = await _dataSet.Where(item => item.DiscountId == discountId).ToListAsync();
-			return details;
-		}
+        public async Task<ICollection<Discount_Detail>> GetDiscount_Details()
+        {
+            var _items = await _dataContext
+                .Discount_Details.OrderBy(item => item.DiscountId)
+                .ToListAsync();
+            return _items;
+        }
 
+        public async Task<Discount_Detail> GetDiscount_Detail(Guid id)
+        {
+            var _item = await _dataContext.Discount_Details.SingleOrDefaultAsync(item =>
+                item.Id == id
+            );
+            return _item;
+        }
 
-		public async Task<ICollection<T>> GetItems()
-		{
-			var items = await _dataSet.OrderBy(item => item.DiscountId).ToListAsync();
-			return items;
-		}
+        public async Task<bool> CreateDiscount_Detail(Discount_Detail _item)
+        {
+            _item.Created_At = DateTime.UtcNow;
+            _item.Modified_At = DateTime.UtcNow;
+            _dataContext.Discount_Details.Add(_item);
+            return Save();
+        }
 
-		public async Task<T> GetItem(Guid id)
-		{
-			throw new NotImplementedException();
-		}
+        public async Task<bool> UpdateDiscount_Detail(
+            Discount_Detail _item,
+            Discount_Detail patchItem
+        )
+        {
+            _item.Modified_At = DateTime.UtcNow;
+            _dataContext.Discount_Details.Update(_item);
+            return Save();
+        }
 
-		public async Task<bool> CreateItem(T _item)
-		{
-			_dataSet.Add(_item);
-			return Save();
-		}
+        public async Task<bool> DeleteDiscount_Detail(Discount_Detail _item)
+        {
+            _dataContext.Discount_Details.Remove(_item);
+            return Save();
+        }
 
-		public async Task<bool> UpdateItem(T _item, T patchItem)
-		{
-			_dataSet.Update(_item);
-			return Save();
-		}
-
-		public async Task<bool> DeleteItem(T _item)
-		{
-			_dataSet.Remove(_item);
-			return Save();
-		}
-
-		public bool Save()
-		{
-			int saved = _dataContext.SaveChanges();
-			return saved > 0;
-		}
-	}
+        private bool Save()
+        {
+            int saved = _dataContext.SaveChanges();
+            return saved > 0;
+        }
+    }
 }

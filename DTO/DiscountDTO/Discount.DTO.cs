@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.DiscountDTO
 {
-	// DONE
 	public class DiscountDTO
 	{
 		[Key]

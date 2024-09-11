@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240904115817_InitMigrations")]
-    partial class InitMigrations
+    [Migration("20240911072256_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,12 +34,6 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("ActiveStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created_At")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("Modified_At")
-                        .HasColumnType("datetime(6)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Discounts");
@@ -47,20 +41,24 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("double");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("DiscountId")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -81,6 +79,12 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("Delivery_Status")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsShare")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
@@ -89,9 +93,6 @@ namespace uni_cap_pro_be.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("Remaining_Timer")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<double>("Total_Price")
                         .HasColumnType("double");
@@ -236,8 +237,6 @@ namespace uni_cap_pro_be.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Sub_Orders");
                 });
 
@@ -339,7 +338,7 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired();
 
                     b.HasOne("uni_cap_pro_be.Models.User", "Owner")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -369,12 +368,6 @@ namespace uni_cap_pro_be.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("uni_cap_pro_be.Models.User", null)
-                        .WithMany("Sub_Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
@@ -384,13 +377,6 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
-                    b.Navigation("Sub_Orders");
-                });
-
-            modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
-                {
-                    b.Navigation("Products");
-
                     b.Navigation("Sub_Orders");
                 });
 #pragma warning restore 612, 618

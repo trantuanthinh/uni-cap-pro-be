@@ -3,11 +3,13 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Interfaces
 {
-	// DONE
-	public interface IProduct_ImageService<T> : IBaseService<T> where T : Product_Image
-	{
-		Task<ICollection<T>> GetItems(Guid OwnerId);
-		Task<T> GetItem(Guid id, Guid OwnerId);
-		Task<List<string>> GetImagesURLByProductId(Guid OwnerId, Guid ProductId);
-	}
+    // DONE
+    public interface IProduct_ImageService
+    {
+        Task<ICollection<Product_Image>> GetImages(Guid OwnerId);
+        Task<Product_Image> GetImage(Guid id);
+        Task<bool> CreateImage(Product_Image item);
+        Task<bool> DeleteImage(Product_Image item);
+        Task<List<string>> GetImagesURLByProductId(Guid OwnerId, Guid ProductId);
+    }
 }

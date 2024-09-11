@@ -2,7 +2,6 @@
 
 namespace uni_cap_pro_be.DTO
 {
-	// DONE
 	public class SignInDTO
 	{
 		[Required]

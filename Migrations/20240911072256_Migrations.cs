@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigrations : Migration
+    public partial class Migrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,8 +19,6 @@ namespace uni_cap_pro_be.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ActiveStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -84,8 +81,9 @@ namespace uni_cap_pro_be.Migrations
                 name: "Discount_Details",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DiscountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Level = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false)
@@ -158,9 +156,10 @@ namespace uni_cap_pro_be.Migrations
                     ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Total_Price = table.Column<double>(type: "double", nullable: false),
                     Total_Quantity = table.Column<int>(type: "int", nullable: false),
-                    Remaining_Timer = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Delivery_Status = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    Delivery_Status = table.Column<int>(type: "int", nullable: false)
+                    IsShare = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -217,12 +216,6 @@ namespace uni_cap_pro_be.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Sub_Orders_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -266,11 +259,6 @@ namespace uni_cap_pro_be.Migrations
                 name: "IX_Sub_Orders_OrderId",
                 table: "Sub_Orders",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sub_Orders_UserId",
-                table: "Sub_Orders",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	// DONE
 	public class Order
 	{
 		[Key]
@@ -21,9 +20,12 @@ namespace uni_cap_pro_be.Models
 		[Required]
 		public required int Total_Quantity { get; set; }
 
-		public DateTime Remaining_Timer { get; set; }
-		public int Level { get; set; } //number of people joined together
+		public DateTime EndTime { get; set; }
 		public DeliveryStatus Delivery_Status { get; set; }
+		public int Level { get; set; } //number of people joined together
+
+		[Required]
+		public required bool IsShare { get; set; }
 
 
 

@@ -16,10 +16,13 @@ namespace uni_cap_pro_be.AutoMapperHelp
 			CreateMap<User, UserDTO>();
 			CreateMap<UserDTO, User>();
 
-			CreateMap<Product, ProductDTO>();
+			CreateMap<Product, ProductDTO>()
+				.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
 			CreateMap<ProductDTO, Product>();
 
-			CreateMap<Product_Image, Product_ImageDTO>().ForMember(dest => dest.OwnerId, opt => opt.Ignore());
+
+
+			CreateMap<Product_Image, Product_ImageDTO>();
 			CreateMap<Product_ImageDTO, Product_Image>();
 
 			CreateMap<Order, OrderDTO>();

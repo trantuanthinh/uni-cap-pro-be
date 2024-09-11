@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.UserDTO
 {
-	// DONE
 	public class UserDTO
 	{
 		public Guid Id { get; set; }
@@ -19,9 +18,6 @@ namespace uni_cap_pro_be.DTO.UserDTO
 
 		[Required]
 		public required string Email { get; set; }
-
-		[Required]
-		public required string Password { get; set; }
 
 		[Required]
 		public required string PhoneNumber { get; set; }

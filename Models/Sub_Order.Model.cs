@@ -2,7 +2,6 @@
 
 namespace uni_cap_pro_be.Models
 {
-	// DONE
 	public class Sub_Order
 	{
 		[Key]

@@ -2,6 +2,7 @@
 
 namespace uni_cap_pro_be.Utils
 {
+    // DONE
     public class SharedService
     {
         public string HashPassword(string password)
@@ -9,9 +10,9 @@ namespace uni_cap_pro_be.Utils
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public bool VerifyPassword(string notHashedpassword, string hashedPassword)
+        public bool VerifyPassword(string notHashedPassword, string hashedPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(notHashedpassword, hashedPassword);
+            return BCrypt.Net.BCrypt.Verify(notHashedPassword, hashedPassword);
         }
 
         public bool IsValidGmail(string email)

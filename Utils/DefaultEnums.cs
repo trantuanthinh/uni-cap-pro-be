@@ -1,5 +1,6 @@
 ﻿namespace uni_cap_pro_be.Utils
 {
+    // DONE
     public enum UsernameType
     {
         Email,

@@ -1,8 +1,14 @@
 ﻿using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Interfaces
 {
-	// DONE
-	public interface IProduct_CategoryService<T> : IBaseService<T> where T : Product_Category { }
+    // DONE
+    public interface IProduct_CategoryService
+    {
+        Task<ICollection<Product_Category>> GetProduct_Categories();
+        Task<Product_Category> GetProduct_Category(Guid id);
+        Task<bool> CreateProduct_Category(Product_Category item);
+        Task<bool> UpdateProduct_Category(Product_Category item, Product_Category patchItem);
+        Task<bool> DeleteProduct_Category(Product_Category item);
+    }
 }

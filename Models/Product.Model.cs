@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	// DONE
 	public class Product
 	{
 		[Key]
@@ -38,8 +37,6 @@ namespace uni_cap_pro_be.Models
 
 		[Required]
 		public required User Owner { get; set; } // the owner of the product
-
-		[Required]
 		public Product_Category? Category { get; set; }
 		public Discount? Discount { get; set; }
 		public List<string>? Images { get; set; }

@@ -7,8 +7,6 @@ namespace uni_cap_pro_be.Models
 	{
 		[Key]
 		public Guid Id { get; set; }
-		public DateTime Created_At { get; set; }
-		public DateTime Modified_At { get; set; }
 
 		public ActiveStatus ActiveStatus { get; set; }
 

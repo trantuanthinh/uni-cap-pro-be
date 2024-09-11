@@ -1,5 +1,6 @@
 ﻿namespace uni_cap_pro_be.Utils
 {
+    // DONE
     public class API_ResponseConvention
     {
         public object OkMessage(string _message, object _item)

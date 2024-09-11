@@ -3,7 +3,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	// DONE
 	public class User
 	{
 		[Key]
@@ -38,7 +37,7 @@ namespace uni_cap_pro_be.Models
 
 
 
-		public ICollection<Product>? Products { get; set; } // for user type producer
-		public ICollection<Sub_Order>? Sub_Orders { get; set; } // for user type company
+		//public ICollection<Product>? Products { get; set; } // for user type producer
+		//public ICollection<Sub_Order>? Sub_Orders { get; set; } // for user type company
 	}
 }

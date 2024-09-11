@@ -4,7 +4,6 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.UserDTO
 {
-	// DONE
 	public class UserCreateDTO
 	{
 		[Required]

@@ -39,9 +39,9 @@ public class DataContext : DbContext
 			entity.Property(e => e.User_Type).HasConversion(user_type_converter);
 
 			// user has many products, many products can be had within a user
-			entity.HasMany(origin => origin.Products)
-				  .WithOne(dest => dest.Owner)
-				  .HasForeignKey(dest => dest.OwnerId);
+			//entity.HasMany(origin => origin.Products)
+			//	  .WithOne(dest => dest.Owner)
+			//	  .HasForeignKey(dest => dest.OwnerId);
 
 			//entity.HasMany(origin => origin.Sub_Orders)
 			//	  .WithOne(dest => dest.User)
@@ -54,9 +54,9 @@ public class DataContext : DbContext
 			entity.HasKey(e => e.Id);
 			entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 
-			entity.HasOne(origin => origin.Owner)
-				  .WithMany(dest => dest.Products)
-				  .HasForeignKey(origin => origin.OwnerId);
+			//entity.HasOne(origin => origin.Owner)
+			//	  .WithMany(dest => dest.Products)
+			//	  .HasForeignKey(origin => origin.OwnerId);
 
 			entity.HasOne(origin => origin.Category)
 				  .WithMany()
