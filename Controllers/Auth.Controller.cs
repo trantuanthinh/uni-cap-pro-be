@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.DTO;
+using uni_cap_pro_be.DTO.UserDTO;
 using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Middleware;
 using uni_cap_pro_be.Models;
@@ -12,11 +14,13 @@ namespace uni_cap_pro_be.Controllers
     [ApiController]
     public class AuthController(
         IAuthService authService,
+        IMapper mapper,
         JWTService jwtService,
         API_ResponseConvention api_Response
     ) : ControllerBase
     {
         private readonly IAuthService _authService = authService;
+        private readonly IMapper _mapper = mapper;
         private readonly JWTService _jwtService = jwtService;
         private readonly API_ResponseConvention _api_Response = api_Response;
 
@@ -35,9 +39,10 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(401, failedMessage);
             }
 
+            UserDTO _dto = _mapper.Map<UserDTO>(_user);
             string _token = _jwtService.GenerateJwtToken(_user);
 
-            var okMessage = _api_Response.OkMessage(_token, methodName, _user);
+            var okMessage = _api_Response.OkMessage(_token, methodName, _dto);
             return StatusCode(200, okMessage);
         }
     }
