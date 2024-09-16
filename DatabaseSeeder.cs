@@ -469,6 +469,7 @@ namespace uni_cap_pro_be
                         Delivery_Status = DeliveryStatus.PENDING,
                         Product = order.Product,
                         IsShare = true,
+                        IsPaid = false,
                     })
                     .ToList();
 

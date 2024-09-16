@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrations : Migration
+    public partial class InitMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -159,7 +159,8 @@ namespace uni_cap_pro_be.Migrations
                     EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Delivery_Status = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    IsShare = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsShare = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsPaid = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

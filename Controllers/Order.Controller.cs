@@ -115,6 +115,7 @@ namespace uni_cap_pro_be.Controllers
                 Total_Price = orderDto.Price,
                 Total_Quantity = orderDto.Quantity,
                 IsShare = orderDto.IsShare,
+                IsPaid = false,
                 Level = 1,
             };
 
