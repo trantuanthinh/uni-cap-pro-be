@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
-using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
@@ -22,13 +20,23 @@ namespace uni_cap_pro_be.Controllers
     {
         private readonly Product_ImageService _service = service;
 
-        [HttpGet("{name}")]
+        [HttpGet("{ownerId}/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetProduct_Image(Guid ownerId, string name)
+        public async Task<IActionResult> GetProduct_Image(string ownerId, string name)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources", name);
+            if (string.IsNullOrWhiteSpace(ownerId) || string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest(new { message = "Invalid parameters." });
+            }
+
+            var filePath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "Resources",
+                ownerId,
+                name
+            );
 
             if (!System.IO.File.Exists(filePath))
             {
