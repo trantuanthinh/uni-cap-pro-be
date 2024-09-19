@@ -388,6 +388,64 @@ namespace uni_cap_pro_be
                         "Aged cheddar cheese with a rich, creamy flavor."
                     )
                 };
+
+                string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+                string seedImagePath = @"D:\UniCapstoneProject\sample-images";
+
+                // Check -> delete old folder: its sub_folders and files, if any, before create the Resources directory
+                if (Directory.Exists(directoryPath))
+                {
+                    try
+                    {
+                        // Delete the directory and all its contents
+                        Directory.Delete(directoryPath, recursive: true);
+                        Console.WriteLine($"Deleted folder and its contents: {directoryPath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(
+                            $"Error deleting folder: {directoryPath}. Exception: {ex.Message}"
+                        );
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Directory '{directoryPath}' does not exist.");
+                }
+
+                foreach (var product in products)
+                {
+                    // Create directory for each owner, if it doesn't already exist
+                    string ownerImageDirectory = Path.Combine(
+                        directoryPath,
+                        product.OwnerId.ToString()
+                    );
+
+                    if (!Directory.Exists(ownerImageDirectory))
+                    {
+                        Directory.CreateDirectory(ownerImageDirectory);
+                    }
+
+                    // Copy product image to the owner's directory
+                    string sourceImagePath = Path.Combine(seedImagePath, $"{product.Name}.jpg");
+                    string destinationImagePath = Path.Combine(
+                        ownerImageDirectory,
+                        $"{product.Name}.jpg"
+                    );
+
+                    if (File.Exists(sourceImagePath))
+                    {
+                        File.Copy(sourceImagePath, destinationImagePath, overwrite: true);
+                    }
+                    else
+                    {
+                        // Log missing image issue instead of just printing to the console
+                        Console.WriteLine(
+                            $"Warning: Image for product {product.Name} not found at {sourceImagePath}."
+                        );
+                    }
+                }
+
                 var productList = products
                     .Select(product => new Product
                     {
