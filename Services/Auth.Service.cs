@@ -20,8 +20,6 @@ namespace uni_cap_pro_be.Services
             {
                 return false;
             }
-            _item.Created_At = DateTime.UtcNow;
-            _item.Modified_At = DateTime.UtcNow;
             _item.Password = _sharedService.HashPassword(_item.Password);
             _repository.Add(_item);
             return _repository.Save();

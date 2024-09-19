@@ -1,5 +1,5 @@
-﻿using Core.Base.Entity;
-using uni_cap_pro_be.Core;
+﻿using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
@@ -41,7 +41,6 @@ namespace uni_cap_pro_be.Services
                 return false;
             }
 
-            _item.Modified_At = DateTime.UtcNow;
             patchRequest.Patch(ref _item);
             _repository.Update(_item);
             return _repository.Save();

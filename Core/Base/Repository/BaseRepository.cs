@@ -29,6 +29,16 @@ namespace uni_cap_pro_be.Core.Base.Repository
 
         public T Add(T obj)
         {
+            var createdAtProperty = obj.GetType().GetProperty("Created_At");
+            var modifiedAtProperty = obj.GetType().GetProperty("Modified_At");
+            if (createdAtProperty != null && createdAtProperty.CanWrite)
+            {
+                createdAtProperty.SetValue(obj, DateTime.UtcNow);
+            }
+            if (modifiedAtProperty != null && modifiedAtProperty.CanWrite)
+            {
+                modifiedAtProperty.SetValue(obj, DateTime.UtcNow);
+            }
             return _dbSet.Add(obj).Entity;
         }
 
