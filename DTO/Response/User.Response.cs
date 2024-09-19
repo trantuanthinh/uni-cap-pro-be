@@ -1,0 +1,36 @@
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using Core.Data.Base.Entity;
+using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Utils;
+
+namespace uni_cap_pro_be.DTO.Response
+{
+    public class UserResponse : BaseEntity<Guid>
+    {
+        public DateTime Created_At { get; set; }
+        public DateTime Modified_At { get; set; }
+
+        [Required]
+        public required string Username { get; set; }
+
+        [Required]
+        public required string Name { get; set; }
+
+        [Required]
+        public required string Email { get; set; }
+
+        [Required]
+        public required string PhoneNumber { get; set; }
+
+        [Required]
+        public required ActiveStatus Active_Status { get; set; }
+
+        [Required]
+        public required UserType User_Type { get; set; }
+
+        public string? Avatar { get; set; }
+        public string? Background { get; set; }
+        public string? Description { get; set; }
+    }
+}

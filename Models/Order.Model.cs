@@ -1,12 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using Core.Data.Base.Entity;
+using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-    public class Order
+    public class Order : BaseEntity<Guid>
     {
-        [Key]
-        public Guid Id { get; set; }
+        static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Product, ProductResponse>();
+        });
+
+        static readonly Mapper mapper = new Mapper(config);
+
+        public ProductResponse ToResponse()
+        {
+            var res = mapper.Map<ProductResponse>(this);
+            return res;
+        }
 
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }

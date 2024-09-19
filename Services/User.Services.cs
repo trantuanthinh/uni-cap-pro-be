@@ -1,89 +1,62 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using uni_cap_pro_be.Data;
-using uni_cap_pro_be.Interfaces;
+using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.QueryParameter;
+using uni_cap_pro_be.DTO.Response;
+using uni_cap_pro_be.Extensions;
 using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Utils;
+using uni_cap_pro_be.Repositories;
 
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class UserService(DataContext dataContext, SharedService sharedService) : IUserService
+    public class UserService(UserRepository repository) : BaseService()
     {
-        private readonly DataContext _dataContext = dataContext;
-        private readonly SharedService _sharedService = sharedService;
+        private readonly UserRepository _repository = repository;
 
-        public async Task<ICollection<User>> GetUsers()
+        public async Task<BaseResponse<UserResponse>> GetUsers(QueryParameters queryParameters)
         {
-            var _items = await _dataContext.Users.OrderBy(item => item.Id).ToListAsync();
-            return _items;
+            QueryParameterResult<User> _items = _repository
+                .SelectAll()
+                .ApplyQueryParameters(queryParameters);
+
+            return _items
+                .Data.AsEnumerable()
+                .Select(item => item.ToResponse())
+                .ToList()
+                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
         }
 
-        public async Task<User> GetUser(Guid id)
+        public async Task<UserResponse> GetUser(Guid id)
         {
-            var _item = await _dataContext.Users.SingleOrDefaultAsync(item => item.Id == id);
-            return _item;
+            User _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            return _item.ToResponse();
         }
 
-        public async Task<bool> CreateUser(User _item)
-        {
-            bool validUser = await IsUserUniqueAsync(_item);
-            if (!validUser)
-            {
-                return false;
-            }
-            _item.Password = _sharedService.HashPassword(_item.Password);
-            _item.Created_At = DateTime.UtcNow;
-            _item.Modified_At = DateTime.UtcNow;
-            _dataContext.Users.Add(_item);
-            return Save();
-        }
+        // public async Task<bool> UpdateUser(User _item, User patchItem)
+        // {
+        //     _item.Modified_At = DateTime.UtcNow;
+        //     _item.Username = patchItem.Username;
+        //     _item.Name = patchItem.Name;
+        //     _item.Email = patchItem.Email;
+        //     if (patchItem.Password != null)
+        //     {
+        //         patchItem.Password = _sharedService.HashPassword(patchItem.Password);
+        //         _item.Password = patchItem.Password;
+        //     }
+        //     _item.PhoneNumber = patchItem.PhoneNumber;
+        //     _item.Active_Status = patchItem.Active_Status;
+        //     _item.User_Type = patchItem.User_Type;
+        //     _item.Description = patchItem.Description;
+        //     _item.Avatar = patchItem.Avatar;
 
-        public async Task<bool> UpdateUser(User _item, User patchItem)
-        {
-            _item.Modified_At = DateTime.UtcNow;
-            _item.Username = patchItem.Username;
-            _item.Name = patchItem.Name;
-            _item.Email = patchItem.Email;
-            if (patchItem.Password != null)
-            {
-                patchItem.Password = _sharedService.HashPassword(patchItem.Password);
-                _item.Password = patchItem.Password;
-            }
-            _item.PhoneNumber = patchItem.PhoneNumber;
-            _item.Active_Status = patchItem.Active_Status;
-            _item.User_Type = patchItem.User_Type;
-            _item.Description = patchItem.Description;
-            _item.Avatar = patchItem.Avatar;
+        //     _dataContext.Users.Update(_item);
+        //     return Save();
+        // }
 
-            _dataContext.Users.Update(_item);
-            return Save();
-        }
-
-        public async Task<bool> DeleteUser(User _item)
-        {
-            _dataContext.Users.Remove(_item);
-            return Save();
-        }
-
-        public async Task<bool> IsUserUniqueAsync(User _item)
-        {
-            string trimmedUpperUsername = _item.Username.Trim().ToUpperInvariant();
-            string trimmedUpperEmail = _item.Email.Trim().ToUpperInvariant();
-
-            bool isUnique = !await _dataContext.Users.AnyAsync(user =>
-                user.Username.Trim()
-                    .Equals(trimmedUpperUsername, StringComparison.CurrentCultureIgnoreCase)
-                || user.Email.Trim()
-                    .Equals(trimmedUpperEmail, StringComparison.CurrentCultureIgnoreCase)
-                || user.PhoneNumber == _item.PhoneNumber
-            );
-            return isUnique;
-        }
-
-        private bool Save()
-        {
-            int saved = _dataContext.SaveChanges();
-            return saved > 0;
-        }
+        // public async Task<bool> DeleteUser(User _item)
+        // {
+        //     _dataContext.Users.Remove(_item);
+        //     return Save();
+        // }
     }
 }

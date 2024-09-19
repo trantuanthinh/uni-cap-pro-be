@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Data.Base.Entity;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	public class Discount
+	public class Discount : BaseEntity<Guid>
 	{
-		[Key]
-		public Guid Id { get; set; }
-
 		public ActiveStatus ActiveStatus { get; set; }
 
 		public List<Discount_Detail>? Discount_Details { get; set; }

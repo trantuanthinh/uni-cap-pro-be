@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using uni_cap_pro_be;
+using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
-using uni_cap_pro_be.Interfaces;
 using uni_cap_pro_be.Middleware;
-using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
@@ -42,10 +42,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddControllers();
 
-builder.Services.AddControllers(options =>
-    options.Conventions.Add(new RoutePrefixConvention("/api"))
-);
+// builder.Services.AddControllers(options =>
+//     options.Conventions.Add(new RoutePrefixConvention("/api"))
+// );
 
 // Add Controllers with JSON options
 builder
@@ -85,18 +86,24 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddSingleton<JWTService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSingleton<SharedService>();
-builder.Services.AddSingleton<API_ResponseConvention>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
-builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
-builder.Services.AddScoped<IDiscountService, DiscountService>();
-builder.Services.AddScoped<IDiscount_DetailService, Discount_DetailService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ISub_OrderService, Sub_OrderService>();
+builder.Services.AddSingleton<SharedService>();
+builder.Services.AddSingleton<APIResponse>();
+builder.Services.AddSingleton<BaseResponse<object>>();
+
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
+
+// builder.Services.AddScoped<IProductService, ProductService>();
+// builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
+// builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
+// builder.Services.AddScoped<IDiscountService, DiscountService>();
+// builder.Services.AddScoped<IDiscount_DetailService, Discount_DetailService>();
+// builder.Services.AddScoped<OrderService>();
+// builder.Services.AddScoped<ISub_OrderService, Sub_OrderService>();
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<AuthRepository>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 
@@ -125,7 +132,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(name: "default", pattern: "api/{controller=Home}/{action=Index}/{id?}");
+// app.MapControllerRoute(name: "default", pattern: "api/{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();
 

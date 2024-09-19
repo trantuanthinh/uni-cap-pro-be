@@ -1,204 +1,207 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using uni_cap_pro_be.DTO.OrderDTO;
-using uni_cap_pro_be.Interfaces;
-using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Utils;
+﻿// using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Mvc;
+// using uni_cap_pro_be.Core;
+// using uni_cap_pro_be.DTO.Request;
+// using uni_cap_pro_be.Models;
+// using uni_cap_pro_be.Services;
 
-namespace uni_cap_pro_be.Controllers
-{
-    // TODO
-    [Route("/[controller]")]
-    [ApiController]
-    public class OrdersController(
-        IOrderService service,
-        IProductService productService,
-        ISub_OrderService subOrderService,
-        IMapper mapper,
-        API_ResponseConvention api_Response,
-        SharedService sharedService
-    ) : ControllerBase
-    {
-        private readonly IOrderService _service = service;
-        private readonly IProductService _productService = productService;
-        private readonly ISub_OrderService _subOrderService = subOrderService;
-        private readonly IMapper _mapper = mapper;
-        private readonly API_ResponseConvention _api_Response = api_Response;
-        private readonly SharedService _sharedService = sharedService;
+// namespace uni_cap_pro_be.Controllers
+// {
+// 	// TODO
+// 	[Route("/[controller]")]
+// 	[ApiController]
+// 	public class OrdersController : BaseAPIController
+// 	{
+// 		private readonly OrderService _service;
+// 		//private readonly IProductService _productService;
+// 		//private readonly ISub_OrderService _subOrderService;
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOrders()
-        {
-            string methodName = nameof(GetOrders);
+// 		public OrdersController(
+// 			OrderService service
+// 		//IProductService productService,
+// 		//ISub_OrderService subOrderService
+// 		)
+// 			: base()
+// 		{
+// 			_service = service;
+// 			//_productService = productService;
+// 			//_subOrderService = subOrderService;
+// 		}
 
-            ICollection<Order> _items = await _service.GetOrders();
+// 		// [HttpGet]
+// 		// [ProducesResponseType(StatusCodes.Status200OK)]
+// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// public async Task<IActionResult> GetOrders([FromQuery] QueryParameters queryParameters)
+// 		// {
+// 		// 	string methodName = nameof(GetOrders);
 
-            if (!ModelState.IsValid)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
-                return StatusCode(400, failedMessage);
-            }
+// 		// 	ICollection<Order> _items = await _service.GetOrders(queryParameters);
 
-            var _dtos = new List<OrderDTO>();
-            foreach (var item in _items)
-            {
-                // List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
-                // item.Sub_Orders = sub_orders;
+// 		// 	// IQueryable<Order> query = _dataContext.Orders.AsQueryable();
+// 		// 	// query = _sharedService.GetFilterQuery(query, customFilter);
+// 		// 	// if (!string.IsNullOrEmpty(search))
+// 		// 	//     query = query.Where(p => p..Contains(search));
 
-                Product product = await _productService.GetProduct(item.ProductId);
-                item.Product = product;
+// 		// 	// var result = query.ToList();
+// 		// 	// var _dtos = new List<OrderDTO>();
+// 		// 	// foreach (var item in _items)
+// 		// 	// {
+// 		// 	//     // List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(item.Id);
+// 		// 	//     // item.Sub_Orders = sub_orders;
 
-                OrderDTO _item = _mapper.Map<OrderDTO>(item);
-                _item.TimeLeft = _item.EndTime - DateTime.UtcNow;
-                _item.Is_Remained = _item.TimeLeft > TimeSpan.Zero;
+// 		// 	//     Product product = await _productService.GetProduct(item.ProductId);
+// 		// 	//     item.Product = product;
 
-                _dtos.Add(_item);
-            }
+// 		// 	//     OrderDTO _item = _mapper.Map<OrderDTO>(item);
+// 		// 	//     _item.TimeLeft = _item.EndTime - DateTime.UtcNow;
+// 		// 	//     _item.Is_Remained = _item.TimeLeft > TimeSpan.Zero;
 
-            var okMessage = _api_Response.OkMessage(methodName, _dtos);
-            return StatusCode(200, okMessage);
-        }
+// 		// 	//     _dtos.Add(_item);
+// 		// 	// }
 
-        [HttpGet("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrder(Guid id)
-        {
-            string methodName = nameof(GetOrder);
+// 		// 	// var okMessage = _api_Response.OkMessage(methodName, _dtos);
+// 		// 	var okMessage = _response.OkMessage(methodName, _items);
+// 		// 	// return StatusCode(200, okMessage);
+// 		// 	return Ok();
+// 		// }
 
-            Order _item = await _service.GetOrder(id);
+// 		// [HttpGet("{id:guid}")]
+// 		// [ProducesResponseType(StatusCodes.Status200OK)]
+// 		// [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+// 		// [ProducesResponseType(StatusCodes.Status404NotFound)]
+// 		// //public async Task<IActionResult> GetOrder(Guid id)
+// 		// //{
+// 		// //    string methodName = nameof(GetOrder);
 
-            if (_item == null)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName);
-                return StatusCode(404, failedMessage);
-            }
+// 		// //    Order _item = await _service.GetOrder(id);
 
-            List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
-            _item.Sub_Orders = sub_orders;
+// 		// //    if (_item == null)
+// 		// //    {
+// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        return StatusCode(404, failedMessage);
+// 		// //    }
 
-            Product product = await _productService.GetProduct(_item.ProductId);
-            _item.Product = product;
+// 		// //    List<Sub_Order> sub_orders = await _subOrderService.GetSubOrdersById(_item.Id);
+// 		// //    _item.Sub_Orders = sub_orders;
 
-            OrderDTO _dto = _mapper.Map<OrderDTO>(_item);
-            _dto.TimeLeft = _dto.EndTime - DateTime.UtcNow;
-            _dto.Is_Remained = _dto.TimeLeft > TimeSpan.Zero;
+// 		// //    Product product = await _productService.GetProduct(_item.ProductId);
+// 		// //    _item.Product = product;
 
-            var okMessage = _api_Response.OkMessage(methodName, _dto);
-            return StatusCode(200, okMessage);
-        }
+// 		// //    OrderDTO _dto = _mapper.Map<OrderDTO>(_item);
+// 		// //    _dto.TimeLeft = _dto.EndTime - DateTime.UtcNow;
+// 		// //    _dto.Is_Remained = _dto.TimeLeft > TimeSpan.Zero;
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO orderDto)
-        {
-            string methodName = nameof(CreateOrder);
+// 		// //    var okMessage = _api_Response.OkMessage(methodName, _dto);
+// 		// //    return StatusCode(200, okMessage);
+// 		// //}
 
-            if (!ModelState.IsValid)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
-                return StatusCode(400, failedMessage);
-            }
+// 		// [HttpPost]
+// 		// [ProducesResponseType(StatusCodes.Status200OK)]
+// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+// 		// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+// 		// //public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO orderDto)
+// 		// //{
+// 		// //    string methodName = nameof(CreateOrder);
 
-            Sub_Order _suborder = _mapper.Map<Sub_Order>(orderDto);
+// 		// //    if (!ModelState.IsValid)
+// 		// //    {
+// 		// //        var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+// 		// //        return StatusCode(400, failedMessage);
+// 		// //    }
 
-            Order _order = new Order
-            {
-                ProductId = orderDto.ProductId,
-                Total_Price = orderDto.Price,
-                Total_Quantity = orderDto.Quantity,
-                IsShare = orderDto.IsShare,
-                IsPaid = false,
-                Level = 1,
-            };
+// 		// //    Sub_Order _suborder = _mapper.Map<Sub_Order>(orderDto);
 
-            bool isOrderCreated = await _service.CreateOrder(_order);
-            if (!isOrderCreated)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName);
-                return StatusCode(500, failedMessage);
-            }
+// 		// //    Order _order = new Order
+// 		// //    {
+// 		// //        ProductId = orderDto.ProductId,
+// 		// //        Total_Price = orderDto.Price,
+// 		// //        Total_Quantity = orderDto.Quantity,
+// 		// //        IsShare = orderDto.IsShare,
+// 		// //        IsPaid = false,
+// 		// //        Level = 1,
+// 		// //    };
 
-            _suborder.OrderId = _order.Id;
-            bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
-            if (!isSubOrderCreated)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName);
-                return StatusCode(500, failedMessage);
-            }
+// 		// //    bool isOrderCreated = await _service.CreateOrder(_order);
+// 		// //    if (!isOrderCreated)
+// 		// //    {
+// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        return StatusCode(500, failedMessage);
+// 		// //    }
 
-            var okMessage = _api_Response.OkMessage(methodName, _order);
-            return StatusCode(200, okMessage);
-        }
+// 		// //    _suborder.OrderId = _order.Id;
+// 		// //    bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
+// 		// //    if (!isSubOrderCreated)
+// 		// //    {
+// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        return StatusCode(500, failedMessage);
+// 		// //    }
 
-        [Authorize]
-        [HttpPatch("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO orderDto)
-        {
-            //string methodName = nameof(PatchOrder);
+// 		// //    var okMessage = _api_Response.OkMessage(methodName, _order);
+// 		// //    return StatusCode(200, okMessage);
+// 		// //}
 
-            //Order _item = await _service.GetItem(id);
+// 		// [Authorize]
+// 		// [HttpPatch("{id:guid}")]
+// 		// [ProducesResponseType(StatusCodes.Status200OK)]
+// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// [ProducesResponseType(StatusCodes.Status404NotFound)]
+// 		// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+// 		// public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO orderDto)
+// 		// {
+// 		// 	//string methodName = nameof(PatchOrder);
 
-            //if (item == null || _item == null)
-            //{
-            //	var failedMessage = _api_Response.FailedMessage(methodName);
-            //	return StatusCode(404, failedMessage);
-            //}
+// 		// 	//Order _item = await _service.GetItem(id);
 
-            //if (!TryValidateModel(_item))
-            //{
-            //	return ValidationProblem(ModelState);
-            //}
+// 		// 	//if (item == null || _item == null)
+// 		// 	//{
+// 		// 	//	var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 	//	return StatusCode(404, failedMessage);
+// 		// 	//}
 
-            //Order patchItem = _mapper.Map<Order>(item);
-            //bool isUpdated = await _service.UpdateItem(_item, patchItem);
-            //if (isUpdated)
-            //{
-            //	var failedMessage = _api_Response.FailedMessage(methodName);
-            //	return StatusCode(500, failedMessage);
-            //}
+// 		// 	//if (!TryValidateModel(_item))
+// 		// 	//{
+// 		// 	//	return ValidationProblem(ModelState);
+// 		// 	//}
 
-            //var okMessage = _api_Response.OkMessage(methodName, _item);
-            //return StatusCode(200, okMessage);
-            return Ok(200);
-        }
+// 		// 	//Order patchItem = _mapper.Map<Order>(item);
+// 		// 	//bool isUpdated = await _service.UpdateItem(_item, patchItem);
+// 		// 	//if (isUpdated)
+// 		// 	//{
+// 		// 	//	var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 	//	return StatusCode(500, failedMessage);
+// 		// 	//}
 
-        [HttpDelete("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteOrder(Guid id)
-        {
-            string methodName = nameof(DeleteOrder);
+// 		// 	//var okMessage = _api_Response.OkMessage(methodName, _item);
+// 		// 	//return StatusCode(200, okMessage);
+// 		// 	return Ok(200);
+// 		// }
 
-            Order _item = await _service.GetOrder(id);
+// 		// [HttpDelete("{id:guid}")]
+// 		// [ProducesResponseType(StatusCodes.Status200OK)]
+// 		// [ProducesResponseType(StatusCodes.Status404NotFound)]
+// 		// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+// 		// public async Task<IActionResult> DeleteOrder(Guid id)
+// 		// {
+// 		// 	string methodName = nameof(DeleteOrder);
 
-            if (_item == null)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName);
-                return StatusCode(404, failedMessage);
-            }
+// 		// 	Order _item = await _service.GetOrder(id);
 
-            bool isDeleted = await _service.DeleteOrder(_item);
-            if (!isDeleted)
-            {
-                var failedMessage = _api_Response.FailedMessage(methodName);
-                return StatusCode(500, failedMessage);
-            }
+// 		// 	if (_item == null)
+// 		// 	{
+// 		// 		var failedMessage = _response.FailedMessage(methodName);
+// 		// 		return StatusCode(404, failedMessage);
+// 		// 	}
 
-            var okMessage = _api_Response.OkMessage(methodName, _item);
-            return StatusCode(200, okMessage);
-        }
-    }
-}
+// 		// 	bool isDeleted = await _service.DeleteOrder(_item);
+// 		// 	if (!isDeleted)
+// 		// 	{
+// 		// 		var failedMessage = _response.FailedMessage(methodName);
+// 		// 		return StatusCode(500, failedMessage);
+// 		// 	}
+
+// 		// 	var okMessage = _response.OkMessage(methodName, _item);
+// 		// 	return StatusCode(200, okMessage);
+// 		// }
+// 	}
+// }

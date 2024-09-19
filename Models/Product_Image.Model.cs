@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Data.Base.Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace uni_cap_pro_be.Models
 {
-	public class Product_Image
+	public class Product_Image : BaseEntity<Guid>
 	{
-		[Key]
-		public Guid Id { get; set; }
 		public DateTime Created_At { get; set; }
 
 		[Required]

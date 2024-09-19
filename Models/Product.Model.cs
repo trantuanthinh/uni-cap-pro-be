@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using uni_cap_pro_be.DTO.UserDTO;
+﻿using Core.Data.Base.Entity;
+using System.ComponentModel.DataAnnotations;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	public class Product
+	public class Product : BaseEntity<Guid>
 	{
-		[Key]
-		public Guid Id { get; set; }
-
 		[Required]
 		public required Guid CategoryId { get; set; }
 

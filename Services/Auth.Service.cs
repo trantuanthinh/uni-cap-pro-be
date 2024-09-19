@@ -1,80 +1,116 @@
-﻿using uni_cap_pro_be.Data;
-using uni_cap_pro_be.DTO;
-using uni_cap_pro_be.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Core;
+using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
-	// DONE
-	public class AuthService(DataContext dataContext, SharedService sharedService) : IAuthService
-	{
-		public readonly DataContext _dataContext = dataContext;
-		public readonly SharedService _sharedService = sharedService;
+    // DONE
+    public class AuthService(AuthRepository repository, SharedService sharedService) : BaseService()
+    {
+        public readonly AuthRepository _repository = repository;
+        public readonly SharedService _sharedService = sharedService;
 
-		public User AuthenticatedUser(SignInDTO item)
-		{
-			User _user = GetUserByUsernameType(item.Username);
+        public async Task<bool> CreateUser(User _item)
+        {
+            bool validUser = await IsUserUniqueAsync(_item);
+            if (!validUser)
+            {
+                return false;
+            }
+            _item.Created_At = DateTime.UtcNow;
+            _item.Modified_At = DateTime.UtcNow;
+            _item.Password = _sharedService.HashPassword(_item.Password);
+            _repository.Add(_item);
+            return _repository.Save();
+        }
 
-			if (_user == null)
-			{
-				return null;
-			}
+        public User AuthenticatedUser(SignInRequest item)
+        {
+            User _user = GetUserByUsernameType(item.Username);
 
-			bool verifyPassword = _sharedService.VerifyPassword(item.Password, _user.Password);
+            if (_user == null)
+            {
+                return null;
+            }
 
-			if (!verifyPassword)
-			{
-				return null;
-			}
+            bool verifyPassword = _sharedService.VerifyPassword(item.Password, _user.Password);
 
-			return _user;
-		}
+            if (!verifyPassword)
+            {
+                return null;
+            }
 
-		public User GetUserByUsernameType(string username)
-		{
-			var usernameType = ChooseUsernameType(username);
+            return _user;
+        }
 
-			return usernameType switch
-			{
-				UsernameType.Email => GetUserByEmail(username),
-				UsernameType.PhoneNumber => GetUserByPhoneNumber(username),
-				UsernameType.UserName => GetUserByUserName(username),
-				_ => throw new ArgumentException("Invalid username type"),
-			};
-		}
+        public async Task<bool> IsUserUniqueAsync(User _item)
+        {
+            string trimmedUpperUsername = _item.Username.Trim().ToUpperInvariant();
+            string trimmedUpperEmail = _item.Email.Trim().ToUpperInvariant();
 
-		public User GetUserByEmail(string email)
-		{
-			User _user = _dataContext.Users.Where(item => item.Email == email).FirstOrDefault();
-			return _user;
-		}
+            bool isUnique = !await _repository
+                .GetDbSet()
+                .AnyAsync(user =>
+                    user.Username.Trim().ToUpper() == trimmedUpperUsername // Case-insensitive comparison
+                    || user.Email.Trim().ToUpper() == trimmedUpperEmail // Case-insensitive comparison
+                    || user.PhoneNumber == _item.PhoneNumber // Phone number comparison
+                );
+            return isUnique;
+        }
 
-		public User GetUserByPhoneNumber(string phoneNumber)
-		{
-			User _user = _dataContext.Users.Where(item => item.PhoneNumber == phoneNumber).FirstOrDefault();
-			return _user;
-		}
+        public User GetUserByUsernameType(string username)
+        {
+            var usernameType = ChooseUsernameType(username);
 
-		public User GetUserByUserName(string username)
-		{
-			User _user = _dataContext.Users.Where(item => item.Username == username).FirstOrDefault();
-			return _user;
-		}
+            return usernameType switch
+            {
+                UsernameType.Email => GetUserByEmail(username),
+                UsernameType.PhoneNumber => GetUserByPhoneNumber(username),
+                UsernameType.UserName => GetUserByUserName(username),
+                _ => throw new ArgumentException("Invalid username type"),
+            };
+        }
 
-		public UsernameType ChooseUsernameType(string username)
-		{
-			if (_sharedService.IsValidGmail(username))
-			{
-				return UsernameType.Email;
-			}
+        public User GetUserByEmail(string email)
+        {
+            User _user = _repository.GetDbSet().Where(item => item.Email == email).FirstOrDefault();
+            return _user;
+        }
 
-			if (_sharedService.IsNumber(username))
-			{
-				return UsernameType.PhoneNumber;
-			}
+        public User GetUserByPhoneNumber(string phoneNumber)
+        {
+            User _user = _repository
+                .GetDbSet()
+                .Where(item => item.PhoneNumber == phoneNumber)
+                .FirstOrDefault();
+            return _user;
+        }
 
-			return UsernameType.UserName;
-		}
-	}
+        public User GetUserByUserName(string username)
+        {
+            User _user = _repository
+                .GetDbSet()
+                .Where(item => item.Username == username)
+                .FirstOrDefault();
+            return _user;
+        }
+
+        public UsernameType ChooseUsernameType(string username)
+        {
+            if (_sharedService.IsValidGmail(username))
+            {
+                return UsernameType.Email;
+            }
+
+            if (_sharedService.IsNumber(username))
+            {
+                return UsernameType.PhoneNumber;
+            }
+
+            return UsernameType.UserName;
+        }
+    }
 }

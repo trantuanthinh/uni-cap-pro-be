@@ -39,6 +39,7 @@ namespace uni_cap_pro_be
                 var discountDetailList = discountDetails
                     .Select(detail => new Discount_Detail
                     {
+                        Id = Guid.NewGuid(),
                         DiscountId = discountList[0].Id,
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
