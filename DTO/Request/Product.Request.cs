@@ -2,7 +2,7 @@
 
 namespace uni_cap_pro_be.DTO.Request
 {
-	public class ProductCreateDTO
+	public class ProductRequest
 	{
 		[Required]
 		public required Guid CategoryId { get; set; }

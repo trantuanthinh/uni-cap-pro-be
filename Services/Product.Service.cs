@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Core.Base.Entity;
 using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.Data;
+using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
 using uni_cap_pro_be.Models;
@@ -43,25 +45,32 @@ namespace uni_cap_pro_be.Services
             return _item.ToResponse();
         }
 
-        // public async Task<bool> CreateProduct(Product _item)
-        // {
-        //     _item.Created_At = DateTime.UtcNow;
-        //     _item.Modified_At = DateTime.UtcNow;
-        //     _dataContext.Products.Add(_item);
-        //     return Save();
-        // }
+        public async Task<bool> CreateProduct(Product _item)
+        {
+            _item.Created_At = DateTime.UtcNow;
+            _item.Modified_At = DateTime.UtcNow;
+            _repository.Add(_item);
+            return _repository.Save();
+        }
 
-        // public async Task<bool> UpdateProduct(Product _item, Product patchItem)
-        // {
-        //     _item.Modified_At = DateTime.UtcNow;
-        //     _dataContext.Products.Update(_item);
-        //     return Save();
-        // }
+        public async Task<bool> UpdateProduct(Guid id, PatchRequest<ProductRequest> patchRequest)
+        {
+            var _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            if (_item == null)
+            {
+                return false;
+            }
 
-        // public async Task<bool> DeleteProduct(Product _item)
-        // {
-        //     _dataContext.Products.Remove(_item);
-        //     return Save();
-        // }
+            _item.Modified_At = DateTime.UtcNow;
+            patchRequest.Patch(ref _item);
+            _repository.Update(_item);
+            return _repository.Save();
+        }
+
+        public async Task<bool> DeleteProduct(Guid id)
+        {
+            _repository.Delete(id);
+            return _repository.Save();
+        }
     }
 }

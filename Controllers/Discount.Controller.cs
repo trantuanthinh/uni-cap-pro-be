@@ -21,7 +21,7 @@
 
 // 		// [HttpGet]
 // 		// [ProducesResponseType(StatusCodes.Status200OK)]
-// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// 
 // 		// public async Task<IActionResult> GetDiscounts()
 // 		// {
 // 		// 	string methodName = nameof(GetDiscounts);
@@ -60,7 +60,7 @@
 
 // 		// //[HttpPost]
 // 		// //[ProducesResponseType(StatusCodes.Status200OK)]
-// 		// //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// //
 // 		// //[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 // 		// //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 // 		// //public async Task<IActionResult> CreateDiscount([FromBody] DiscountCreateDTO item)
@@ -88,7 +88,7 @@
 // 		// //[Authorize]
 // 		// //[HttpPatch("{id:guid}")]
 // 		// //[ProducesResponseType(StatusCodes.Status200OK)]
-// 		// //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// //
 // 		// //[ProducesResponseType(StatusCodes.Status404NotFound)]
 // 		// //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 // 		// //public async Task<IActionResult> PatchDiscount(Guid id, [FromBody] DiscountCreateDTO item)

@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Base.Entity;
+using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.QueryParameter;
+using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
 using uni_cap_pro_be.Models;
@@ -32,31 +34,24 @@ namespace uni_cap_pro_be.Services
             return _item.ToResponse();
         }
 
-        // public async Task<bool> UpdateUser(User _item, User patchItem)
-        // {
-        //     _item.Modified_At = DateTime.UtcNow;
-        //     _item.Username = patchItem.Username;
-        //     _item.Name = patchItem.Name;
-        //     _item.Email = patchItem.Email;
-        //     if (patchItem.Password != null)
-        //     {
-        //         patchItem.Password = _sharedService.HashPassword(patchItem.Password);
-        //         _item.Password = patchItem.Password;
-        //     }
-        //     _item.PhoneNumber = patchItem.PhoneNumber;
-        //     _item.Active_Status = patchItem.Active_Status;
-        //     _item.User_Type = patchItem.User_Type;
-        //     _item.Description = patchItem.Description;
-        //     _item.Avatar = patchItem.Avatar;
+        public async Task<bool> UpdateUser(Guid id, PatchRequest<UserRequest> patchRequest)
+        {
+            var _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            if (_item == null)
+            {
+                return false;
+            }
 
-        //     _dataContext.Users.Update(_item);
-        //     return Save();
-        // }
+            _item.Modified_At = DateTime.UtcNow;
+            patchRequest.Patch(ref _item);
+            _repository.Update(_item);
+            return _repository.Save();
+        }
 
-        // public async Task<bool> DeleteUser(User _item)
-        // {
-        //     _dataContext.Users.Remove(_item);
-        //     return Save();
-        // }
+        public async Task<bool> DeleteUser(Guid id)
+        {
+            _repository.Delete(id);
+            return _repository.Save();
+        }
     }
 }

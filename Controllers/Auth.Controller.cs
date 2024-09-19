@@ -48,7 +48,6 @@ namespace uni_cap_pro_be.Controllers
 
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SignUp([FromBody] UserRequest item)
@@ -58,12 +57,6 @@ namespace uni_cap_pro_be.Controllers
             if (!_sharedService.IsValidGmail(item.Email))
             {
                 ModelState.AddModelError("", "Invalid email address");
-                var failedMessage = _apiResponse.Failure(methodName, ModelState);
-                return StatusCode(400, failedMessage);
-            }
-
-            if (!ModelState.IsValid)
-            {
                 var failedMessage = _apiResponse.Failure(methodName, ModelState);
                 return StatusCode(400, failedMessage);
             }

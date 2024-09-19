@@ -30,7 +30,7 @@
 
 // 		// [HttpGet]
 // 		// [ProducesResponseType(StatusCodes.Status200OK)]
-// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// 
 // 		// public async Task<IActionResult> GetOrders([FromQuery] QueryParameters queryParameters)
 // 		// {
 // 		// 	string methodName = nameof(GetOrders);
@@ -97,7 +97,7 @@
 
 // 		// [HttpPost]
 // 		// [ProducesResponseType(StatusCodes.Status200OK)]
-// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// 
 // 		// [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 // 		// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 // 		// //public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDTO orderDto)
@@ -144,7 +144,7 @@
 // 		// [Authorize]
 // 		// [HttpPatch("{id:guid}")]
 // 		// [ProducesResponseType(StatusCodes.Status200OK)]
-// 		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
+// 		// 
 // 		// [ProducesResponseType(StatusCodes.Status404NotFound)]
 // 		// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 // 		// public async Task<IActionResult> PatchOrder(Guid id, [FromBody] OrderCreateDTO orderDto)

@@ -36,8 +36,9 @@ namespace uni_cap_pro_be.Core.Base.Repository
             return _dbSet.Update(obj).Entity;
         }
 
-        public T Delete(T obj)
+        public T Delete(Guid id)
         {
+            var obj = _dbSet.Where(x => x.Id == id).FirstOrDefault();
             return _dbSet.Remove(obj).Entity;
         }
 
