@@ -68,7 +68,6 @@ namespace uni_cap_pro_be.Controllers
             bool isUpdated = await _service.UpdateUser(id, patchRequest);
             if (isUpdated)
             {
-                ModelState.AddModelError("", "Invalid - Something went wrong updating the User");
                 var failedMessage = _apiResponse.Failure(methodName, ModelState);
                 return StatusCode(500, failedMessage);
             }

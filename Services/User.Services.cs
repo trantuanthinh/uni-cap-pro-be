@@ -35,7 +35,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateUser(Guid id, PatchRequest<UserRequest> patchRequest)
         {
-            var _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            User _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
             if (_item == null)
             {
                 return false;

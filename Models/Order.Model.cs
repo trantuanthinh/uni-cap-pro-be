@@ -16,9 +16,9 @@ namespace uni_cap_pro_be.Models
 
         static readonly Mapper mapper = new Mapper(config);
 
-        public ProductResponse ToResponse()
+        public OrderResponse ToResponse()
         {
-            var res = mapper.Map<ProductResponse>(this);
+            var res = mapper.Map<OrderResponse>(this);
             return res;
         }
 
