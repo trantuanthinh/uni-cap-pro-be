@@ -59,7 +59,7 @@
 // 		// 	//     _dtos.Add(_item);
 // 		// 	// }
 
-// 		// 	// var okMessage = _api_Response.OkMessage(methodName, _dtos);
+// 		// 	// var okMessage = _apiResponse.Success(methodName, _dtos);
 // 		// 	var okMessage = _response.OkMessage(methodName, _items);
 // 		// 	// return StatusCode(200, okMessage);
 // 		// 	return Ok();
@@ -77,7 +77,7 @@
 
 // 		// //    if (_item == null)
 // 		// //    {
-// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        var failedMessage = _apiResponse.Failure(methodName);
 // 		// //        return StatusCode(404, failedMessage);
 // 		// //    }
 
@@ -91,7 +91,7 @@
 // 		// //    _dto.TimeLeft = _dto.EndTime - DateTime.UtcNow;
 // 		// //    _dto.Is_Remained = _dto.TimeLeft > TimeSpan.Zero;
 
-// 		// //    var okMessage = _api_Response.OkMessage(methodName, _dto);
+// 		// //    var okMessage = _apiResponse.Success(methodName, _dto);
 // 		// //    return StatusCode(200, okMessage);
 // 		// //}
 
@@ -106,7 +106,7 @@
 
 // 		// //    if (!ModelState.IsValid)
 // 		// //    {
-// 		// //        var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+// 		// //        var failedMessage = _apiResponse.Failure(methodName, ModelState);
 // 		// //        return StatusCode(400, failedMessage);
 // 		// //    }
 
@@ -125,7 +125,7 @@
 // 		// //    bool isOrderCreated = await _service.CreateOrder(_order);
 // 		// //    if (!isOrderCreated)
 // 		// //    {
-// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        var failedMessage = _apiResponse.Failure(methodName);
 // 		// //        return StatusCode(500, failedMessage);
 // 		// //    }
 
@@ -133,11 +133,11 @@
 // 		// //    bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
 // 		// //    if (!isSubOrderCreated)
 // 		// //    {
-// 		// //        var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// //        var failedMessage = _apiResponse.Failure(methodName);
 // 		// //        return StatusCode(500, failedMessage);
 // 		// //    }
 
-// 		// //    var okMessage = _api_Response.OkMessage(methodName, _order);
+// 		// //    var okMessage = _apiResponse.Success(methodName, _order);
 // 		// //    return StatusCode(200, okMessage);
 // 		// //}
 
@@ -155,7 +155,7 @@
 
 // 		// 	//if (item == null || _item == null)
 // 		// 	//{
-// 		// 	//	var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 	//	var failedMessage = _apiResponse.Failure(methodName);
 // 		// 	//	return StatusCode(404, failedMessage);
 // 		// 	//}
 
@@ -168,11 +168,11 @@
 // 		// 	//bool isUpdated = await _service.UpdateItem(_item, patchItem);
 // 		// 	//if (isUpdated)
 // 		// 	//{
-// 		// 	//	var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 	//	var failedMessage = _apiResponse.Failure(methodName);
 // 		// 	//	return StatusCode(500, failedMessage);
 // 		// 	//}
 
-// 		// 	//var okMessage = _api_Response.OkMessage(methodName, _item);
+// 		// 	//var okMessage = _apiResponse.Success(methodName, _item);
 // 		// 	//return StatusCode(200, okMessage);
 // 		// 	return Ok(200);
 // 		// }

@@ -120,7 +120,8 @@ namespace uni_cap_pro_be.Migrations
                     Total_Rating_Value = table.Column<int>(type: "int", nullable: false),
                     Total_Rating_Quantity = table.Column<int>(type: "int", nullable: false),
                     Images = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Product_CategoryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -137,6 +138,11 @@ namespace uni_cap_pro_be.Migrations
                         principalTable: "Product_Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Product_Categories_Product_CategoryId",
+                        column: x => x.Product_CategoryId,
+                        principalTable: "Product_Categories",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Products_Users_OwnerId",
                         column: x => x.OwnerId,
@@ -255,6 +261,11 @@ namespace uni_cap_pro_be.Migrations
                 name: "IX_Products_OwnerId",
                 table: "Products",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Product_CategoryId",
+                table: "Products",
+                column: "Product_CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sub_Orders_OrderId",

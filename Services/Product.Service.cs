@@ -1,103 +1,67 @@
-﻿// using AutoMapper;
-// using Microsoft.EntityFrameworkCore;
-// using uni_cap_pro_be.Data;
-// using uni_cap_pro_be.Models;
-// using uni_cap_pro_be.Repositories;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.QueryParameter;
+using uni_cap_pro_be.Data;
+using uni_cap_pro_be.DTO.Response;
+using uni_cap_pro_be.Extensions;
+using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Repositories;
 
-// namespace uni_cap_pro_be.Services
-// {
-// 	// TODO
-// 	public class ProductService(
-// 		DataContext dataContext,
-// 		IMapper mapper,
-// 		UserService userSerivce,
-// 		IProduct_ImageService imageSerivce,
-// 		IProduct_CategoryService categorySerivce,
-// 		IDiscountService discountService
-// 	) : IProductService
-// 	{
-// 		private readonly DataContext _dataContext = dataContext;
-// 		private readonly IMapper _mapper = mapper;
-// 		private readonly UserService _userSerivce = userSerivce;
-// 		private readonly IProduct_ImageService _imageSerivce = imageSerivce;
-// 		private readonly IProduct_CategoryService _categorySerivce = categorySerivce;
-// 		private readonly IDiscountService _discountSerivce = discountService;
+namespace uni_cap_pro_be.Services
+{
+    // TODO
+    public class ProductService(ProductRepository repository) : BaseService()
+    {
+        private readonly ProductRepository _repository = repository;
 
-// 		public async Task<ICollection<Product>> GetProducts()
-// 		{
-// 			var _items = await _dataContext.Products.OrderBy(item => item.Id).ToListAsync();
-// 			foreach (var item in _items)
-// 			{
-// 				List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(
-// 					item.OwnerId,
-// 					item.Id
-// 				);
-// 				item.Images = imagesName;
+        public async Task<BaseResponse<ProductResponse>> GetProducts(
+            QueryParameters queryParameters
+        )
+        {
+            QueryParameterResult<Product> _items = _repository
+                .SelectAll()
+                .Include(item => item.Owner)
+                .Include(item => item.Category)
+                .Include(item => item.Discount)
+                .Include(item => item.Images)
+                .ApplyQueryParameters(queryParameters);
 
-// 				// User user = await _userSerivce.GetUser(item.OwnerId);
-// 				// UserDTO userDTO = _mapper.Map<UserDTO>(user);
-// 				// item.Owner = userDTO;
+            return _items
+                .Data.AsEnumerable()
+                .Select(item => item.ToResponse())
+                .ToList()
+                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
+        }
 
-// 				Discount discount = await _discountSerivce.GetDiscount(item.DiscountId);
-// 				item.Discount = discount;
+        public async Task<ProductResponse> GetProduct(Guid id)
+        {
+            var _item = await _repository
+                .GetDbSet()
+                .Where(item => item.Id == id)
+                .FirstOrDefaultAsync();
+            return _item.ToResponse();
+        }
 
-// 				Product_Category category = await _categorySerivce.GetProduct_Category(
-// 					item.CategoryId
-// 				);
-// 				item.Category = category;
-// 			}
-// 			return _items;
-// 		}
+        // public async Task<bool> CreateProduct(Product _item)
+        // {
+        //     _item.Created_At = DateTime.UtcNow;
+        //     _item.Modified_At = DateTime.UtcNow;
+        //     _dataContext.Products.Add(_item);
+        //     return Save();
+        // }
 
-// 		public async Task<Product> GetProduct(Guid id)
-// 		{
-// 			Product _item = await _dataContext.Products.SingleOrDefaultAsync(item => item.Id == id);
-// 			List<string> imagesName = await _imageSerivce.GetImagesURLByProductId(
-// 				_item.OwnerId,
-// 				_item.Id
-// 			);
-// 			_item.Images = imagesName;
+        // public async Task<bool> UpdateProduct(Product _item, Product patchItem)
+        // {
+        //     _item.Modified_At = DateTime.UtcNow;
+        //     _dataContext.Products.Update(_item);
+        //     return Save();
+        // }
 
-// 			// User user = await _userSerivce.GetUser(_item.OwnerId);
-// 			// UserDTO userDTO = _mapper.Map<UserDTO>(user);
-// 			// _item.Owner = userDTO;
-
-// 			Discount discount = await _discountSerivce.GetDiscount(_item.DiscountId);
-// 			_item.Discount = discount;
-
-// 			Product_Category category = await _categorySerivce.GetProduct_Category(
-// 				_item.CategoryId
-// 			);
-// 			_item.Category = category;
-
-// 			return _item;
-// 		}
-
-// 		public async Task<bool> CreateProduct(Product _item)
-// 		{
-// 			_item.Created_At = DateTime.UtcNow;
-// 			_item.Modified_At = DateTime.UtcNow;
-// 			_dataContext.Products.Add(_item);
-// 			return Save();
-// 		}
-
-// 		public async Task<bool> UpdateProduct(Product _item, Product patchItem)
-// 		{
-// 			_item.Modified_At = DateTime.UtcNow;
-// 			_dataContext.Products.Update(_item);
-// 			return Save();
-// 		}
-
-// 		public async Task<bool> DeleteProduct(Product _item)
-// 		{
-// 			_dataContext.Products.Remove(_item);
-// 			return Save();
-// 		}
-
-// 		private bool Save()
-// 		{
-// 			int saved = _dataContext.SaveChanges();
-// 			return saved > 0;
-// 		}
-// 	}
-// }
+        // public async Task<bool> DeleteProduct(Product _item)
+        // {
+        //     _dataContext.Products.Remove(_item);
+        //     return Save();
+        // }
+    }
+}

@@ -93,8 +93,8 @@ builder.Services.AddSingleton<BaseResponse<object>>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ProductService>();
 
-// builder.Services.AddScoped<IProductService, ProductService>();
 // builder.Services.AddScoped<IProduct_CategoryService, Product_CategoryService>();
 // builder.Services.AddScoped<IProduct_ImageService, Product_ImageService>();
 // builder.Services.AddScoped<IDiscountService, DiscountService>();
@@ -102,8 +102,9 @@ builder.Services.AddScoped<UserService>();
 // builder.Services.AddScoped<OrderService>();
 // builder.Services.AddScoped<ISub_OrderService, Sub_OrderService>();
 
-builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ProductRepository>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

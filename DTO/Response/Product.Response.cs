@@ -27,9 +27,10 @@ namespace uni_cap_pro_be.DTO.Response
         [Required]
         public required int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
 
-        public required User Owner { get; set; } // the owner of the product
+        public required string Owner { get; set; } // the owner of the product
         public string? Category { get; set; }
-        public Discount? Discount { get; set; }
-        public List<string>? Images { get; set; }
+
+        // public Discount? Discount { get; set; }
+        // public ICollection<Product_Image>? Images { get; set; }
     }
 }

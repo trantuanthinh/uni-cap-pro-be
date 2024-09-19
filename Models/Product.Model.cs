@@ -1,42 +1,66 @@
-﻿using Core.Data.Base.Entity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using Core.Data.Base.Entity;
+using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
-	public class Product : BaseEntity<Guid>
-	{
-		[Required]
-		public required Guid CategoryId { get; set; }
+    // DONE
+    public class Product : BaseEntity<Guid>
+    {
+        // Mapping from Product to ProductResponse
+        static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
+            cfg.CreateMap<Product, ProductResponse>()
+                .ForMember(dest => dest.Owner, dest => dest.MapFrom(t => t.Owner.Name))
+                .ForMember(dest => dest.Category, dest => dest.MapFrom(t => t.Category.Name))
+        // .ForMember(
+        //     dest => dest.Discount,
+        //     dest => dest.MapFrom(t => t.Discount.Discount_Details)
+        // )
+        // .ForMember(
+        //     dest => dest.Images,
+        //     dest => dest.MapFrom(t => t.Images.Select(e => e.Name).ToList())
+        // )
+        );
 
-		[Required]
-		public required Guid DiscountId { get; set; }
+        static readonly IMapper mapper = config.CreateMapper();
 
-		[Required]
-		public required Guid OwnerId { get; set; } // the owner of the product
+        public ProductResponse ToResponse()
+        {
+            var res = mapper.Map<ProductResponse>(this);
+            return res;
+        }
 
-		public DateTime Created_At { get; set; }
-		public DateTime Modified_At { get; set; }
+        [Required]
+        public required Guid CategoryId { get; set; }
 
-		[Required]
-		public required string Name { get; set; }
+        [Required]
+        public required Guid DiscountId { get; set; }
 
-		[Required]
-		public required double Price { get; set; }
-		public string? Description { get; set; }
+        [Required]
+        public required Guid OwnerId { get; set; } // the owner of the product
 
-		[Required]
-		public required ActiveStatus Active_Status { get; set; }
+        public DateTime Created_At { get; set; }
+        public DateTime Modified_At { get; set; }
 
-		public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
-		public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
+        [Required]
+        public required string Name { get; set; }
 
+        [Required]
+        public required double Price { get; set; }
+        public string? Description { get; set; }
 
+        [Required]
+        public required ActiveStatus Active_Status { get; set; }
 
-		[Required]
-		public required User Owner { get; set; } // the owner of the product
-		public Product_Category? Category { get; set; }
-		public Discount? Discount { get; set; }
-		public List<string>? Images { get; set; }
-	}
+        public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
+        public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
+
+        [Required]
+        public required User Owner { get; set; } // the owner of the product
+        public Product_Category? Category { get; set; }
+        public Discount? Discount { get; set; }
+        public ICollection<Product_Image>? Images { get; set; }
+    }
 }

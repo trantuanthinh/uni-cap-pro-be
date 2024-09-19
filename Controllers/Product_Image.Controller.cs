@@ -68,7 +68,7 @@
 // 		// 		// Kiểm tra file có hợp lệ hay không
 // 		// 		if (file == null || file.Length == 0)
 // 		// 		{
-// 		// 			var failedMessage = _api_Response.FailedMessage(
+// 		// 			var failedMessage = _apiResponse.Failure(
 // 		// 				methodName,
 // 		// 				"File is null or empty"
 // 		// 			);
@@ -79,7 +79,7 @@
 // 		// 		var fileExtension = Path.GetExtension(file.FileName).ToLower();
 // 		// 		if (!validExtensions.Contains(fileExtension))
 // 		// 		{
-// 		// 			var failedMessage = _api_Response.FailedMessage(
+// 		// 			var failedMessage = _apiResponse.Failure(
 // 		// 				methodName,
 // 		// 				"Invalid file format"
 // 		// 			);
@@ -110,18 +110,18 @@
 // 		// 		bool isCreated = await _service.CreateImage(_item);
 // 		// 		if (!isCreated)
 // 		// 		{
-// 		// 			var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 			var failedMessage = _apiResponse.Failure(methodName);
 // 		// 			return StatusCode(500, failedMessage);
 // 		// 		}
 
 // 		// 		// Phản hồi thành công
-// 		// 		var okMessage = _api_Response.OkMessage(methodName, _item);
+// 		// 		var okMessage = _apiResponse.Success(methodName, _item);
 // 		// 		return StatusCode(200, okMessage);
 // 		// 	}
 // 		// 	catch (Exception ex)
 // 		// 	{
 // 		// 		// Xử lý ngoại lệ
-// 		// 		var errorMessage = _api_Response.FailedMessage(methodName, ex.Message);
+// 		// 		var errorMessage = _apiResponse.Failure(methodName, ex.Message);
 // 		// 		return StatusCode(500, errorMessage);
 // 		// 	}
 // 		// }
@@ -138,7 +138,7 @@
 
 // 		// 	if (_item == null)
 // 		// 	{
-// 		// 		var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 		var failedMessage = _apiResponse.Failure(methodName);
 // 		// 		return StatusCode(404, failedMessage);
 // 		// 	}
 
@@ -162,16 +162,16 @@
 
 // 		// 		if (!isDeleted)
 // 		// 		{
-// 		// 			var failedMessage = _api_Response.FailedMessage(methodName);
+// 		// 			var failedMessage = _apiResponse.Failure(methodName);
 // 		// 			return StatusCode(500, failedMessage);
 // 		// 		}
 
-// 		// 		var okMessage = _api_Response.OkMessage(methodName, _item);
+// 		// 		var okMessage = _apiResponse.Success(methodName, _item);
 // 		// 		return StatusCode(200, okMessage);
 // 		// 	}
 // 		// 	catch (Exception ex)
 // 		// 	{
-// 		// 		var errorMessage = _api_Response.FailedMessage(methodName, ex.Message);
+// 		// 		var errorMessage = _apiResponse.Failure(methodName, ex.Message);
 // 		// 		return StatusCode(500, errorMessage);
 // 		// 	}
 // 		// }

@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240919022224_InitMigrations")]
+    [Migration("20240919073217_InitMigrations")]
     partial class InitMigrations
     {
         /// <inheritdoc />
@@ -148,6 +148,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
+                    b.Property<Guid?>("Product_CategoryId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Total_Rating_Quantity")
                         .HasColumnType("int");
 
@@ -161,6 +164,8 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("DiscountId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("Product_CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -346,6 +351,10 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("uni_cap_pro_be.Models.Product_Category", null)
+                        .WithMany("Products")
+                        .HasForeignKey("Product_CategoryId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
@@ -381,6 +390,11 @@ namespace uni_cap_pro_be.Migrations
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
                     b.Navigation("Sub_Orders");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

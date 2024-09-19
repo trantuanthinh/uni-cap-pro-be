@@ -13,21 +13,15 @@ namespace uni_cap_pro_be.Controllers
     // DONE
     [Route("/[controller]")]
     [ApiController]
-    public class UsersController : BaseAPIController
+    public class UsersController(
+        DataContext dataContext,
+        IMapper mapper,
+        APIResponse apiResponse,
+        SharedService sharedService,
+        UserService service
+    ) : BaseAPIController(dataContext, mapper, apiResponse, sharedService)
     {
-        private readonly UserService _service;
-
-        public UsersController(
-            DataContext dataContext,
-            IMapper mapper,
-            APIResponse apiResponse,
-            SharedService sharedService,
-            UserService service
-        )
-            : base(dataContext, mapper, apiResponse, sharedService)
-        {
-            _service = service;
-        }
+        private readonly UserService _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,7 +49,6 @@ namespace uni_cap_pro_be.Controllers
                 var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(404, failedMessage);
             }
-
             var okMessage = _apiResponse.Success(methodName, _item);
             return StatusCode(200, okMessage);
         }
@@ -72,13 +65,13 @@ namespace uni_cap_pro_be.Controllers
         //	if (!_sharedService.IsValidGmail(item.Email))
         //	{
         //		ModelState.AddModelError("", "Invalid email address");
-        //		var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+        //		var failedMessage = _apiResponse.Failure(methodName, ModelState);
         //		return StatusCode(400, failedMessage);
         //	}
 
         //	if (!ModelState.IsValid)
         //	{
-        //		var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+        //		var failedMessage = _apiResponse.Failure(methodName, ModelState);
         //		return StatusCode(400, failedMessage);
         //	}
 
@@ -86,11 +79,11 @@ namespace uni_cap_pro_be.Controllers
         //	bool isCreated = await _service.CreateUser(_item);
         //	if (!isCreated)
         //	{
-        //		var failedMessage = _api_Response.FailedMessage(methodName);
+        //		var failedMessage = _apiResponse.Failure(methodName);
         //		return StatusCode(500, failedMessage);
         //	}
 
-        //	var okMessage = _api_Response.OkMessage(methodName, _item);
+        //	var okMessage = _apiResponse.Success(methodName, _item);
         //	return StatusCode(200, okMessage);
         //}
 
@@ -106,7 +99,7 @@ namespace uni_cap_pro_be.Controllers
         //	User _item = await _service.GetUser(id);
         //	if (_item == null)
         //	{
-        //		var failedMessage = _api_Response.FailedMessage(methodName);
+        //		var failedMessage = _apiResponse.Failure(methodName);
         //		return StatusCode(404, failedMessage);
         //	}
 
@@ -115,11 +108,11 @@ namespace uni_cap_pro_be.Controllers
         //	if (isUpdated)
         //	{
         //		ModelState.AddModelError("", "Invalid - Something went wrong updating the User");
-        //		var failedMessage = _api_Response.FailedMessage(methodName, ModelState);
+        //		var failedMessage = _apiResponse.Failure(methodName, ModelState);
         //		return StatusCode(500, failedMessage);
         //	}
 
-        //	var okMessage = _api_Response.OkMessage($"{methodName} Successfully", patchItem);
+        //	var okMessage = _apiResponse.Success($"{methodName} Successfully", patchItem);
         //	return StatusCode(200, okMessage);
         //}
 
@@ -135,18 +128,18 @@ namespace uni_cap_pro_be.Controllers
         // 	User _item = await _service.GetUser(id);
         // 	if (_item == null)
         // 	{
-        // 		var failedMessage = _api_Response.FailedMessage(methodName);
+        // 		var failedMessage = _apiResponse.Failure(methodName);
         // 		return StatusCode(404, failedMessage);
         // 	}
 
         // 	bool isDeleted = await _service.DeleteUser(_item);
         // 	if (!isDeleted)
         // 	{
-        // 		var failedMessage = _api_Response.FailedMessage(methodName);
+        // 		var failedMessage = _apiResponse.Failure(methodName);
         // 		return StatusCode(500, failedMessage);
         // 	}
 
-        // 	var okMessage = _api_Response.OkMessage(methodName, _item);
+        // 	var okMessage = _apiResponse.Success(methodName, _item);
         // 	return StatusCode(200, okMessage);
         // }
     }
