@@ -4,6 +4,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Request
 {
+    // DONE
     public class UserRequest
     {
         [Required]

@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Core.Base.Entity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
-using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
@@ -12,7 +10,7 @@ using uni_cap_pro_be.Repositories;
 
 namespace uni_cap_pro_be.Services
 {
-    // TODO
+    // DONE
     public class ProductService(ProductRepository repository) : BaseService()
     {
         private readonly ProductRepository _repository = repository;

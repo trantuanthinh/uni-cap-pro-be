@@ -1,5 +1,4 @@
 ﻿using Core.Base.Entity;
-using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.DTO.Request;
@@ -10,7 +9,7 @@ using uni_cap_pro_be.Repositories;
 
 namespace uni_cap_pro_be.Services
 {
-    // TODO
+    // DONE
     public class UserService(UserRepository repository) : BaseService()
     {
         private readonly UserRepository _repository = repository;

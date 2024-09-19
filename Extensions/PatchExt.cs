@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Core.Base.Entity;
+using uni_cap_pro_be.Core.Base.Entity;
 
 namespace uni_cap_pro_be.Extensions
 {

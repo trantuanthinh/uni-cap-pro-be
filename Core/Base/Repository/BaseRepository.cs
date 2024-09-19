@@ -1,8 +1,9 @@
-using Core.Data.Base.Entity;
 using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Core.Data.Base.Entity;
 
 namespace uni_cap_pro_be.Core.Base.Repository
 {
+    // DONE
     public class BaseRepository<T, DbContextType> : IBaseRepository<T>
         where T : BaseEntity<Guid>
         where DbContextType : DbContext

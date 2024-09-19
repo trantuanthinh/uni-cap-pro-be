@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using Core.Data.Base.Entity;
+using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Utils;
 

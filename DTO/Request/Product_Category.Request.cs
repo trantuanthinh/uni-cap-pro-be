@@ -2,9 +2,10 @@
 
 namespace uni_cap_pro_be.DTO.Request
 {
-	public class Product_CategoryCreateDTO
-	{
-		[Required]
-		public required string Name { get; set; }
-	}
+    // DONE
+    public class Product_CategoryRequest
+    {
+        [Required]
+        public required string Name { get; set; }
+    }
 }

@@ -4,7 +4,7 @@ using uni_cap_pro_be.Core.QueryParameter;
 
 namespace uni_cap_pro_be.Extensions
 {
-	public static class QueryableExts
+	public static class QueryableExtension
 	{
 		public static QueryParameterResult<T> ApplyQueryParameters<T>(
 			this IQueryable<T> query,

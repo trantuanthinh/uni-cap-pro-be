@@ -1,5 +1,6 @@
 ﻿namespace uni_cap_pro_be.Core
 {
+	// DONE
 	public class BaseService
 	{
 		protected readonly ILogger<object> Logger;

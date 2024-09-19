@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
-using Core.Base.Entity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers
 {
-    // TODO
+    // DONE
     [Route("/[controller]")]
     [ApiController]
     public class ProductsController(

@@ -21,7 +21,7 @@
 
 // 		// [HttpGet]
 // 		// [ProducesResponseType(StatusCodes.Status200OK)]
-// 		// 
+// 		//
 // 		// public async Task<IActionResult> GetDiscounts()
 // 		// {
 // 		// 	string methodName = nameof(GetDiscounts);

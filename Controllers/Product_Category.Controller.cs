@@ -23,7 +23,7 @@
 
 //         // [HttpGet]
 //         // [ProducesResponseType(StatusCodes.Status200OK)]
-//         // 
+//         //
 //         // public async Task<IActionResult> GetProductCategories()
 //         // {
 //         // 	string methodName = nameof(GetProductCategories);
@@ -62,7 +62,7 @@
 
 //         // [HttpPost]
 //         // [ProducesResponseType(StatusCodes.Status200OK)]
-//         // 
+//         //
 //         // [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
 //         // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 //         // public async Task<IActionResult> CreateProductCategory(
@@ -92,7 +92,7 @@
 //         // [Authorize]
 //         // [HttpPatch("{id:guid}")]
 //         // [ProducesResponseType(StatusCodes.Status200OK)]
-//         // 
+//         //
 //         // [ProducesResponseType(StatusCodes.Status404NotFound)]
 //         // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 //         // public async Task<IActionResult> PatchProductCategory(

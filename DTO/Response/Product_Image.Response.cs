@@ -2,6 +2,7 @@
 
 namespace uni_cap_pro_be.DTO.Response
 {
+    // DONE
     public class Product_ImageResponse
     {
         [Required]

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using Core.Data.Base.Entity;
+using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
 {
+    // DONE
     public class Order : BaseEntity<Guid>
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>

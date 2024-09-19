@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.Data.Base.Entity;
+using uni_cap_pro_be.Core.Data.Base.Entity;
 
 namespace uni_cap_pro_be.Models
 {
+    // DONE
     public class Sub_Order : BaseEntity<Guid>
     {
         public DateTime Created_At { get; set; }

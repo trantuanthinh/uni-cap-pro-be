@@ -2,12 +2,13 @@
 
 namespace uni_cap_pro_be.DTO.Request
 {
-	public class DiscountRequest
-	{
-		[Required]
-		public required short Level { get; set; }
+    // DONE
+    public class DiscountRequest
+    {
+        [Required]
+        public required short Level { get; set; }
 
-		[Required]
-		public required double Amount { get; set; }
-	}
+        [Required]
+        public required double Amount { get; set; }
+    }
 }
