@@ -26,26 +26,24 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProduct_Image(string ownerId, string name)
         {
+            string methodName = nameof(GetProduct_Image);
+
             if (string.IsNullOrWhiteSpace(ownerId) || string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest(new { message = "Invalid parameters." });
             }
 
-            var filePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Resources",
-                ownerId,
-                name
-            );
+            var filePath = await _service.GetImagePath(ownerId, name);
 
             if (!System.IO.File.Exists(filePath))
             {
-                return StatusCode(404, new { message = "Image not found!" });
+                var failedMessage = _apiResponse.Failure(methodName, "Image not found!");
+                return StatusCode(404, failedMessage);
             }
 
             try
             {
-                var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
                 var extension = Path.GetExtension(name).ToLowerInvariant();
                 string contentType = extension switch
@@ -60,81 +58,73 @@ namespace uni_cap_pro_be.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(
-                    500,
-                    new { message = "Unable to retrieve image!", error = ex.Message }
-                );
+                var failedMessage = _apiResponse.Failure(methodName, "Unable to retrieve image");
+                return StatusCode(500, failedMessage);
             }
         }
 
         // [HttpPost]
         // [ProducesResponseType(StatusCodes.Status200OK)]
         // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // public async Task<IActionResult> CreateProduct_Image(Product_ImageDTO item, IFormFile file)
+        // public async Task<IActionResult> CreateProduct_Image(string item, IFormFile file)
         // {
-        // 	string methodName = nameof(CreateProduct_Image);
+        //     string methodName = nameof(CreateProduct_Image);
 
-        // 	try
-        // 	{
-        // 		// Kiểm tra file có hợp lệ hay không
-        // 		if (file == null || file.Length == 0)
-        // 		{
-        // 			var failedMessage = _apiResponse.Failure(
-        // 				methodName,
-        // 				"File is null or empty"
-        // 			);
-        // 			return StatusCode(400, failedMessage);
-        // 		}
+        //     try
+        //     {
+        //         // Kiểm tra file có hợp lệ hay không
+        //         if (file == null || file.Length == 0)
+        //         {
+        //             var failedMessage = _apiResponse.Failure(methodName, "File is null or empty");
+        //             return StatusCode(400, failedMessage);
+        //         }
 
-        // 		var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-        // 		var fileExtension = Path.GetExtension(file.FileName).ToLower();
-        // 		if (!validExtensions.Contains(fileExtension))
-        // 		{
-        // 			var failedMessage = _apiResponse.Failure(
-        // 				methodName,
-        // 				"Invalid file format"
-        // 			);
-        // 			return StatusCode(400, failedMessage);
-        // 		}
+        //         var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+        //         var fileExtension = Path.GetExtension(file.FileName).ToLower();
+        //         if (!validExtensions.Contains(fileExtension))
+        //         {
+        //             var failedMessage = _apiResponse.Failure(methodName, "Invalid file format");
+        //             return StatusCode(400, failedMessage);
+        //         }
 
-        // 		string _uploadFolderPath = Path.Combine(
-        // 			Directory.GetCurrentDirectory(),
-        // 			$"Resources/{item.OwnerId}"
-        // 		);
+        //         string _uploadFolderPath = Path.Combine(
+        //             Directory.GetCurrentDirectory(),
+        //             $"Resources/{item.OwnerId}"
+        //         );
 
-        // 		if (!Directory.Exists(_uploadFolderPath))
-        // 		{
-        // 			Directory.CreateDirectory(_uploadFolderPath);
-        // 		}
+        //         if (!Directory.Exists(_uploadFolderPath))
+        //         {
+        //             Directory.CreateDirectory(_uploadFolderPath);
+        //         }
 
-        // 		var filePath = Path.Combine(_uploadFolderPath, file.FileName);
+        //         var filePath = Path.Combine(_uploadFolderPath, file.FileName);
 
-        // 		using (var stream = new FileStream(filePath, FileMode.Create))
-        // 		{
-        // 			await file.CopyToAsync(stream);
-        // 		}
+        //         using (var stream = new FileStream(filePath, FileMode.Create))
+        //         {
+        //             await file.CopyToAsync(stream);
+        //         }
 
-        // 		item.Name = file.FileName;
+        //         item.Name = file.FileName;
 
-        // 		Product_Image _item = _mapper.Map<Product_Image>(item);
+        //         Product_Image _item = _mapper.Map<Product_Image>(item);
 
-        // 		bool isCreated = await _service.CreateImage(_item);
-        // 		if (!isCreated)
-        // 		{
-        // 			var failedMessage = _apiResponse.Failure(methodName);
-        // 			return StatusCode(500, failedMessage);
-        // 		}
+        //         bool isCreated = await _service.CreateImage(_item);
+        //         if (!isCreated)
+        //         {
+        //             var failedMessage = _apiResponse.Failure(methodName);
+        //             return StatusCode(500, failedMessage);
+        //         }
 
-        // 		// Phản hồi thành công
-        // 		var okMessage = _apiResponse.Success(methodName, _item);
-        // 		return StatusCode(200, okMessage);
-        // 	}
-        // 	catch (Exception ex)
-        // 	{
-        // 		// Xử lý ngoại lệ
-        // 		var errorMessage = _apiResponse.Failure(methodName, ex.Message);
-        // 		return StatusCode(500, errorMessage);
-        // 	}
+        //         // Phản hồi thành công
+        //         var okMessage = _apiResponse.Success(methodName, _item);
+        //         return StatusCode(200, okMessage);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // Xử lý ngoại lệ
+        //         var errorMessage = _apiResponse.Failure(methodName, ex.Message);
+        //         return StatusCode(500, errorMessage);
+        //     }
         // }
 
         // [HttpDelete("{id:guid}")]

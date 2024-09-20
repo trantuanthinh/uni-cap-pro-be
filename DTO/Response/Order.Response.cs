@@ -1,5 +1,4 @@
-﻿using uni_cap_pro_be.Core.Data.Base.Entity;
-using uni_cap_pro_be.Models;
+﻿using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Response

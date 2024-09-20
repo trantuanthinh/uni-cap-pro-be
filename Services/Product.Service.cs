@@ -23,7 +23,7 @@ namespace uni_cap_pro_be.Services
                 .SelectAll()
                 .Include(item => item.Owner)
                 .Include(item => item.Category)
-                // .Include(item => item.Images)
+                .Include(item => item.Images)
                 .ApplyQueryParameters(queryParameters);
 
             return _items

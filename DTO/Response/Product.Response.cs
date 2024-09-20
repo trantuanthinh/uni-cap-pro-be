@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using uni_cap_pro_be.Core.Data.Base.Entity;
+﻿using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
@@ -27,6 +26,6 @@ namespace uni_cap_pro_be.DTO.Response
         public string? Category { get; set; }
 
         public DiscountResponse? Discount { get; set; }
-        // public ICollection<Product_Image>? Images { get; set; }
+        public List<string>? Images { get; set; }
     }
 }

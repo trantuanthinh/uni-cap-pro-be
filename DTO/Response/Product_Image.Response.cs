@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace uni_cap_pro_be.DTO.Response
+﻿namespace uni_cap_pro_be.DTO.Response
 {
     // DONE
     public class Product_ImageResponse

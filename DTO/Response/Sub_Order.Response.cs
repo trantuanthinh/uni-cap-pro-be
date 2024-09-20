@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using uni_cap_pro_be.Core.Data.Base.Entity;
-
 namespace uni_cap_pro_be.DTO.Response
 {
     // DONE
@@ -10,7 +7,6 @@ namespace uni_cap_pro_be.DTO.Response
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 
-        [Required]
         public required Guid UserId { get; set; }
         public Guid OrderId { get; set; }
 

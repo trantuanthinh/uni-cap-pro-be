@@ -2,6 +2,7 @@
 using AutoMapper;
 using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.DTO.Response;
+using uni_cap_pro_be.Extensions;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
@@ -15,11 +16,58 @@ namespace uni_cap_pro_be.Models
                 .ForMember(d => d.Owner, d => d.MapFrom(opt => opt.Owner.Name))
                 .ForMember(d => d.Category, d => d.MapFrom(opt => opt.Category.Name))
                 .ForMember(d => d.Discount, d => d.MapFrom(opt => opt.Discount.ToResponse()))
-        // .ForMember(
-        //     d => d.Images,
-        //     d => d.MapFrom(opt => opt.Images.Select(e => e.Name).ToList())
-        // )
+                // TODO
+                .ForMember(
+                    d => d.Images,
+                    d => d.MapFrom(opt => opt.GetImagesURLByProductAsync(opt))
+                )
         );
+
+        private List<string> GetImagesURLByProductAsync(Product opt)
+        {
+            string _host = "http://localhost:5130/api/product_images/";
+            // Ensure product has images
+            if (opt.Images == null || !opt.Images.Any())
+            {
+                return new List<string>();
+            }
+
+            var directoryPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                $"Resources\\{opt.OwnerId}"
+            );
+
+            // Check if the directory exists
+            if (!Directory.Exists(directoryPath))
+            {
+                return new List<string>(); // Return an empty list if the directory does not exist
+            }
+
+            var imageUrls = new List<string>();
+
+            try
+            {
+                foreach (var name in opt.Images)
+                {
+                    var filePath = Path.Combine(directoryPath, name.ToString());
+                    if (File.Exists(filePath))
+                    {
+                        // Construct the file URL and add to the list
+                        var fileUrl = Path.Combine(_host, $"{opt.OwnerId}/{name}")
+                            .Replace("\\", "/");
+                        imageUrls.Add(fileUrl);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                // Optionally log the exception
+                return new List<string>(); // Return an empty list on error
+            }
+
+            return imageUrls;
+        }
 
         static readonly IMapper mapper = config.CreateMapper();
 
