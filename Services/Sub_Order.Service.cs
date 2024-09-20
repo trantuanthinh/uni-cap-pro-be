@@ -29,7 +29,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<Sub_OrderResponse> GetSub_Order(Guid id)
         {
-            Sub_Order _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            Sub_Order _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             return _item.ToResponse();
         }
 

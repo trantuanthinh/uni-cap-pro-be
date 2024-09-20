@@ -29,13 +29,13 @@ namespace uni_cap_pro_be.Services
 
         public async Task<UserResponse> GetUser(Guid id)
         {
-            User _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            User _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             return _item.ToResponse();
         }
 
         public async Task<bool> UpdateUser(Guid id, PatchRequest<UserRequest> patchRequest)
         {
-            User _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            User _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             if (_item == null)
             {
                 return false;

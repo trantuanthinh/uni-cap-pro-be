@@ -37,7 +37,7 @@ namespace uni_cap_pro_be.Services
         public async Task<ProductResponse> GetProduct(Guid id)
         {
             var _item = await _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
             return _item.ToResponse();
@@ -51,7 +51,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateProduct(Guid id, PatchRequest<ProductRequest> patchRequest)
         {
-            var _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            var _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             if (_item == null)
             {
                 return false;

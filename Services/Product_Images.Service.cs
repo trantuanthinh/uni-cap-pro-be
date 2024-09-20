@@ -13,7 +13,7 @@ namespace uni_cap_pro_be.Services
         public async Task<List<string>> GetImagesURLByProductId(Guid OwnerId, Guid ProductId)
         {
             var imagesName = await _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.ProductId == ProductId)
                 .Select(item => item.Name)
                 .ToListAsync();

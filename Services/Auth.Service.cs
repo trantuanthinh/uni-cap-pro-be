@@ -50,7 +50,7 @@ namespace uni_cap_pro_be.Services
             string trimmedUpperEmail = _item.Email.Trim().ToUpperInvariant();
 
             bool isUnique = !await _repository
-                .GetDbSet()
+                .SelectAll()
                 .AnyAsync(user =>
                     user.Username.Trim().ToUpper() == trimmedUpperUsername // Case-insensitive comparison
                     || user.Email.Trim().ToUpper() == trimmedUpperEmail // Case-insensitive comparison
@@ -74,14 +74,14 @@ namespace uni_cap_pro_be.Services
 
         public User GetUserByEmail(string email)
         {
-            User _user = _repository.GetDbSet().Where(item => item.Email == email).FirstOrDefault();
+            User _user = _repository.SelectAll().Where(item => item.Email == email).FirstOrDefault();
             return _user;
         }
 
         public User GetUserByPhoneNumber(string phoneNumber)
         {
             User _user = _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.PhoneNumber == phoneNumber)
                 .FirstOrDefault();
             return _user;
@@ -90,7 +90,7 @@ namespace uni_cap_pro_be.Services
         public User GetUserByUserName(string username)
         {
             User _user = _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.Username == username)
                 .FirstOrDefault();
             return _user;

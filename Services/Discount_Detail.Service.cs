@@ -47,7 +47,7 @@ namespace uni_cap_pro_be.Services
         public async Task<Discount_DetailResponse> GetDiscount_Detail(Guid id)
         {
             Discount_Detail _item = _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.Id == id)
                 .FirstOrDefault();
             return _item.ToResponse();
@@ -65,7 +65,7 @@ namespace uni_cap_pro_be.Services
         )
         {
             Discount_Detail _item = _repository
-                .GetDbSet()
+                .SelectAll()
                 .Where(item => item.Id == id)
                 .FirstOrDefault();
             if (_item == null)

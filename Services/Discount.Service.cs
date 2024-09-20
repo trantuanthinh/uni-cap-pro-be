@@ -34,7 +34,11 @@ namespace uni_cap_pro_be.Services
 
         public async Task<DiscountResponse> GetDiscount(Guid id)
         {
-            Discount _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            Discount _item = _repository
+                .SelectAll()
+                .Include(item => item.Discount_Details)
+                .Where(item => item.Id == id)
+                .FirstOrDefault();
             return _item.ToResponse();
         }
 
@@ -46,7 +50,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateDiscount(Guid id, PatchRequest<DiscountRequest> patchRequest)
         {
-            Discount _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            Discount _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             if (_item == null)
             {
                 return false;

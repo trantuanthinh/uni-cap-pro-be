@@ -28,8 +28,5 @@ namespace uni_cap_pro_be.Models
         public required Guid DiscountId { get; set; }
         public int Level { get; set; } // Level of discount ladder (1, 2, 3, 4, 5)
         public double Amount { get; set; }
-
-        // [JsonIgnore]
-        // public Discount? Discount { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<OrderResponse> GetOrder(Guid id)
         {
-            Order _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            Order _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             return _item.ToResponse();
         }
 
@@ -49,7 +49,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateOrder(Guid id, PatchRequest<OrderRequest> patchRequest)
         {
-            Order _item = _repository.GetDbSet().Where(item => item.Id == id).FirstOrDefault();
+            Order _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
             if (_item == null)
             {
                 return false;

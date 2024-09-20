@@ -22,10 +22,10 @@ namespace uni_cap_pro_be.Core.Base.Repository
             return _dbSet;
         }
 
-        public DbSet<T> GetDbSet()
-        {
-            return _dbSet;
-        }
+        // public DbSet<T> GetDbSet()
+        // {
+        //     return _dbSet;
+        // }
 
         public T Add(T obj)
         {
