@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using uni_cap_pro_be;
+using uni_cap_pro_be.Controllers;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Middleware;
@@ -94,19 +95,31 @@ builder.Services.AddSingleton<SharedService>();
 builder.Services.AddSingleton<APIResponse>();
 builder.Services.AddSingleton<BaseResponse<object>>();
 
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ProductService>();
-builder.Services.AddScoped<Product_ImageService>();
-builder.Services.AddScoped<OrderService>();
-builder.Services.AddScoped<Sub_OrderService>();
+builder.Services.AddScoped<BaseAPIController>();
 
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<AuthService>();
+
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
+
 builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<ProductService>();
+
 builder.Services.AddScoped<Product_ImageRepository>();
+builder.Services.AddScoped<Product_ImageService>();
+
+builder.Services.AddScoped<DiscountRepository>();
+builder.Services.AddScoped<DiscountService>();
+
+builder.Services.AddScoped<Discount_DetailRepository>();
+builder.Services.AddScoped<Discount_DetailService>();
+
 builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderService>();
+
 builder.Services.AddScoped<Sub_OrderRepository>();
+builder.Services.AddScoped<Sub_OrderService>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

@@ -5,7 +5,7 @@ using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Data
 {
-	// TODO
+    // TODO
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options)
@@ -41,14 +41,14 @@ namespace uni_cap_pro_be.Data
                 // user 1 - n product
                 entity
                     .HasMany(origin => origin.Products)
-                    .WithOne(dest => dest.Owner)
-                    .HasForeignKey(dest => dest.OwnerId);
+                    .WithOne(d => d.Owner)
+                    .HasForeignKey(d => d.OwnerId);
 
                 // user 1 - n sub_order
                 // entity
                 //     .HasMany(origin => origin.Sub_Orders)
-                //     .WithOne(dest => dest.User)
-                //     .HasForeignKey(dest => dest.UserId);
+                //     .WithOne(d => d.User)
+                //     .HasForeignKey(d => d.UserId);
             });
 
             // product
@@ -60,7 +60,7 @@ namespace uni_cap_pro_be.Data
                 //product n - 1 user
                 entity
                     .HasOne(origin => origin.Owner)
-                    .WithMany(dest => dest.Products)
+                    .WithMany(d => d.Products)
                     .HasForeignKey(origin => origin.OwnerId);
 
                 //product n - 1 category
@@ -78,7 +78,7 @@ namespace uni_cap_pro_be.Data
                 //product 1 - n image
                 entity
                     .HasMany(origin => origin.Images)
-                    .WithOne(dest => dest.Product)
+                    .WithOne(d => d.Product)
                     .HasForeignKey(origin => origin.ProductId);
             });
 
@@ -90,7 +90,7 @@ namespace uni_cap_pro_be.Data
                 // product_image n - 1 product
                 entity
                     .HasOne(origin => origin.Product)
-                    .WithMany(dest => dest.Images)
+                    .WithMany(d => d.Images)
                     .HasForeignKey(origin => origin.ProductId);
             });
 

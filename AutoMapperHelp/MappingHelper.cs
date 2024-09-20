@@ -14,7 +14,7 @@ namespace uni_cap_pro_be.AutoMapperHelp
             CreateMap<UserRequest, User>();
 
             //CreateMap<Product, ProductDTO>()
-            //	.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
+            //	.ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name));
             //CreateMap<ProductDTO, Product>();
 
 
@@ -28,7 +28,7 @@ namespace uni_cap_pro_be.AutoMapperHelp
             //CreateMap<OrderCreateDTO, Sub_Order>();
 
             //CreateMap<Discount_DetailDTO, Discount_Detail>()
-            //	.ForMember(dest => dest.DiscountId, opt => opt.Ignore());
+            //	.ForMember(d => d.DiscountId, opt => opt.Ignore());
         }
     }
 }

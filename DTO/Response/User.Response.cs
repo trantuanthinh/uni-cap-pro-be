@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Response
 {
     // DONE
-    public class UserResponse : BaseEntity<Guid>
+    public class UserResponse
     {
+        public Guid Id { get; set; }
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 

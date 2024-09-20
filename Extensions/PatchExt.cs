@@ -5,15 +5,15 @@ namespace uni_cap_pro_be.Extensions
 {
     public static class PatchExtensions
     {
-        public static void Patch<T, D>(this PatchRequest<T> src, ref D dest)
+        public static void Patch<T, D>(this PatchRequest<T> src, ref D d)
             where T : class
             where D : class
         {
             // Set Modified_At to now if it exists
-            var modifiedAtProperty = dest.GetType().GetProperty("Modified_At");
+            var modifiedAtProperty = d.GetType().GetProperty("Modified_At");
             if (modifiedAtProperty != null && modifiedAtProperty.CanWrite)
             {
-                modifiedAtProperty.SetValue(dest, DateTime.UtcNow);
+                modifiedAtProperty.SetValue(d, DateTime.UtcNow);
             }
 
             foreach (var field in src.Fields)
@@ -34,7 +34,7 @@ namespace uni_cap_pro_be.Extensions
                         && !srcProp.GetCustomAttributes(false).OfType<JsonIgnoreAttribute>().Any()
                     )
                     {
-                        destProp.SetValue(dest, srcValue);
+                        destProp.SetValue(d, srcValue);
                     }
                 }
             }

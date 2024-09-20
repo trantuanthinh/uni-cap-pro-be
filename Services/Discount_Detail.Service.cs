@@ -1,67 +1,87 @@
-﻿// using Microsoft.EntityFrameworkCore;
-// using uni_cap_pro_be.Data;
-// using uni_cap_pro_be.Models;
-// using uni_cap_pro_be.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Base.Entity;
+using uni_cap_pro_be.Core.QueryParameter;
+using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.Extensions;
+using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Repositories;
 
-// namespace uni_cap_pro_be.Services
-// {
-// 	// DONE
-// 	public class Discount_DetailService(DataContext dataContext) : IDiscount_DetailService
-// 	{
-// 		private readonly DataContext _dataContext = dataContext;
+namespace uni_cap_pro_be.Services
+{
+    // DONE
+    public class Discount_DetailService(Discount_DetailRepository repository) : BaseService
+    {
+        private readonly Discount_DetailRepository _repository = repository;
 
-// 		public async Task<List<Discount_Detail>> GetDetailsByDiscountId(Guid discountId)
-// 		{
-// 			var details = await _dataContext
-// 				.Discount_Details.Where(item => item.DiscountId == discountId)
-// 				.ToListAsync();
-// 			return details;
-// 		}
+        // public async Task<List<Discount_DetailResponse>> GetDetailsByDiscountId(
+        //     QueryParameters queryParameters
+        // )
+        // {
+        //     QueryParameterResult<Discount_Detail> _items = _repository
+        //         .SelectAll()
+        //         .ApplyQueryParameters(queryParameters);
 
-// 		public async Task<ICollection<Discount_Detail>> GetDiscount_Details()
-// 		{
-// 			var _items = await _dataContext
-// 				.Discount_Details.OrderBy(item => item.DiscountId)
-// 				.ToListAsync();
-// 			return _items;
-// 		}
+        //     return _items
+        //         .Data.AsEnumerable()
+        //         .Select(item => item.ToResponse())
+        //         .ToList()
+        //         .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
+        // }
 
-// 		public async Task<Discount_Detail> GetDiscount_Detail(Guid id)
-// 		{
-// 			var _item = await _dataContext.Discount_Details.SingleOrDefaultAsync(item =>
-// 				item.Id == id
-// 			);
-// 			return _item;
-// 		}
+        public async Task<BaseResponse<Discount_DetailResponse>> GetDiscount_Details(
+            QueryParameters queryParameters
+        )
+        {
+            QueryParameterResult<Discount_Detail> _items = _repository
+                .SelectAll()
+                .ApplyQueryParameters(queryParameters);
 
-// 		public async Task<bool> CreateDiscount_Detail(Discount_Detail _item)
-// 		{
-// 			_item.Created_At = DateTime.UtcNow;
-// 			_item.Modified_At = DateTime.UtcNow;
-// 			_dataContext.Discount_Details.Add(_item);
-// 			return Save();
-// 		}
+            return _items
+                .Data.AsEnumerable()
+                .Select(item => item.ToResponse())
+                .ToList()
+                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
+        }
 
-// 		public async Task<bool> UpdateDiscount_Detail(
-// 			Discount_Detail _item,
-// 			Discount_Detail patchItem
-// 		)
-// 		{
-// 			_item.Modified_At = DateTime.UtcNow;
-// 			_dataContext.Discount_Details.Update(_item);
-// 			return Save();
-// 		}
+        public async Task<Discount_DetailResponse> GetDiscount_Detail(Guid id)
+        {
+            Discount_Detail _item = _repository
+                .GetDbSet()
+                .Where(item => item.Id == id)
+                .FirstOrDefault();
+            return _item.ToResponse();
+        }
 
-// 		public async Task<bool> DeleteDiscount_Detail(Discount_Detail _item)
-// 		{
-// 			_dataContext.Discount_Details.Remove(_item);
-// 			return Save();
-// 		}
+        public async Task<bool> CreateDiscount_Detail(Discount_Detail _item)
+        {
+            _repository.Add(_item);
+            return _repository.Save();
+        }
 
-// 		private bool Save()
-// 		{
-// 			int saved = _dataContext.SaveChanges();
-// 			return saved > 0;
-// 		}
-// 	}
-// }
+        public async Task<bool> UpdateDiscount_Detail(
+            Guid id,
+            PatchRequest<Discount_DetailRequest> patchRequest
+        )
+        {
+            Discount_Detail _item = _repository
+                .GetDbSet()
+                .Where(item => item.Id == id)
+                .FirstOrDefault();
+            if (_item == null)
+            {
+                return false;
+            }
+
+            patchRequest.Patch(ref _item);
+            _repository.Update(_item);
+            return _repository.Save();
+        }
+
+        public async Task<bool> DeleteDiscount_Detail(Guid id)
+        {
+            _repository.Delete(id);
+            return _repository.Save();
+        }
+    }
+}

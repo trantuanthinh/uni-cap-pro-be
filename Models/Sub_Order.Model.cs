@@ -8,7 +8,7 @@ namespace uni_cap_pro_be.Models
     // DONE
     public class Sub_Order : BaseEntity<Guid>
     {
-        // Mapping from User to UserResponse
+        // Mapping from Sub_Order to Sub_OrderResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<Sub_Order, Sub_OrderResponse>()
         );

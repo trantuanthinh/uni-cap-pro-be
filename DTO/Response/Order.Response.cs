@@ -5,8 +5,9 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.DTO.Response
 {
     // DONE
-    public class OrderResponse : BaseEntity<Guid>
+    public class OrderResponse
     {
+        public Guid Id { get; set; }
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 

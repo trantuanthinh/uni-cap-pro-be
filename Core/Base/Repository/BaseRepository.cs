@@ -44,6 +44,11 @@ namespace uni_cap_pro_be.Core.Base.Repository
 
         public T Update(T obj)
         {
+            var modifiedAtProperty = obj.GetType().GetProperty("Modified_At");
+            if (modifiedAtProperty != null && modifiedAtProperty.CanWrite)
+            {
+                modifiedAtProperty.SetValue(obj, DateTime.UtcNow);
+            }
             return _dbSet.Update(obj).Entity;
         }
 
