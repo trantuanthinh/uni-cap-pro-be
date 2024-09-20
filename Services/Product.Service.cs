@@ -23,8 +23,7 @@ namespace uni_cap_pro_be.Services
                 .SelectAll()
                 .Include(item => item.Owner)
                 .Include(item => item.Category)
-                .Include(item => item.Discount)
-                .Include(item => item.Images)
+                // .Include(item => item.Images)
                 .ApplyQueryParameters(queryParameters);
 
             return _items
@@ -38,6 +37,11 @@ namespace uni_cap_pro_be.Services
         {
             var _item = await _repository
                 .SelectAll()
+                .Include(item => item.Owner)
+                .Include(item => item.Category)
+                .Include(item => item.Discount)
+                .ThenInclude(discount => discount.Discount_Details)
+                .Include(item => item.Images)
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
             return _item.ToResponse();

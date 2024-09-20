@@ -12,15 +12,12 @@ namespace uni_cap_pro_be.Models
         // Mapping from Product to ProductResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<Product, ProductResponse>()
-                .ForMember(d => d.Owner, d => d.MapFrom(t => t.Owner.Name))
-                .ForMember(d => d.Category, d => d.MapFrom(t => t.Category.Name))
-        // .ForMember(
-        //     d => d.Discount,
-        //     d => d.MapFrom(t => t.Discount.Discount_Details)
-        // )
+                .ForMember(d => d.Owner, d => d.MapFrom(opt => opt.Owner.Name))
+                .ForMember(d => d.Category, d => d.MapFrom(opt => opt.Category.Name))
+                .ForMember(d => d.Discount, d => d.MapFrom(opt => opt.Discount.ToResponse()))
         // .ForMember(
         //     d => d.Images,
-        //     d => d.MapFrom(t => t.Images.Select(e => e.Name).ToList())
+        //     d => d.MapFrom(opt => opt.Images.Select(e => e.Name).ToList())
         // )
         );
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using uni_cap_pro_be.Core.Data.Base.Entity;
+using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Response
@@ -25,7 +26,7 @@ namespace uni_cap_pro_be.DTO.Response
         public required string Owner { get; set; } // the owner of the product
         public string? Category { get; set; }
 
-        // public Discount? Discount { get; set; }
+        public DiscountResponse? Discount { get; set; }
         // public ICollection<Product_Image>? Images { get; set; }
     }
 }
