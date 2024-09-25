@@ -11,11 +11,9 @@ using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
 
-// TODO
-
-// Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure DbContext
 builder.Services.AddDbContext<DataContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -32,6 +30,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// Add CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -44,15 +43,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers();
 
-// builder.Services.AddControllers(options =>
-//     options.Conventions.Add(new RoutePrefixConvention("/api"))
-// );
-
-// Add Controllers with JSON options
+// Add Controllers with JSON options and route prefix
 builder
-    .Services.AddControllers()
+    .Services.AddControllers(options =>
+    {
+        options.Conventions.Add(new RoutePrefixConvention("/api"));
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -60,6 +57,7 @@ builder
         options.JsonSerializerOptions.MaxDepth = 128;
     });
 
+// Add authentication and JWT configuration
 builder.Services.AddAuthorization();
 builder
     .Services.AddAuthentication(options =>
@@ -84,6 +82,7 @@ builder
         };
     });
 
+// Add other services
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddSingleton<JWTService>();
 
@@ -121,7 +120,7 @@ builder.Services.AddScoped<Sub_OrderService>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -132,7 +131,7 @@ if (args.Length == 1 && args[0].ToLower().Equals("seeddata"))
     SeedData(app);
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
@@ -142,12 +141,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.MapControllerRoute(name: "default", pattern: "api/{controller=Home}/{action=Index}/{id?}");
-app.MapControllers();
+app.MapControllerRoute(name: "default", pattern: "api/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
@@ -155,8 +152,6 @@ static void SeedData(IHost app)
 {
     using var scope = app.Services.CreateScope();
     var seed_service = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-
     seed_service.SeedDataContext();
-
     Console.WriteLine("Database seeded");
 }

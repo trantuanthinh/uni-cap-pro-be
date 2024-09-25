@@ -119,8 +119,6 @@ namespace uni_cap_pro_be.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Total_Rating_Value = table.Column<int>(type: "int", nullable: false),
                     Total_Rating_Quantity = table.Column<int>(type: "int", nullable: false),
-                    Images = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Product_CategoryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>

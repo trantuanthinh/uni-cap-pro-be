@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240919073217_InitMigrations")]
+    [Migration("20240925022057_InitMigrations")]
     partial class InitMigrations
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace uni_cap_pro_be.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -131,9 +131,6 @@ namespace uni_cap_pro_be.Migrations
 
                     b.Property<Guid>("DiscountId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("Images")
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
@@ -346,7 +343,7 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired();
 
                     b.HasOne("uni_cap_pro_be.Models.User", "Owner")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -365,7 +362,7 @@ namespace uni_cap_pro_be.Migrations
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -392,7 +389,17 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("Sub_Orders");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
+                {
+                    b.Navigation("Images");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
                 {
                     b.Navigation("Products");
                 });
