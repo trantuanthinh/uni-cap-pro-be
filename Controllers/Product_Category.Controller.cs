@@ -15,7 +15,7 @@ namespace uni_cap_pro_be.Controllers
     // DONE
     [Route("/[controller]")]
     [ApiController]
-    public class Product_CategorysController(
+    public class Product_CategoriesController(
         DataContext dataContext,
         IMapper mapper,
         APIResponse apiResponse,

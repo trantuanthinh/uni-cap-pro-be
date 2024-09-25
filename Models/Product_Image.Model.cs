@@ -18,7 +18,6 @@ namespace uni_cap_pro_be.Models
         public Guid ProductId { get; set; }
 
         [Required]
-        [JsonIgnore]
-        public required Product Product { get; set; }
+        public Product? Product { get; set; }
     }
 }

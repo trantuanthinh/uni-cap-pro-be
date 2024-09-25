@@ -10,10 +10,10 @@ namespace uni_cap_pro_be.Models
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Product, ProductResponse>();
+            cfg.CreateMap<Product_Category, Product_CategoryResponse>();
         });
 
-        static readonly Mapper mapper = new Mapper(config);
+        static readonly IMapper mapper = new Mapper(config);
 
         public Product_CategoryResponse ToResponse()
         {

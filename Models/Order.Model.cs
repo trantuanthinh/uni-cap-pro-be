@@ -11,10 +11,14 @@ namespace uni_cap_pro_be.Models
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Product, ProductResponse>();
+            cfg.CreateMap<Order, OrderResponse>()
+                .ForMember(
+                    dest => dest.Is_Remained,
+                    dest => dest.MapFrom(opt => opt.EndTime - DateTime.UtcNow)
+                );
         });
 
-        static readonly Mapper mapper = new Mapper(config);
+        static readonly IMapper mapper = new Mapper(config);
 
         public OrderResponse ToResponse()
         {
