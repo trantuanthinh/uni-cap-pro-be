@@ -106,6 +106,9 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<Product_ImageRepository>();
 builder.Services.AddScoped<Product_ImageService>();
 
+builder.Services.AddScoped<Product_CategoryRepository>();
+builder.Services.AddScoped<Product_CategoryService>();
+
 builder.Services.AddScoped<DiscountRepository>();
 builder.Services.AddScoped<DiscountService>();
 

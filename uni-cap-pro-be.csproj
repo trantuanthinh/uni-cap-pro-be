@@ -9,7 +9,7 @@
     <UserSecretsId>7178c444-92d3-48aa-9ce8-ad9be720e493</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <NoWarn>CS0436;CS1591;CS8603;CS8600;CS8602;CS8604;CS1998</NoWarn>
+    <NoWarn>CS0436;CS1591;CS8603;CS8600;CS8602;CS8604;CS1998;CS8618;CS0414;CS0168</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

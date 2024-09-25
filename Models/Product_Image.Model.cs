@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using AutoMapper;
 using uni_cap_pro_be.Core.Data.Base.Entity;
+using uni_cap_pro_be.DTO.Response;
 
 namespace uni_cap_pro_be.Models
 {

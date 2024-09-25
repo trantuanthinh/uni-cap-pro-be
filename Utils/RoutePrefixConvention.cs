@@ -2,10 +2,15 @@
 
 namespace uni_cap_pro_be.Utils
 {
-    // DONE
-    public class RoutePrefixConvention(string prefix) : IControllerModelConvention
+    public class RoutePrefixConvention : IControllerModelConvention
     {
-        private readonly string _prefix = prefix;
+        private readonly string _prefix;
+
+        public RoutePrefixConvention(string prefix)
+        {
+            _prefix =
+                prefix ?? throw new ArgumentNullException(nameof(prefix), "Prefix cannot be null.");
+        }
 
         public void Apply(ControllerModel controller)
         {
@@ -24,7 +29,7 @@ namespace uni_cap_pro_be.Utils
 
             if (controller.Selectors.Count > 0)
             {
-                var routeTemplate = controller.Selectors[0].AttributeRouteModel.Template;
+                var routeTemplate = controller.Selectors[0].AttributeRouteModel?.Template;
                 if (!string.IsNullOrEmpty(routeTemplate))
                 {
                     controller.Selectors[0].AttributeRouteModel.Template =
