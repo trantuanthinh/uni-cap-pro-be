@@ -1,5 +1,3 @@
-using System;
-
 namespace uni_cap_pro_be.DTO.Response
 {
     // DONE

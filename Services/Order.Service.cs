@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
@@ -20,6 +21,7 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<Order> _items = _repository
                 .SelectAll()
+                .Include(item => item.Sub_Orders)
                 .ApplyQueryParameters(queryParameters);
 
             return _items
@@ -31,7 +33,11 @@ namespace uni_cap_pro_be.Services
 
         public async Task<OrderResponse> GetOrder(Guid id)
         {
-            Order _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
+            Order _item = _repository
+                .SelectAll()
+                .Include(item => item.Sub_Orders)
+                .Where(item => item.Id == id)
+                .FirstOrDefault();
             return _item.ToResponse();
         }
 
