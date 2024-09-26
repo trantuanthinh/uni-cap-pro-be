@@ -76,10 +76,10 @@ namespace uni_cap_pro_be.Data
                     .HasForeignKey(origin => origin.DiscountId);
 
                 //product 1 - n image
-                entity
-                    .HasMany(origin => origin.Images)
-                    .WithOne(d => d.Product)
-                    .HasForeignKey(origin => origin.ProductId);
+                // entity
+                //     .HasMany(origin => origin.Images)
+                //     .WithOne(d => d.Product)
+                //     .HasForeignKey(origin => origin.ProductId);
             });
 
             // product image

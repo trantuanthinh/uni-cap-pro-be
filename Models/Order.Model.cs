@@ -13,11 +13,11 @@ namespace uni_cap_pro_be.Models
         {
             cfg.CreateMap<Order, OrderResponse>()
                 .ForMember(
-                    dest => dest.TimeLeft,
+                    d => d.TimeLeft,
                     opt => opt.MapFrom(src => src.EndTime - DateTime.UtcNow)
                 )
                 .ForMember(
-                    dest => dest.Is_Remained,
+                    d => d.Is_Remained,
                     opt => opt.MapFrom(src => (src.EndTime - DateTime.UtcNow) > TimeSpan.Zero)
                 );
         });

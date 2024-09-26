@@ -390,8 +390,8 @@ namespace uni_cap_pro_be
                 };
 
                 string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
-                string seedImagePath = @"D:\UniCapstoneProject\sample-images";
-
+                string seedImagePath = "D:\\UniCapProject\\sample-images";
+                Console.WriteLine(seedImagePath);
                 // Check -> delete old folder: its sub_folders and files, if any, before create the Resources directory
                 if (Directory.Exists(directoryPath))
                 {

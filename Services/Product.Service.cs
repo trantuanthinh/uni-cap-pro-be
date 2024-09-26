@@ -23,6 +23,8 @@ namespace uni_cap_pro_be.Services
                 .SelectAll()
                 .Include(item => item.Owner)
                 .Include(item => item.Category)
+                .Include(item => item.Discount)
+                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Images)
                 .ApplyQueryParameters(queryParameters);
 

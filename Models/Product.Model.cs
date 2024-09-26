@@ -13,47 +13,48 @@ namespace uni_cap_pro_be.Models
         // Mapping from Product to ProductResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<Product, ProductResponse>()
-                .ForMember(d => d.Owner, d => d.MapFrom(opt => opt.Owner.Name))
-                .ForMember(d => d.Category, d => d.MapFrom(opt => opt.Category.Name))
-                .ForMember(d => d.Discount, d => d.MapFrom(opt => opt.Discount.ToResponse()))
-                // TODO
-                .ForMember(
-                    d => d.Images,
-                    d => d.MapFrom(opt => opt.GetImagesURLByProductAsync(opt))
-                )
+                .ForMember(d => d.Owner, opt => opt.MapFrom(src => src.Owner.Name))
+                .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(d => d.Discount, opt => opt.MapFrom(src => src.Discount.ToResponse()))
+                // .ForMember(
+                //     dest => dest.Images,
+                //     opt => opt.MapFrom(src => src.Images.Select(img => img.Name).ToList()) // Map danh sách tên từ Product_Image
+                // )
+                .ForMember(d => d.Images, opt => opt.MapFrom(src => src.GetImageUrls()))
         );
 
-        private List<string> GetImagesURLByProductAsync(Product opt)
+        private List<string> GetImageUrls()
         {
-            string _host = "http://localhost:5130/api/product_images/";
+            string host = "http://localhost:5130/api/product_images/";
+            var imageUrls = new List<string>();
+
             // Ensure product has images
-            if (opt.Images == null || !opt.Images.Any())
+            if (Images == null || !Images.Any())
             {
-                return new List<string>();
+                return imageUrls;
             }
 
             var directoryPath = Path.Combine(
                 Directory.GetCurrentDirectory(),
-                $"Resources\\{opt.OwnerId}"
+                $"Resources\\{OwnerId}"
             );
+            Console.Write(directoryPath);
 
             // Check if the directory exists
             if (!Directory.Exists(directoryPath))
             {
-                return new List<string>(); // Return an empty list if the directory does not exist
+                return imageUrls; // Return an empty list if the directory does not exist
             }
-
-            var imageUrls = new List<string>();
 
             try
             {
-                foreach (var name in opt.Images)
+                foreach (var image in Images)
                 {
-                    var filePath = Path.Combine(directoryPath, name.ToString());
+                    var filePath = Path.Combine(directoryPath, image.Name);
                     if (File.Exists(filePath))
                     {
                         // Construct the file URL and add to the list
-                        var fileUrl = Path.Combine(_host, $"{opt.OwnerId}/{name}")
+                        var fileUrl = Path.Combine(host, $"{OwnerId}/{image.Name}")
                             .Replace("\\", "/");
                         imageUrls.Add(fileUrl);
                     }
@@ -62,7 +63,6 @@ namespace uni_cap_pro_be.Models
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                // Optionally log the exception
                 return new List<string>(); // Return an empty list on error
             }
 
