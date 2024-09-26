@@ -12,6 +12,7 @@ namespace uni_cap_pro_be.Models
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Order, OrderResponse>()
+                .ForMember(d => d.Product, opt => opt.MapFrom(src => src.Product.ToResponse()))
                 .ForMember(
                     d => d.TimeLeft,
                     opt => opt.MapFrom(src => src.EndTime - DateTime.UtcNow)

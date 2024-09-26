@@ -21,12 +21,11 @@ namespace uni_cap_pro_be
                 // Ensure the database is created
                 _dataContext.Database.EnsureCreated();
 
-                // seed discount
+                #region seed discounts
                 var discountList = new List<Discount>
                 {
                     new Discount { Id = Guid.NewGuid(), ActiveStatus = ActiveStatus.ACTIVE }
                 };
-
                 var discountDetails = new List<(int Level, double Amount)>
                 {
                     (1, 0.1f),
@@ -47,8 +46,9 @@ namespace uni_cap_pro_be
                         Amount = detail.Amount,
                     })
                     .ToList();
+                #endregion
 
-                // Seed users
+                #region seed users
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
 
                 var users = new List<(
@@ -111,8 +111,9 @@ namespace uni_cap_pro_be
                         Description = user.Description
                     })
                     .ToList();
+                #endregion
 
-                // Seed product categories
+                #region seed product_categories
                 var productCategories = new List<string>
                 {
                     "Fruits",
@@ -129,8 +130,9 @@ namespace uni_cap_pro_be
                         Name = category,
                     })
                     .ToList();
+                #endregion
 
-                // Seed products for each producer
+                #region seed products for each producer
                 var products = new List<(
                     string Name,
                     Guid CategoryId,
@@ -391,7 +393,7 @@ namespace uni_cap_pro_be
 
                 string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
                 string seedImagePath = "D:\\UniCapProject\\sample-images";
-                Console.WriteLine(seedImagePath);
+
                 // Check -> delete old folder: its sub_folders and files, if any, before create the Resources directory
                 if (Directory.Exists(directoryPath))
                 {
@@ -467,8 +469,9 @@ namespace uni_cap_pro_be
                         Discount = discountList[0]
                     })
                     .ToList();
+                #endregion
 
-                // Seed product images
+                #region seed product_images
                 var productImages = new List<(string Name, Guid ProductId, Product Product)>
                 {
                     // Images for Producer 1
@@ -507,8 +510,9 @@ namespace uni_cap_pro_be
                         Product = image.Product
                     })
                     .ToList();
+                #endregion
 
-                // seed order
+                #region seed orders
                 TimeSpan timeSpan = new(24, 0, 0);
                 var orders = new List<(Guid ProductId, Product Product)>
                 {
@@ -572,8 +576,9 @@ namespace uni_cap_pro_be
                         Price = sub_order.Price,
                     })
                     .ToList();
+                #endregion
 
-                // Check and seed data
+                #region Check and seed data
                 _dataContext.Users.AddRange(userList);
                 _dataContext.Product_Categories.AddRange(productCategoryList);
                 _dataContext.Products.AddRange(productList);
@@ -584,6 +589,7 @@ namespace uni_cap_pro_be
 
                 _dataContext.Discounts.AddRange(discountList);
                 _dataContext.Discount_Details.AddRange(discountDetailList);
+                #endregion
 
                 _dataContext.SaveChanges();
                 Console.WriteLine("Database seeding completed.");

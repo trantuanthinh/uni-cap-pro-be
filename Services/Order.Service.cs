@@ -21,6 +21,9 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<Order> _items = _repository
                 .SelectAll()
+                .Include(item => item.Product)
+                .ThenInclude(product => product.Discount)
+                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Sub_Orders)
                 .ApplyQueryParameters(queryParameters);
 
@@ -35,6 +38,9 @@ namespace uni_cap_pro_be.Services
         {
             Order _item = _repository
                 .SelectAll()
+                .Include(item => item.Product)
+                .ThenInclude(product => product.Discount)
+                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.Id == id)
                 .FirstOrDefault();

@@ -28,7 +28,7 @@ namespace uni_cap_pro_be.Data
             var user_type_converter = new EnumToStringConverter<UserType>();
             var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
 
-            // user
+            #region User
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -38,107 +38,117 @@ namespace uni_cap_pro_be.Data
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
                 entity.Property(e => e.User_Type).HasConversion(user_type_converter);
 
-                // user 1 - n product
+                // User 1 - n Product
                 entity
                     .HasMany(origin => origin.Products)
                     .WithOne(d => d.Owner)
                     .HasForeignKey(d => d.OwnerId);
 
-                // user 1 - n sub_order
+                // User 1 - n sub_order
                 // entity
                 //     .HasMany(origin => origin.Sub_Orders)
                 //     .WithOne(d => d.User)
                 //     .HasForeignKey(d => d.UserId);
             });
+            #endregion
 
-            // product
+            #region Product
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 
-                //product n - 1 user
+                //Product n - 1 User
                 entity
                     .HasOne(origin => origin.Owner)
                     .WithMany(d => d.Products)
                     .HasForeignKey(origin => origin.OwnerId);
 
-                //product n - 1 category
+                //Product n - 1 Category
                 entity
                     .HasOne(origin => origin.Category)
                     .WithMany()
                     .HasForeignKey(origin => origin.CategoryId);
 
-                //product n - 1 discount
+                //Product n - 1 Discount
                 entity
                     .HasOne(origin => origin.Discount)
                     .WithMany()
                     .HasForeignKey(origin => origin.DiscountId);
 
-                //product 1 - n image
+                //Product 1 - n image
                 // entity
                 //     .HasMany(origin => origin.Images)
                 //     .WithOne(d => d.Product)
                 //     .HasForeignKey(origin => origin.ProductId);
             });
+            #endregion
 
-            // product image
+            #region Product_Image
             modelBuilder.Entity<Product_Image>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
-                // product_image n - 1 product
+                // Product_Image n - 1 Product
                 entity
                     .HasOne(origin => origin.Product)
                     .WithMany(d => d.Images)
                     .HasForeignKey(origin => origin.ProductId);
             });
 
-            // product category
+            // Product_Category
             modelBuilder.Entity<Product_Category>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Name).IsUnique();
             });
+            #endregion
 
-            // order
+            #region Order
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
+                // Order n - 1 Product
                 entity
                     .HasOne(origin => origin.Product)
                     .WithMany()
                     .HasForeignKey(origin => origin.ProductId);
 
+                // Order 1 - n Sub_Orders
                 entity
                     .HasMany(origin => origin.Sub_Orders)
                     .WithOne()
                     .HasForeignKey(origin => origin.OrderId);
             });
+            #endregion
 
-            // sub order
+            #region Sub_Order
             modelBuilder.Entity<Sub_Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
             });
+            #endregion
 
-            // discount
+            #region Discount
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
+                // Discount 1 - n Discount_Details
                 entity
                     .HasMany(origin => origin.Discount_Details)
                     .WithOne()
                     .HasForeignKey(origin => origin.DiscountId);
             });
+            #endregion
 
-            // discount detail
+            #region Discount_Detail
             modelBuilder.Entity<Discount_Detail>(entity =>
             {
                 entity.HasKey(e => e.Id);
             });
+            #endregion
         }
     }
 }

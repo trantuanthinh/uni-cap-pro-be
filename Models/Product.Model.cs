@@ -38,7 +38,6 @@ namespace uni_cap_pro_be.Models
                 Directory.GetCurrentDirectory(),
                 $"Resources\\{OwnerId}"
             );
-            Console.Write(directoryPath);
 
             // Check if the directory exists
             if (!Directory.Exists(directoryPath))
