@@ -13,7 +13,6 @@ namespace uni_cap_pro_be.Models
         // Mapping from Product to ProductResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<Product, ProductResponse>()
-                .ForMember(d => d.Owner, opt => opt.MapFrom(src => src.Owner.Name))
                 .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(d => d.Discount, opt => opt.MapFrom(src => src.Discount.ToResponse()))
                 // .ForMember(
@@ -34,10 +33,7 @@ namespace uni_cap_pro_be.Models
                 return imageUrls;
             }
 
-            var directoryPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                $"Resources\\{OwnerId}"
-            );
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), $"Resources");
 
             // Check if the directory exists
             if (!Directory.Exists(directoryPath))
@@ -53,8 +49,7 @@ namespace uni_cap_pro_be.Models
                     if (File.Exists(filePath))
                     {
                         // Construct the file URL and add to the list
-                        var fileUrl = Path.Combine(host, $"{OwnerId}/{image.Name}")
-                            .Replace("\\", "/");
+                        var fileUrl = Path.Combine(host, $"{image.Name}").Replace("\\", "/");
                         imageUrls.Add(fileUrl);
                     }
                 }
@@ -82,9 +77,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid DiscountId { get; set; }
 
-        [Required]
-        public required Guid OwnerId { get; set; } // the owner of the product
-
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 
@@ -101,8 +93,6 @@ namespace uni_cap_pro_be.Models
         public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
         public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
 
-        [Required]
-        public required User Owner { get; set; } // the owner of the product
         public Product_Category? Category { get; set; }
         public Discount? Discount { get; set; }
         public ICollection<Product_Image>? Images { get; set; }

@@ -136,9 +136,6 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("char(36)");
-
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
@@ -151,15 +148,18 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("Total_Rating_Value")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("DiscountId");
 
-                    b.HasIndex("OwnerId");
-
                     b.HasIndex("Product_CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -283,10 +283,6 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("User_Type")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -339,21 +335,17 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("uni_cap_pro_be.Models.User", "Owner")
-                        .WithMany("Products")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("uni_cap_pro_be.Models.Product_Category", null)
                         .WithMany("Products")
                         .HasForeignKey("Product_CategoryId");
 
+                    b.HasOne("uni_cap_pro_be.Models.User", null)
+                        .WithMany("Products")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>

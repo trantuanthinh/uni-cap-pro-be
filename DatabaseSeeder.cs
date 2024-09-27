@@ -56,7 +56,6 @@ namespace uni_cap_pro_be
                     string Name,
                     string Email,
                     string PhoneNumber,
-                    UserType UserType,
                     string Description
                 )>
                 {
@@ -65,7 +64,6 @@ namespace uni_cap_pro_be
                         "Company One",
                         "company1@gmail.com",
                         "1234567890",
-                        UserType.COMPANY,
                         "First company"
                     ),
                     (
@@ -73,7 +71,6 @@ namespace uni_cap_pro_be
                         "Company Two",
                         "company2@gmail.com",
                         "0987654321",
-                        UserType.COMPANY,
                         "Second company"
                     ),
                     (
@@ -81,7 +78,6 @@ namespace uni_cap_pro_be
                         "Producer One",
                         "producer1@gmail.com",
                         "1122334455",
-                        UserType.PRODUCER,
                         "First producer"
                     ),
                     (
@@ -89,7 +85,6 @@ namespace uni_cap_pro_be
                         "Producer Two",
                         "producer2@gmail.com",
                         "5566778899",
-                        UserType.PRODUCER,
                         "Second producer"
                     )
                 };
@@ -106,7 +101,6 @@ namespace uni_cap_pro_be
                         Password = hashedPassword,
                         PhoneNumber = user.PhoneNumber,
                         Active_Status = ActiveStatus.ACTIVE,
-                        User_Type = user.UserType,
                         Avatar = null,
                         Description = user.Description
                     })
@@ -137,8 +131,6 @@ namespace uni_cap_pro_be
                     string Name,
                     Guid CategoryId,
                     Product_Category Category,
-                    Guid OwnerId,
-                    User Owner,
                     double Price,
                     int TotalRatingValue,
                     int TotalRatingQuantity,
@@ -150,8 +142,6 @@ namespace uni_cap_pro_be
                         "Organic Apples",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[2].Id,
-                        userList[2],
                         30000,
                         120,
                         30,
@@ -161,8 +151,6 @@ namespace uni_cap_pro_be
                         "Ripe Bananas",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[2].Id,
-                        userList[2],
                         20000,
                         80,
                         20,
@@ -172,8 +160,6 @@ namespace uni_cap_pro_be
                         "Organic Carrots",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[2].Id,
-                        userList[2],
                         15000,
                         90,
                         20,
@@ -183,8 +169,6 @@ namespace uni_cap_pro_be
                         "Fresh Broccoli",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[2].Id,
-                        userList[2],
                         18000,
                         70,
                         20,
@@ -194,8 +178,6 @@ namespace uni_cap_pro_be
                         "Whole Wheat Flour",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[2].Id,
-                        userList[2],
                         12000,
                         85,
                         25,
@@ -205,8 +187,6 @@ namespace uni_cap_pro_be
                         "Brown Rice",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[2].Id,
-                        userList[2],
                         10000,
                         60,
                         18,
@@ -216,8 +196,6 @@ namespace uni_cap_pro_be
                         "Organic Strawberries",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[2].Id,
-                        userList[2],
                         37000,
                         110,
                         22,
@@ -227,8 +205,6 @@ namespace uni_cap_pro_be
                         "Sweet Potatoes",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[2].Id,
-                        userList[2],
                         24000,
                         65,
                         14,
@@ -238,8 +214,6 @@ namespace uni_cap_pro_be
                         "Bell Peppers",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[2].Id,
-                        userList[2],
                         27500,
                         65,
                         13,
@@ -249,8 +223,6 @@ namespace uni_cap_pro_be
                         "Quinoa",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[2].Id,
-                        userList[2],
                         31000,
                         80,
                         16,
@@ -260,8 +232,6 @@ namespace uni_cap_pro_be
                         "Oats",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[2].Id,
-                        userList[2],
                         18000,
                         70,
                         17,
@@ -271,8 +241,6 @@ namespace uni_cap_pro_be
                         "Pineapples",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[2].Id,
-                        userList[2],
                         36000,
                         95,
                         19,
@@ -282,8 +250,6 @@ namespace uni_cap_pro_be
                         "Zucchini",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[2].Id,
-                        userList[2],
                         15000,
                         50,
                         10,
@@ -293,8 +259,6 @@ namespace uni_cap_pro_be
                         "Fresh Milk",
                         productCategoryList[3].Id,
                         productCategoryList[3],
-                        userList[2].Id,
-                        userList[2],
                         22000,
                         90,
                         20,
@@ -305,8 +269,6 @@ namespace uni_cap_pro_be
                         "Baby Carrots",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[3].Id,
-                        userList[3],
                         20000,
                         50,
                         11,
@@ -316,8 +278,6 @@ namespace uni_cap_pro_be
                         "Green Beans",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[3].Id,
-                        userList[3],
                         22000,
                         55,
                         13,
@@ -327,8 +287,6 @@ namespace uni_cap_pro_be
                         "Millet",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[3].Id,
-                        userList[3],
                         28000,
                         50,
                         14,
@@ -338,8 +296,6 @@ namespace uni_cap_pro_be
                         "Buckwheat",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        userList[3].Id,
-                        userList[3],
                         34000,
                         0,
                         0,
@@ -349,8 +305,6 @@ namespace uni_cap_pro_be
                         "Mangoes",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[3].Id,
-                        userList[3],
                         40000,
                         85,
                         22,
@@ -360,8 +314,6 @@ namespace uni_cap_pro_be
                         "Papayas",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        userList[3].Id,
-                        userList[3],
                         32000,
                         75,
                         18,
@@ -371,8 +323,6 @@ namespace uni_cap_pro_be
                         "Cherry Tomatoes",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        userList[3].Id,
-                        userList[3],
                         25000,
                         70,
                         16,
@@ -382,8 +332,6 @@ namespace uni_cap_pro_be
                         "Cheddar Cheese",
                         productCategoryList[3].Id,
                         productCategoryList[3],
-                        userList[3].Id,
-                        userList[3],
                         50000,
                         110,
                         25,
@@ -418,20 +366,15 @@ namespace uni_cap_pro_be
                 foreach (var product in products)
                 {
                     // Create directory for each owner, if it doesn't already exist
-                    string ownerImageDirectory = Path.Combine(
-                        directoryPath,
-                        product.OwnerId.ToString()
-                    );
-
-                    if (!Directory.Exists(ownerImageDirectory))
+                    if (!Directory.Exists(directoryPath))
                     {
-                        Directory.CreateDirectory(ownerImageDirectory);
+                        Directory.CreateDirectory(directoryPath);
                     }
 
                     // Copy product image to the owner's directory
                     string sourceImagePath = Path.Combine(seedImagePath, $"{product.Name}.jpg");
                     string destinationImagePath = Path.Combine(
-                        ownerImageDirectory,
+                        directoryPath,
                         $"{product.Name}.jpg"
                     );
 
@@ -455,8 +398,6 @@ namespace uni_cap_pro_be
                         CategoryId = product.CategoryId,
                         DiscountId = discountList[0].Id,
                         Category = product.Category,
-                        OwnerId = product.OwnerId,
-                        Owner = product.Owner,
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
                         Name = product.Name,

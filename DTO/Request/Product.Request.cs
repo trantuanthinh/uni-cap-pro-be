@@ -8,9 +8,6 @@ namespace uni_cap_pro_be.DTO.Request
         [Required]
         public required Guid CategoryId { get; set; }
 
-        [Required]
-        public required Guid OwnerId { get; set; } // the owner of the product
-
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 

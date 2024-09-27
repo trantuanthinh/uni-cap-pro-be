@@ -8,12 +8,6 @@
         UserName
     }
 
-    public enum UserType
-    {
-        COMPANY,
-        PRODUCER
-    }
-
     public enum ActiveStatus
     {
         ACTIVE,
