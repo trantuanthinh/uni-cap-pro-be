@@ -26,7 +26,9 @@ namespace uni_cap_pro_be.Models
 
         [Required]
         public required Guid UserId { get; set; }
-        public Guid OrderId { get; set; }
+
+        [Required]
+        public required Guid OrderId { get; set; }
 
         public int Quantity { get; set; }
         public double Price { get; set; }

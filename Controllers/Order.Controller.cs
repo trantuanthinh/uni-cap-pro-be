@@ -96,18 +96,65 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
+        [HttpPost("buy-together/{orderId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status412PreconditionFailed)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddSubOrder(
+            Guid orderId,
+            [FromBody] BuyTogetherRequest item
+        )
+        {
+            string methodName = nameof(AddSubOrder);
+
+            Sub_Order _suborder = _mapper.Map<Sub_Order>(item);
+
+            Order _order = await _service.FindOrder(orderId);
+            if (_order == null)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(404, failedMessage);
+            }
+
+            bool checkValid = _service.CheckValid(_order);
+            if (!checkValid)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(412, failedMessage);
+            }
+
+            _suborder.OrderId = _order.Id;
+            bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
+            if (!isSubOrderCreated)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(500, failedMessage);
+            }
+
+            bool isSubOrderAdded = await _service.AddSubOrder(_order, _suborder);
+            if (!isSubOrderAdded)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, _order);
+            return StatusCode(200, okMessage);
+        }
+
         // [Authorize]
-        [HttpPatch("{id:guid}")]
+        [HttpPatch("{orderId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PatchOrder(
-            Guid id,
+            Guid orderId,
             [FromBody] PatchRequest<OrderRequest> patchRequest
         )
         {
             string methodName = nameof(PatchOrder);
 
-            bool isUpdated = await _service.UpdateOrder(id, patchRequest);
+            bool isUpdated = await _service.UpdateOrder(orderId, patchRequest);
             if (isUpdated)
             {
                 var failedMessage = _apiResponse.Failure(methodName);

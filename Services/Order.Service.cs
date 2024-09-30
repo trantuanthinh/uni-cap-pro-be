@@ -79,5 +79,29 @@ namespace uni_cap_pro_be.Services
             _repository.Delete(id);
             return _repository.Save();
         }
+
+        public async Task<Order> FindOrder(Guid orderId)
+        {
+            Order _item = _repository.SelectById(orderId);
+            // .FirstOrDefault();
+            return _item;
+        }
+
+        public bool CheckValid(Order order)
+        {
+            return order.Level <= 5
+                && !order.IsPaid
+                && order.IsShare
+                && order.EndTime > DateTime.UtcNow;
+        }
+
+        public async Task<bool> AddSubOrder(Order order, Sub_Order subOrder)
+        {
+            order.Total_Price += subOrder.Price;
+            order.Total_Quantity += subOrder.Quantity;
+            order.Level += 1;
+            _repository.Update(order);
+            return _repository.Save();
+        }
     }
 }

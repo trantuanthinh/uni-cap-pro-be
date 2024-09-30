@@ -64,10 +64,10 @@ namespace uni_cap_pro_be.Core.Base.Repository
         //     return obj != null;
         // }
 
-        // public T SelectById(string id)
-        // {
-        //     return _dbSet.Find(id);
-        // }
+        public T SelectById(Guid id)
+        {
+            return _dbSet.Find(id);
+        }
 
         public bool Save()
         {

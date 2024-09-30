@@ -17,13 +17,11 @@ namespace uni_cap_pro_be.AutoMapperHelp
             //	.ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name));
             //CreateMap<ProductDTO, Product>();
 
-
-
             //CreateMap<Product_Image, Product_ImageDTO>();
             //CreateMap<Product_ImageDTO, Product_Image>();
 
             //CreateMap<Order, OrderDTO>();
-            //CreateMap<OrderDTO, Order>();
+            CreateMap<BuyTogetherRequest, Sub_Order>();
 
             //CreateMap<OrderCreateDTO, Sub_Order>();
 
