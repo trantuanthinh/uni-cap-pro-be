@@ -11,14 +11,9 @@ namespace uni_cap_pro_be.Services
         private readonly Product_ImageRepository _repository = repository;
         private readonly string _host = "http://localhost:5130/api/product_images/";
 
-        public async Task<string> GetImagePath(string ownerId, string name)
+        public async Task<string> GetImagePath(string name)
         {
-            var filePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Resources",
-                ownerId,
-                name
-            );
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", name);
             return filePath;
         }
 
