@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240927150706_InitMigrtions")]
-    partial class InitMigrtions
+    [Migration("20240930051115_InitMigrations")]
+    partial class InitMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

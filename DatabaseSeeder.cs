@@ -49,7 +49,7 @@ namespace uni_cap_pro_be
                 #endregion
 
                 #region seed users
-                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("loveyou");
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword("thaohoang");
 
                 var users = new List<(
                     string Username,
@@ -60,33 +60,12 @@ namespace uni_cap_pro_be
                 )>
                 {
                     (
-                        "company1",
-                        "Company One",
-                        "company1@gmail.com",
-                        "1234567890",
-                        "First company"
+                        "trantuanthinh",
+                        "Tran Tuan Thinh",
+                        "tran.tuan.thinh.0125@gmail.com",
+                        "0395279915",
+                        "Tran Tuan Thinh"
                     ),
-                    (
-                        "company2",
-                        "Company Two",
-                        "company2@gmail.com",
-                        "0987654321",
-                        "Second company"
-                    ),
-                    (
-                        "producer1",
-                        "Producer One",
-                        "producer1@gmail.com",
-                        "1122334455",
-                        "First producer"
-                    ),
-                    (
-                        "producer2",
-                        "Producer Two",
-                        "producer2@gmail.com",
-                        "5566778899",
-                        "Second producer"
-                    )
                 };
 
                 var userList = users
