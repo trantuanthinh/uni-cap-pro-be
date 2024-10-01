@@ -23,7 +23,7 @@ namespace uni_cap_pro_be.AutoMapperHelp
             //CreateMap<Order, OrderDTO>();
             CreateMap<BuyTogetherRequest, Sub_Order>();
 
-            //CreateMap<OrderCreateDTO, Sub_Order>();
+            CreateMap<OrderRequest, Sub_Order>();
 
             //CreateMap<Discount_DetailDTO, Discount_Detail>()
             //	.ForMember(d => d.DiscountId, opt => opt.Ignore());

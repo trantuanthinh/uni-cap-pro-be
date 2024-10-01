@@ -51,9 +51,15 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> CreateOrder(Order _item)
         {
-            TimeSpan Timer = new(24, 0, 0);
-
-            _item.EndTime = DateTime.UtcNow + Timer;
+            if (_item.IsShare)
+            {
+                TimeSpan Timer = new(24, 0, 0);
+                _item.EndTime = DateTime.UtcNow + Timer;
+            }
+            else
+            {
+                _item.EndTime = DateTime.UtcNow;
+            }
             _item.Delivery_Status = DeliveryStatus.PENDING;
             _item.IsPaid = false;
             _item.Level = 1;
