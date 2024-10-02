@@ -8,6 +8,6 @@ namespace uni_cap_pro_be.Core.QueryParameter
         public string? SortBy { get; set; }
         public string? SortOrder { get; set; } = "asc"; // asc or desc
         public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 8;
     }
 }
