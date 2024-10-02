@@ -66,6 +66,13 @@ namespace uni_cap_pro_be
                         "0395279915",
                         "Tran Tuan Thinh"
                     ),
+                    (
+                        "thaohoang",
+                        "Hoang Thi Thanh Thao",
+                        "thaoh1717@gmail.com",
+                        "0327858682",
+                        "ThaoHoang1717"
+                    ),
                 };
 
                 var userList = users
