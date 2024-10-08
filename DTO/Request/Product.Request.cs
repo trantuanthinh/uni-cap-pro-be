@@ -12,6 +12,9 @@ namespace uni_cap_pro_be.DTO.Request
         public DateTime Modified_At { get; set; }
 
         [Required]
+        public required Guid OwnerId { get; set; } // the owner of the product
+
+        [Required]
         public required string Name { get; set; }
 
         [Required]

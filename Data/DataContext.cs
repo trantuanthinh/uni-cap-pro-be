@@ -25,6 +25,7 @@ namespace uni_cap_pro_be.Data
             base.OnModelCreating(modelBuilder);
 
             var active_status_converter = new EnumToStringConverter<ActiveStatus>();
+            var user_type_converter = new EnumToStringConverter<UserType>();
             var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
 
             #region User
@@ -35,6 +36,12 @@ namespace uni_cap_pro_be.Data
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.HasIndex(e => e.PhoneNumber).IsUnique();
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
+
+                // User 1 - n Product
+                entity
+                    .HasMany(origin => origin.Products)
+                    .WithOne(d => d.Owner)
+                    .HasForeignKey(d => d.OwnerId);
 
                 // User 1 - n sub_order
                 // entity
@@ -49,6 +56,12 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
+
+                //Product n - 1 User
+                entity
+                    .HasOne(origin => origin.Owner)
+                    .WithMany(d => d.Products)
+                    .HasForeignKey(origin => origin.OwnerId);
 
                 //Product n - 1 Category
                 entity

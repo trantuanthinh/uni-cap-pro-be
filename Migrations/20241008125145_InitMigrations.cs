@@ -62,6 +62,7 @@ namespace uni_cap_pro_be.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Active_Status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     Avatar = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Background = table.Column<string>(type: "longtext", nullable: true)
@@ -112,12 +113,12 @@ namespace uni_cap_pro_be.Migrations
                     Price = table.Column<double>(type: "double", nullable: false),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    OwnerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Active_Status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Total_Rating_Value = table.Column<int>(type: "int", nullable: false),
                     Total_Rating_Quantity = table.Column<int>(type: "int", nullable: false),
-                    Product_CategoryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                    Product_CategoryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -140,10 +141,11 @@ namespace uni_cap_pro_be.Migrations
                         principalTable: "Product_Categories",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Products_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Products_Users_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -253,14 +255,14 @@ namespace uni_cap_pro_be.Migrations
                 column: "DiscountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_OwnerId",
+                table: "Products",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_Product_CategoryId",
                 table: "Products",
                 column: "Product_CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_UserId",
-                table: "Products",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sub_Orders_OrderId",

@@ -43,6 +43,9 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required ActiveStatus Active_Status { get; set; }
 
+        [Required]
+        public required UserType Type { get; set; }
+
         public string? Avatar { get; set; }
         public string? Background { get; set; }
         public string? Description { get; set; }

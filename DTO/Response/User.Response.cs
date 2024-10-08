@@ -25,6 +25,9 @@ namespace uni_cap_pro_be.DTO.Response
         public required string PhoneNumber { get; set; }
 
         [Required]
+        public required UserType User_Type { get; set; }
+
+        [Required]
         public required ActiveStatus Active_Status { get; set; }
 
         public string? Avatar { get; set; }

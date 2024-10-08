@@ -56,7 +56,8 @@ namespace uni_cap_pro_be
                     string Name,
                     string Email,
                     string PhoneNumber,
-                    string Description
+                    string Description,
+                    UserType Type
                 )>
                 {
                     (
@@ -64,14 +65,48 @@ namespace uni_cap_pro_be
                         "Tran Tuan Thinh",
                         "tran.tuan.thinh.0125@gmail.com",
                         "0395279915",
-                        "Tran Tuan Thinh"
+                        "Tran Tuan Thinh",
+                        UserType.Company
                     ),
                     (
                         "thaohoang",
                         "Hoang Thi Thanh Thao",
                         "thaoh1717@gmail.com",
                         "0327858682",
-                        "ThaoHoang1717"
+                        "ThaoHoang1717",
+                        UserType.Company
+                    ),
+                    (
+                        "company1",
+                        "Company 1",
+                        "company1@gmail.com",
+                        "1234567890",
+                        "Company 1",
+                        UserType.Company
+                    ),
+                    (
+                        "company2",
+                        "Company 2",
+                        "company2@gmail.com",
+                        "9876543210",
+                        "Company 2",
+                        UserType.Company
+                    ),
+                    (
+                        "producer1",
+                        "Producer 1",
+                        "producer1@gmail.com",
+                        "1237894560",
+                        "Producer 1",
+                        UserType.Producer
+                    ),
+                    (
+                        "producer2",
+                        "Producer 2",
+                        "producer2@gmail.com",
+                        "9873216540",
+                        "Producer 2",
+                        UserType.Producer
                     ),
                 };
 
@@ -87,6 +122,7 @@ namespace uni_cap_pro_be
                         Password = hashedPassword,
                         PhoneNumber = user.PhoneNumber,
                         Active_Status = ActiveStatus.ACTIVE,
+                        Type = user.Type,
                         Avatar = null,
                         Description = user.Description
                     })
@@ -120,7 +156,9 @@ namespace uni_cap_pro_be
                     double Price,
                     int TotalRatingValue,
                     int TotalRatingQuantity,
-                    string Description
+                    string Description,
+                    Guid OwnerId,
+                    User Owner
                 )>
                 {
                     // Producer 1's products
@@ -131,7 +169,9 @@ namespace uni_cap_pro_be
                         30000,
                         120,
                         30,
-                        "Fresh organic apples, rich in flavor and nutrients."
+                        "Fresh organic apples, rich in flavor and nutrients.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Ripe Bananas",
@@ -140,7 +180,9 @@ namespace uni_cap_pro_be
                         20000,
                         80,
                         20,
-                        "Sweet and ripe bananas, perfect for a healthy snack."
+                        "Sweet and ripe bananas, perfect for a healthy snack.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Organic Carrots",
@@ -149,7 +191,9 @@ namespace uni_cap_pro_be
                         15000,
                         90,
                         20,
-                        "Crisp and fresh organic carrots, ideal for salads and snacking."
+                        "Crisp and fresh organic carrots, ideal for salads and snacking.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Fresh Broccoli",
@@ -158,7 +202,9 @@ namespace uni_cap_pro_be
                         18000,
                         70,
                         20,
-                        "Nutritious and fresh broccoli, perfect for a healthy diet."
+                        "Nutritious and fresh broccoli, perfect for a healthy diet.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Whole Wheat Flour",
@@ -167,7 +213,9 @@ namespace uni_cap_pro_be
                         12000,
                         85,
                         25,
-                        "High-quality whole wheat flour for baking and cooking."
+                        "High-quality whole wheat flour for baking and cooking.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Brown Rice",
@@ -176,7 +224,9 @@ namespace uni_cap_pro_be
                         10000,
                         60,
                         18,
-                        "Nutritious brown rice, ideal for a variety of dishes."
+                        "Nutritious brown rice, ideal for a variety of dishes.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Organic Strawberries",
@@ -185,7 +235,9 @@ namespace uni_cap_pro_be
                         37000,
                         110,
                         22,
-                        "Juicy and sweet organic strawberries, perfect for desserts."
+                        "Juicy and sweet organic strawberries, perfect for desserts.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Sweet Potatoes",
@@ -194,7 +246,9 @@ namespace uni_cap_pro_be
                         24000,
                         65,
                         14,
-                        "Delicious sweet potatoes, great for baking or roasting."
+                        "Delicious sweet potatoes, great for baking or roasting.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Bell Peppers",
@@ -203,7 +257,9 @@ namespace uni_cap_pro_be
                         27500,
                         65,
                         13,
-                        "Fresh red bell peppers, ideal for salads and stir-fries."
+                        "Fresh red bell peppers, ideal for salads and stir-fries.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Quinoa",
@@ -212,7 +268,9 @@ namespace uni_cap_pro_be
                         31000,
                         80,
                         16,
-                        "High-protein quinoa, perfect as a side dish or main course."
+                        "High-protein quinoa, perfect as a side dish or main course.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Oats",
@@ -221,7 +279,9 @@ namespace uni_cap_pro_be
                         18000,
                         70,
                         17,
-                        "Healthy oats for breakfast or baking."
+                        "Healthy oats for breakfast or baking.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Pineapples",
@@ -230,7 +290,9 @@ namespace uni_cap_pro_be
                         36000,
                         95,
                         19,
-                        "Tropical pineapples, sweet and juicy."
+                        "Tropical pineapples, sweet and juicy.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Zucchini",
@@ -239,7 +301,9 @@ namespace uni_cap_pro_be
                         15000,
                         50,
                         10,
-                        "Fresh zucchini, versatile for various dishes."
+                        "Fresh zucchini, versatile for various dishes.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     (
                         "Fresh Milk",
@@ -248,7 +312,9 @@ namespace uni_cap_pro_be
                         22000,
                         90,
                         20,
-                        "Pure and fresh milk, sourced from local dairy farms."
+                        "Pure and fresh milk, sourced from local dairy farms.",
+                        userList[4].Id,
+                        userList[4]
                     ),
                     // Producer 2's products
                     (
@@ -258,7 +324,9 @@ namespace uni_cap_pro_be
                         20000,
                         50,
                         11,
-                        "Sweet and tender baby carrots."
+                        "Sweet and tender baby carrots.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Green Beans",
@@ -267,7 +335,9 @@ namespace uni_cap_pro_be
                         22000,
                         55,
                         13,
-                        "Fresh green beans, ideal for stir-fries and sides."
+                        "Fresh green beans, ideal for stir-fries and sides.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Millet",
@@ -276,7 +346,9 @@ namespace uni_cap_pro_be
                         28000,
                         50,
                         14,
-                        "Nutritious millet, great for various recipes."
+                        "Nutritious millet, great for various recipes.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Buckwheat",
@@ -285,7 +357,9 @@ namespace uni_cap_pro_be
                         34000,
                         0,
                         0,
-                        "Healthy buckwheat, a great addition to your pantry."
+                        "Healthy buckwheat, a great addition to your pantry.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Mangoes",
@@ -294,7 +368,9 @@ namespace uni_cap_pro_be
                         40000,
                         85,
                         22,
-                        "Sweet and juicy mangoes, perfect for smoothies and desserts."
+                        "Sweet and juicy mangoes, perfect for smoothies and desserts.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Papayas",
@@ -303,7 +379,9 @@ namespace uni_cap_pro_be
                         32000,
                         75,
                         18,
-                        "Fresh papayas, great for fruit salads and juices."
+                        "Fresh papayas, great for fruit salads and juices.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Cherry Tomatoes",
@@ -312,7 +390,9 @@ namespace uni_cap_pro_be
                         25000,
                         70,
                         16,
-                        "Sweet cherry tomatoes, perfect for salads and snacks."
+                        "Sweet cherry tomatoes, perfect for salads and snacks.",
+                        userList[5].Id,
+                        userList[5]
                     ),
                     (
                         "Cheddar Cheese",
@@ -321,7 +401,9 @@ namespace uni_cap_pro_be
                         50000,
                         110,
                         25,
-                        "Aged cheddar cheese with a rich, creamy flavor."
+                        "Aged cheddar cheese with a rich, creamy flavor.",
+                        userList[5].Id,
+                        userList[5]
                     )
                 };
 
@@ -352,15 +434,19 @@ namespace uni_cap_pro_be
                 foreach (var product in products)
                 {
                     // Create directory for each owner, if it doesn't already exist
-                    if (!Directory.Exists(directoryPath))
+                    string ownerImageDirectory = Path.Combine(
+                        directoryPath,
+                        product.OwnerId.ToString()
+                    );
+                    if (!Directory.Exists(ownerImageDirectory))
                     {
-                        Directory.CreateDirectory(directoryPath);
+                        Directory.CreateDirectory(ownerImageDirectory);
                     }
 
                     // Copy product image to the owner's directory
                     string sourceImagePath = Path.Combine(seedImagePath, $"{product.Name}.jpg");
                     string destinationImagePath = Path.Combine(
-                        directoryPath,
+                        ownerImageDirectory,
                         $"{product.Name}.jpg"
                     );
 
@@ -392,6 +478,8 @@ namespace uni_cap_pro_be
                         Total_Rating_Value = product.TotalRatingValue,
                         Total_Rating_Quantity = product.TotalRatingQuantity,
                         Description = product.Description,
+                        OwnerId = product.OwnerId,
+                        Owner = product.Owner,
                         Images = [],
                         Discount = discountList[0]
                     })

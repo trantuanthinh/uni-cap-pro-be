@@ -21,6 +21,7 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<Product> _items = _repository
                 .SelectAll()
+                .Include(item => item.Owner)
                 .Include(item => item.Category)
                 .Include(item => item.Discount)
                 .ThenInclude(discount => discount.Discount_Details)
@@ -38,6 +39,7 @@ namespace uni_cap_pro_be.Services
         {
             var _item = await _repository
                 .SelectAll()
+                .Include(item => item.Owner)
                 .Include(item => item.Category)
                 .Include(item => item.Discount)
                 .ThenInclude(discount => discount.Discount_Details)
