@@ -20,11 +20,11 @@ namespace uni_cap_pro_be.Controllers
     {
         private readonly Product_ImageService _service = service;
 
-        [HttpGet("{name}")]
+        [HttpGet("{ownerId:guid}/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetProduct_Image(string name)
+        public async Task<IActionResult> GetProduct_Image(Guid ownerId, string name)
         {
             string methodName = nameof(GetProduct_Image);
 
@@ -33,7 +33,7 @@ namespace uni_cap_pro_be.Controllers
                 return BadRequest(new { message = "Invalid parameters." });
             }
 
-            var filePath = await _service.GetImagePath(name);
+            var filePath = await _service.GetImagePath(ownerId.ToString(), name);
 
             if (!System.IO.File.Exists(filePath))
             {
