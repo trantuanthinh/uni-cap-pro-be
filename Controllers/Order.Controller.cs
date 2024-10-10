@@ -124,7 +124,7 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(412, failedMessage);
             }
 
-            _suborder.OrderId = _order.Id;
+            _suborder.OrderId = orderId;
             bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
             if (!isSubOrderCreated)
             {
@@ -132,7 +132,7 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(500, failedMessage);
             }
 
-            bool isSubOrderAdded = await _service.AddSubOrder(_order, _suborder);
+            bool isSubOrderAdded = await _service.AddSubOrder(_order);
             if (!isSubOrderAdded)
             {
                 var failedMessage = _apiResponse.Failure(methodName);

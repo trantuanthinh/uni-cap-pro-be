@@ -13,9 +13,10 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class OrderService(OrderRepository repository)
+    public class OrderService(OrderRepository repository, Sub_OrderRepository sub_orderRepository)
     {
         private readonly OrderRepository _repository = repository;
+        private readonly Sub_OrderRepository _sub_orderRepository = sub_orderRepository;
 
         public async Task<BaseResponse<OrderResponse>> GetOrders(QueryParameters queryParameters)
         {
@@ -88,8 +89,14 @@ namespace uni_cap_pro_be.Services
 
         public async Task<Order> FindOrder(Guid orderId)
         {
-            Order _item = _repository.SelectById(orderId);
-            // .FirstOrDefault();
+            Order _item = _repository
+                .SelectAll()
+                .Include(item => item.Product)
+                .ThenInclude(product => product.Discount)
+                .ThenInclude(discount => discount.Discount_Details)
+                .Include(item => item.Sub_Orders)
+                .Where(item => item.Id == orderId)
+                .FirstOrDefault();
             return _item;
         }
 
@@ -101,11 +108,44 @@ namespace uni_cap_pro_be.Services
                 && order.EndTime > DateTime.UtcNow;
         }
 
-        public async Task<bool> AddSubOrder(Order order, Sub_Order subOrder)
+        public async Task<bool> AddSubOrder(Order order)
         {
-            order.Total_Price += subOrder.Price;
-            order.Total_Quantity += subOrder.Quantity;
+            // Order _item = _repository
+            //     .SelectAll()
+            //     .Include(item => item.Product)
+            //     .ThenInclude(product => product.Discount)
+            //     .ThenInclude(discount => discount.Discount_Details)
+            //     .Include(item => item.Sub_Orders)
+            //     .Where(item => item.Id == order.Id)
+            //     .FirstOrDefault();
+
             order.Level += 1;
+            double discount = 0;
+            double total_price = 0;
+            int total_quantity = 0;
+
+            foreach (var discount_detail in order.Product.Discount.Discount_Details)
+            {
+                if (discount_detail.Level == order.Level)
+                {
+                    discount = discount_detail.Amount;
+                    break;
+                }
+            }
+            foreach (var sub_order in order.Sub_Orders)
+            {
+                sub_order.Price = order.Product.Price - (order.Product.Price * discount);
+                _sub_orderRepository.Update(sub_order);
+                bool checkSubOrder = _sub_orderRepository.Save();
+                if (!checkSubOrder)
+                {
+                    total_price += sub_order.Price;
+                    total_quantity += sub_order.Quantity;
+                }
+            }
+            order.Total_Price = total_price;
+            order.Total_Quantity = total_quantity;
+
             _repository.Update(order);
             return _repository.Save();
         }

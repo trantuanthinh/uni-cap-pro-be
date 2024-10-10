@@ -95,5 +95,26 @@ namespace uni_cap_pro_be.Controllers
             var okMessage = _apiResponse.Success(methodName, id);
             return StatusCode(200, okMessage);
         }
+
+        // [HttpGet("orders/{id:guid}")]
+        // [ProducesResponseType(StatusCodes.Status200OK)]
+        // [ProducesResponseType(StatusCodes.Status404NotFound)]
+        // public async Task<IActionResult> GetUserOrders(
+        //     Guid id,
+        //     [FromQuery] QueryParameters queryParameters
+        // )
+        // {
+        //     string methodName = nameof(GetUserOrders);
+
+        //     BaseResponse<OrderResponse> _item = await _service.GetUserOrders(id, queryParameters);
+
+        //     if (_item == null)
+        //     {
+        //         var failedMessage = _apiResponse.Failure(methodName);
+        //         return StatusCode(404, failedMessage);
+        //     }
+        //     var okMessage = _apiResponse.Success(methodName, _item);
+        //     return StatusCode(200, okMessage);
+        // }
     }
 }

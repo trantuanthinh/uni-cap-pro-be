@@ -28,11 +28,12 @@ namespace uni_cap_pro_be
                 };
                 var discountDetails = new List<(int Level, double Amount)>
                 {
-                    (1, 0.1f),
-                    (2, 0.15f),
-                    (3, 0.2f),
-                    (4, 0.25f),
-                    (5, 0.4f)
+                    (1, 0),
+                    (2, 0.1),
+                    (3, 0.15),
+                    (4, 0.2),
+                    (5, 0.25),
+                    (6, 0.4)
                 };
 
                 var discountDetailList = discountDetails
