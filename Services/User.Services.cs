@@ -59,41 +59,52 @@ namespace uni_cap_pro_be.Services
             return _repository.Save();
         }
 
-        public async Task<BaseResponse<UserSub_OrderResponse>> GetUserOrders(
+        public async Task<List<UserSub_OrderResponse>> GetUserOrders(
             Guid id,
             QueryParameters queryParameters
         )
         {
-            // UserSub_OrderResponse _response = new UserSub_OrderResponse { };
-
-            // Fetch sub-orders associated with the user
-            var subOrders = _sub_orderRepository
+            // Fetch sub-orders associated with the user and apply query parameters
+            List<Sub_Order>? subOrders = _sub_orderRepository
                 .SelectAll()
                 .Where(order => order.UserId == id)
-                .ToList();
+                .ToList(); // Materializing query into list
 
             // Track unique OrderIds from sub-orders
-            List<Guid> orderIds = subOrders
+            List<Guid>? orderIds = subOrders
                 .Select(subOrder => subOrder.OrderId)
                 .Distinct()
+                .ToList(); // Only fetch distinct OrderIds
+
+            // Fetch corresponding orders including associated products and images
+            List<Order>? orders = _orderRepository
+                .SelectAll()
+                .Include(order => order.Product)
+                .ThenInclude(product => product.Images)
+                .Where(order => orderIds.Contains(order.Id))
+                .ToList(); // Materialize query into list
+
+            // Create a dictionary to improve lookup for OrderId -> Product
+            Dictionary<Guid, Product?>? orderProductMap = orders.ToDictionary(
+                order => order.Id,
+                order => order.Product
+            );
+
+            // Map sub-orders to UserSub_OrderResponse
+            List<UserSub_OrderResponse>? userSubOrderResponses = subOrders
+                .Select(subOrder => new UserSub_OrderResponse
+                {
+                    Id = subOrder.Id,
+                    Created_At = subOrder.Created_At,
+                    Modified_At = subOrder.Modified_At,
+                    Quantity = subOrder.Quantity,
+                    Price = subOrder.Price,
+                    Product = orderProductMap[subOrder.OrderId]?.ToResponse()
+                })
                 .ToList();
 
-            // Fetch and apply query parameters on main orders using the tracked OrderIds
-            QueryParameterResult<Order> _items = _orderRepository
-                .SelectAll()
-                .Include(item => item.Product)
-                .ThenInclude(product => product.Images)
-                .Include(item => item.Product)
-                .Where(order => orderIds.Contains(order.Id))
-                .ApplyQueryParameters(queryParameters);
-
-            // Return paginated order responses
-            // return _items
-            //     .Data.AsEnumerable()
-            //     .Select(item => item.ToResponse())
-            //     .ToList()
-            //     .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
-            return null;
+            // Return the mapped sub-orders
+            return userSubOrderResponses;
         }
     }
 }

@@ -110,15 +110,6 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> AddSubOrder(Order order)
         {
-            // Order _item = _repository
-            //     .SelectAll()
-            //     .Include(item => item.Product)
-            //     .ThenInclude(product => product.Discount)
-            //     .ThenInclude(discount => discount.Discount_Details)
-            //     .Include(item => item.Sub_Orders)
-            //     .Where(item => item.Id == order.Id)
-            //     .FirstOrDefault();
-
             order.Level += 1;
             double discount = 0;
             double total_price = 0;
