@@ -22,6 +22,6 @@ namespace uni_cap_pro_be.DTO.Request
         public required double Price { get; set; }
         public string? Description { get; set; }
 
-        public required ActiveStatus Active_Status { get; set; } = ActiveStatus.ACTIVE;
+        public ActiveStatus Active_Status { get; set; } = ActiveStatus.ACTIVE;
     }
 }
