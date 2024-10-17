@@ -8,12 +8,12 @@ namespace uni_cap_pro_be.AutoMapperHelp
     {
         public MappingHelper()
         {
-            //CreateMap<A,B> => Map from A to B
+            // ----- CreateMap<A,B> => Map from A to B
 
             // CreateMap<User, UserDTO>();
             CreateMap<UserRequest, User>();
 
-            //CreateMap<Product, ProductDTO>()
+            CreateMap<ProductRequest, Product>();
             //	.ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name));
             //CreateMap<ProductDTO, Product>();
 

@@ -51,6 +51,8 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> CreateProduct(Product _item)
         {
+            _item.Total_Rating_Value = 0;
+            _item.Total_Rating_Quantity = 0;
             _repository.Add(_item);
             return _repository.Save();
         }

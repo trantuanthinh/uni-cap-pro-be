@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Request
 {
@@ -8,11 +9,11 @@ namespace uni_cap_pro_be.DTO.Request
         [Required]
         public required Guid CategoryId { get; set; }
 
-        public DateTime Created_At { get; set; }
-        public DateTime Modified_At { get; set; }
-
         [Required]
         public required Guid OwnerId { get; set; } // the owner of the product
+
+        [Required]
+        public required Guid DiscountId { get; set; }
 
         [Required]
         public required string Name { get; set; }
@@ -21,10 +22,6 @@ namespace uni_cap_pro_be.DTO.Request
         public required double Price { get; set; }
         public string? Description { get; set; }
 
-        [Required]
-        public required int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
-
-        [Required]
-        public required int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
+        public required ActiveStatus Active_Status { get; set; } = ActiveStatus.ACTIVE;
     }
 }
