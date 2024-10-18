@@ -9,13 +9,6 @@ namespace uni_cap_pro_be.Extensions
             where T : class
             where D : class
         {
-            // Set Modified_At to now if it exists
-            var modifiedAtProperty = d.GetType().GetProperty("Modified_At");
-            if (modifiedAtProperty != null && modifiedAtProperty.CanWrite)
-            {
-                modifiedAtProperty.SetValue(d, DateTime.UtcNow);
-            }
-
             foreach (var field in src.Fields)
             {
                 var srcProp = typeof(T).GetProperty(CapitalizeFirstLetter(field));
@@ -24,7 +17,7 @@ namespace uni_cap_pro_be.Extensions
 
                 if (destProp != null && destProp.CanWrite)
                 {
-                    var srcValue = srcProp?.GetValue(src);
+                    var srcValue = srcProp?.GetValue(src.Request);
 
                     if (
                         srcValue != null
