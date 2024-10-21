@@ -155,7 +155,7 @@ namespace uni_cap_pro_be.Controllers
             string methodName = nameof(PatchOrder);
 
             bool isUpdated = await _service.UpdateOrder(orderId, patchRequest);
-            if (isUpdated)
+            if (!isUpdated)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(500, failedMessage);

@@ -87,7 +87,7 @@ namespace uni_cap_pro_be.Controllers
             string methodName = nameof(PatchProduct);
 
             bool isUpdated = await _service.UpdateProduct(id, item);
-            if (isUpdated)
+            if (!isUpdated)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(500, failedMessage);

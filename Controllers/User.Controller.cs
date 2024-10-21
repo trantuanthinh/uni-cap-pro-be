@@ -66,7 +66,7 @@ namespace uni_cap_pro_be.Controllers
             string methodName = nameof(PatchUser);
 
             bool isUpdated = await _service.UpdateUser(id, patchRequest);
-            if (isUpdated)
+            if (!isUpdated)
             {
                 var failedMessage = _apiResponse.Failure(methodName, ModelState);
                 return StatusCode(500, failedMessage);
