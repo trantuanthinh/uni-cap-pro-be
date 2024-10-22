@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigrations : Migration
+    public partial class Migrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,6 +40,22 @@ namespace uni_cap_pro_be.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product_Categories", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Unit_Measurements",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Symbol = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Unit_Measurements", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -111,6 +127,8 @@ namespace uni_cap_pro_be.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<double>(type: "double", nullable: false),
+                    Quantity = table.Column<double>(type: "double", nullable: false),
+                    UnitMeasureId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OwnerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -140,6 +158,12 @@ namespace uni_cap_pro_be.Migrations
                         column: x => x.Product_CategoryId,
                         principalTable: "Product_Categories",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Products_Unit_Measurements_UnitMeasureId",
+                        column: x => x.UnitMeasureId,
+                        principalTable: "Unit_Measurements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_Users_OwnerId",
                         column: x => x.OwnerId,
@@ -265,6 +289,11 @@ namespace uni_cap_pro_be.Migrations
                 column: "Product_CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_UnitMeasureId",
+                table: "Products",
+                column: "UnitMeasureId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sub_Orders_OrderId",
                 table: "Sub_Orders",
                 column: "OrderId");
@@ -311,6 +340,9 @@ namespace uni_cap_pro_be.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product_Categories");
+
+            migrationBuilder.DropTable(
+                name: "Unit_Measurements");
 
             migrationBuilder.DropTable(
                 name: "Users");

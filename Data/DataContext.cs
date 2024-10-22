@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Data
@@ -20,6 +21,9 @@ namespace uni_cap_pro_be.Data
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Discount_Detail> Discount_Details { get; set; }
 
+        // Setting-Data
+        public DbSet<UnitMeasure> Unit_Measurements { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +31,13 @@ namespace uni_cap_pro_be.Data
             var active_status_converter = new EnumToStringConverter<ActiveStatus>();
             var user_type_converter = new EnumToStringConverter<UserType>();
             var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
+
+            #region Setting-Data
+            modelBuilder.Entity<UnitMeasure>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+            #endregion
 
             #region User
             modelBuilder.Entity<User>(entity =>
@@ -80,6 +91,12 @@ namespace uni_cap_pro_be.Data
                 //     .HasMany(origin => origin.Images)
                 //     .WithOne(d => d.Product)
                 //     .HasForeignKey(origin => origin.ProductId);
+
+                //Product 1 - n UnitMeasure
+                entity
+                    .HasOne(origin => origin.UnitMeasure)
+                    .WithMany()
+                    .HasForeignKey(origin => origin.UnitMeasureId);
             });
             #endregion
 

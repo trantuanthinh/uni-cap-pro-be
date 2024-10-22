@@ -145,11 +145,17 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<Guid?>("Product_CategoryId")
                         .HasColumnType("char(36)");
 
+                    b.Property<double>("Quantity")
+                        .HasColumnType("double");
+
                     b.Property<int>("Total_Rating_Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("Total_Rating_Value")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("UnitMeasureId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -160,6 +166,8 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("OwnerId");
 
                     b.HasIndex("Product_CategoryId");
+
+                    b.HasIndex("UnitMeasureId");
 
                     b.ToTable("Products");
                 });
@@ -209,6 +217,25 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Product_Images");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.UnitMeasure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Unit_Measurements");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
@@ -348,11 +375,19 @@ namespace uni_cap_pro_be.Migrations
                         .WithMany("Products")
                         .HasForeignKey("Product_CategoryId");
 
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.UnitMeasure", "UnitMeasure")
+                        .WithMany()
+                        .HasForeignKey("UnitMeasureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
 
                     b.Navigation("Discount");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("UnitMeasure");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>

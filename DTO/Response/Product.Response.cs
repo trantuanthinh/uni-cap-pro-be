@@ -1,6 +1,4 @@
-﻿using uni_cap_pro_be.Core.Base.Entity;
-using uni_cap_pro_be.Models;
-using uni_cap_pro_be.Utils;
+﻿using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Response
 {
@@ -14,6 +12,8 @@ namespace uni_cap_pro_be.DTO.Response
         public required string Name { get; set; }
 
         public required double Price { get; set; }
+        public required double Quantity { get; set; }
+        public required string UnitMeasure { get; set; }
         public string? Description { get; set; }
 
         public required ActiveStatus Active_Status { get; set; }

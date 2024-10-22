@@ -1,5 +1,6 @@
 ﻿using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be
@@ -20,6 +21,22 @@ namespace uni_cap_pro_be
             {
                 // Ensure the database is created
                 _dataContext.Database.EnsureCreated();
+
+                #region seed settings-data
+                var unitMeasures = new List<(string Name, string Symbol)>
+                {
+                    ("Kilogram", "kg"),
+                    ("Liter", "l"),
+                };
+                var unitMeasureList = unitMeasures
+                    .Select(um => new UnitMeasure
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = um.Name,
+                        Symbol = um.Symbol
+                    })
+                    .ToList();
+                #endregion
 
                 #region seed discounts
                 var discountList = new List<Discount>
@@ -154,6 +171,8 @@ namespace uni_cap_pro_be
                     string Name,
                     Guid CategoryId,
                     Product_Category Category,
+                    Guid UnitMeasureId,
+                    UnitMeasure UnitMeasure,
                     double Price,
                     int TotalRatingValue,
                     int TotalRatingQuantity,
@@ -167,6 +186,8 @@ namespace uni_cap_pro_be
                         "Organic Apples",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         30000,
                         120,
                         30,
@@ -178,6 +199,8 @@ namespace uni_cap_pro_be
                         "Ripe Bananas",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         20000,
                         80,
                         20,
@@ -189,6 +212,8 @@ namespace uni_cap_pro_be
                         "Organic Carrots",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         15000,
                         90,
                         20,
@@ -200,6 +225,8 @@ namespace uni_cap_pro_be
                         "Fresh Broccoli",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         18000,
                         70,
                         20,
@@ -211,6 +238,8 @@ namespace uni_cap_pro_be
                         "Whole Wheat Flour",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         12000,
                         85,
                         25,
@@ -222,6 +251,8 @@ namespace uni_cap_pro_be
                         "Brown Rice",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         10000,
                         60,
                         18,
@@ -233,6 +264,8 @@ namespace uni_cap_pro_be
                         "Organic Strawberries",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         37000,
                         110,
                         22,
@@ -244,6 +277,8 @@ namespace uni_cap_pro_be
                         "Sweet Potatoes",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         24000,
                         65,
                         14,
@@ -255,6 +290,8 @@ namespace uni_cap_pro_be
                         "Bell Peppers",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         27500,
                         65,
                         13,
@@ -266,6 +303,8 @@ namespace uni_cap_pro_be
                         "Quinoa",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         31000,
                         80,
                         16,
@@ -277,6 +316,8 @@ namespace uni_cap_pro_be
                         "Oats",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         18000,
                         70,
                         17,
@@ -288,6 +329,8 @@ namespace uni_cap_pro_be
                         "Pineapples",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         36000,
                         95,
                         19,
@@ -299,6 +342,8 @@ namespace uni_cap_pro_be
                         "Zucchini",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         15000,
                         50,
                         10,
@@ -310,6 +355,8 @@ namespace uni_cap_pro_be
                         "Fresh Milk",
                         productCategoryList[3].Id,
                         productCategoryList[3],
+                        unitMeasureList[1].Id,
+                        unitMeasureList[1],
                         22000,
                         90,
                         20,
@@ -322,6 +369,8 @@ namespace uni_cap_pro_be
                         "Baby Carrots",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         20000,
                         50,
                         11,
@@ -333,6 +382,8 @@ namespace uni_cap_pro_be
                         "Green Beans",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         22000,
                         55,
                         13,
@@ -344,6 +395,8 @@ namespace uni_cap_pro_be
                         "Millet",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         28000,
                         50,
                         14,
@@ -355,6 +408,8 @@ namespace uni_cap_pro_be
                         "Buckwheat",
                         productCategoryList[2].Id,
                         productCategoryList[2],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         34000,
                         0,
                         0,
@@ -366,6 +421,8 @@ namespace uni_cap_pro_be
                         "Mangoes",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         40000,
                         85,
                         22,
@@ -377,6 +434,8 @@ namespace uni_cap_pro_be
                         "Papayas",
                         productCategoryList[0].Id,
                         productCategoryList[0],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         32000,
                         75,
                         18,
@@ -388,6 +447,8 @@ namespace uni_cap_pro_be
                         "Cherry Tomatoes",
                         productCategoryList[1].Id,
                         productCategoryList[1],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         25000,
                         70,
                         16,
@@ -399,6 +460,8 @@ namespace uni_cap_pro_be
                         "Cheddar Cheese",
                         productCategoryList[3].Id,
                         productCategoryList[3],
+                        unitMeasureList[0].Id,
+                        unitMeasureList[0],
                         50000,
                         110,
                         25,
@@ -475,6 +538,9 @@ namespace uni_cap_pro_be
                         Modified_At = DateTime.UtcNow,
                         Name = product.Name,
                         Price = product.Price,
+                        Quantity = 10,
+                        UnitMeasure = product.UnitMeasure,
+                        UnitMeasureId = product.UnitMeasureId,
                         Active_Status = ActiveStatus.ACTIVE,
                         Total_Rating_Value = product.TotalRatingValue,
                         Total_Rating_Quantity = product.TotalRatingQuantity,
@@ -595,6 +661,8 @@ namespace uni_cap_pro_be
                 #endregion
 
                 #region Check and seed data
+                _dataContext.Unit_Measurements.AddRange(unitMeasureList);
+
                 _dataContext.Users.AddRange(userList);
                 _dataContext.Product_Categories.AddRange(productCategoryList);
                 _dataContext.Products.AddRange(productList);

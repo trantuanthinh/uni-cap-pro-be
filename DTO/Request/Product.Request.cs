@@ -16,12 +16,18 @@ namespace uni_cap_pro_be.DTO.Request
         public required Guid DiscountId { get; set; }
 
         [Required]
+        public required Guid UnitMeasureId { get; set; }
+
+        [Required]
         public required string Name { get; set; }
 
         [Required]
         public required double Price { get; set; }
+
+        [Required]
+        public required double Quantity { get; set; }
         public string? Description { get; set; }
 
-        public ActiveStatus Active_Status { get; set; } = ActiveStatus.ACTIVE;
+        public ActiveStatus? Active_Status { get; set; } = ActiveStatus.ACTIVE;
     }
 }
