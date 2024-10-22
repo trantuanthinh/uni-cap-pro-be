@@ -23,6 +23,8 @@ namespace uni_cap_pro_be.Services
             QueryParameterResult<Order> _items = _repository
                 .SelectAll()
                 .Include(item => item.Product)
+                .ThenInclude(product => product.UnitMeasure)
+                .Include(item => item.Product)
                 .ThenInclude(product => product.Images)
                 .Include(item => item.Product)
                 .ThenInclude(product => product.Discount)
@@ -41,6 +43,8 @@ namespace uni_cap_pro_be.Services
         {
             Order _item = _repository
                 .SelectAll()
+                .Include(item => item.Product)
+                .ThenInclude(product => product.UnitMeasure)
                 .Include(item => item.Product)
                 .ThenInclude(product => product.Discount)
                 .ThenInclude(discount => discount.Discount_Details)
