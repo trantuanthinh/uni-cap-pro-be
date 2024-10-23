@@ -74,7 +74,10 @@ namespace uni_cap_pro_be.Services
 
         public User GetUserByEmail(string email)
         {
-            User _user = _repository.SelectAll().Where(item => item.Email == email).FirstOrDefault();
+            User _user = _repository
+                .SelectAll()
+                .Where(item => item.Email == email)
+                .FirstOrDefault();
             return _user;
         }
 

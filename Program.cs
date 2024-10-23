@@ -8,7 +8,9 @@ using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Middleware;
 using uni_cap_pro_be.Repositories;
+using uni_cap_pro_be.Repositories.Setting_Data_Repositories;
 using uni_cap_pro_be.Services;
+using uni_cap_pro_be.Services.Setting_Data_Services;
 using uni_cap_pro_be.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -93,6 +95,10 @@ builder.Services.AddSingleton<APIResponse>();
 builder.Services.AddSingleton<BaseResponse<object>>();
 
 builder.Services.AddScoped<BaseAPIController>();
+
+// Setting Data
+builder.Services.AddScoped<UnitMeasureRepository>();
+builder.Services.AddScoped<UnitMeasureService>();
 
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<AuthService>();
