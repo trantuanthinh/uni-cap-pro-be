@@ -8,6 +8,19 @@ namespace uni_cap_pro_be.Models
     // DONE
     public class Comment : BaseEntity<Guid>
     {
+        static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Comment, CommentResponse>();
+        });
+
+        static readonly IMapper mapper = config.CreateMapper();
+
+        public CommentResponse ToResponse()
+        {
+            var res = mapper.Map<CommentResponse>(this);
+            return res;
+        }
+
         [Required]
         public required Guid UserId { get; set; }
 

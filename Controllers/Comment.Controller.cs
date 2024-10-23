@@ -24,13 +24,13 @@ namespace uni_cap_pro_be.Controllers
     {
         private readonly CommentService _service = service;
 
-        [HttpGet("products/{id:guid}")]
+        [HttpGet("products/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetComments([FromQuery] QueryParameters queryParameters)
+        public async Task<IActionResult> GetComments(Guid productId)
         {
             string methodName = nameof(GetComments);
 
-            BaseResponse<Comment> _items = await _service.GetComments(queryParameters);
+            ICollection<CommentResponse> _items = await _service.GetComments(productId);
             var okMessage = _apiResponse.Success(methodName, _items);
             return StatusCode(200, okMessage);
         }

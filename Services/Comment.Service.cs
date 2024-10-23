@@ -15,17 +15,15 @@ namespace uni_cap_pro_be.Services
     {
         private readonly CommentRepository _repository = repository;
 
-        public async Task<BaseResponse<Comment>> GetComments(QueryParameters queryParameters)
+        public async Task<ICollection<CommentResponse>> GetComments(Guid productId)
         {
-            QueryParameterResult<Comment> _items = _repository
+            ICollection<Comment> _items = _repository
                 .SelectAll()
-                .ApplyQueryParameters(queryParameters);
+                .Include(item => item.User)
+                .Where(item => item.ProductId == productId)
+                .ToList();
 
-            return _items
-                .Data.AsEnumerable()
-                .Select(item => item)
-                .ToList()
-                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
+            return _items.AsEnumerable().Select(item => item.ToResponse()).ToList();
         }
 
         public async Task<bool> CreateComment(Comment _item)
