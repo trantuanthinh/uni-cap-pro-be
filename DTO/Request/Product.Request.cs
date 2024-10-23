@@ -7,27 +7,27 @@ namespace uni_cap_pro_be.DTO.Request
     public class ProductRequest
     {
         [Required]
-        public required Guid CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [Required]
-        public required Guid OwnerId { get; set; } // the owner of the product
+        public Guid OwnerId { get; set; } // the owner of the product
 
         [Required]
-        public required Guid DiscountId { get; set; }
+        public Guid DiscountId { get; set; }
 
         [Required]
-        public required Guid UnitMeasureId { get; set; }
+        public Guid UnitMeasureId { get; set; }
 
         [Required]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public required double Price { get; set; }
+        public double Price { get; set; }
 
         [Required]
-        public required double Quantity { get; set; }
+        public double Quantity { get; set; }
         public string? Description { get; set; }
 
-        public ActiveStatus? Active_Status { get; set; } = ActiveStatus.ACTIVE;
+        public ActiveStatus? Active_Status { get; set; }
     }
 }

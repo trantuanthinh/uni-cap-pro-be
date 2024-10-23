@@ -1,4 +1,7 @@
-﻿using uni_cap_pro_be.Utils;
+﻿using System.Collections;
+using System.Text.Json.Serialization;
+using uni_cap_pro_be.Models;
+using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.DTO.Response
 {
@@ -27,5 +30,8 @@ namespace uni_cap_pro_be.DTO.Response
 
         public DiscountResponse? Discount { get; set; }
         public List<string>? Images { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Comment>? Comments { get; set; }
     }
 }

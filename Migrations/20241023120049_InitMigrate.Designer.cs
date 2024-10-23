@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241022144107_Migrations")]
-    partial class Migrations
+    [Migration("20241023120049_InitMigrate")]
+    partial class InitMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,40 @@ namespace uni_cap_pro_be.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
                 {
@@ -334,6 +368,25 @@ namespace uni_cap_pro_be.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Comment", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Discount", null)
@@ -425,6 +478,8 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Images");
                 });
 

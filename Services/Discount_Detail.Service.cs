@@ -14,21 +14,6 @@ namespace uni_cap_pro_be.Services
     {
         private readonly Discount_DetailRepository _repository = repository;
 
-        // public async Task<List<Discount_DetailResponse>> GetDetailsByDiscountId(
-        //     QueryParameters queryParameters
-        // )
-        // {
-        //     QueryParameterResult<Discount_Detail> _items = _repository
-        //         .SelectAll()
-        //         .ApplyQueryParameters(queryParameters);
-
-        //     return _items
-        //         .Data.AsEnumerable()
-        //         .Select(item => item.ToResponse())
-        //         .ToList()
-        //         .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
-        // }
-
         public async Task<BaseResponse<Discount_DetailResponse>> GetDiscount_Details(
             QueryParameters queryParameters
         )

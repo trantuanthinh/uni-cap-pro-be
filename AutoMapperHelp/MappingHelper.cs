@@ -10,23 +10,15 @@ namespace uni_cap_pro_be.AutoMapperHelp
         {
             // ----- CreateMap<A,B> => Map from A to B
 
-            // CreateMap<User, UserDTO>();
             CreateMap<UserRequest, User>();
 
             CreateMap<ProductRequest, Product>();
-            //	.ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name));
-            //CreateMap<ProductDTO, Product>();
 
-            //CreateMap<Product_Image, Product_ImageDTO>();
-            //CreateMap<Product_ImageDTO, Product_Image>();
-
-            //CreateMap<Order, OrderDTO>();
             CreateMap<BuyTogetherRequest, Sub_Order>();
 
-            CreateMap<OrderRequest, Sub_Order>();
+            CreateMap<CommentRequest, Comment>();
 
-            //CreateMap<Discount_DetailDTO, Discount_Detail>()
-            //	.ForMember(d => d.DiscountId, opt => opt.Ignore());
+            CreateMap<OrderRequest, Sub_Order>();
         }
     }
 }

@@ -8,24 +8,24 @@ namespace uni_cap_pro_be.DTO.Request
     public class UserRequest
     {
         [Required]
-        public required string Username { get; set; }
+        public string Username { get; set; }
 
         [Required]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [DefaultValue("string@gmail.com")]
-        public required string Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
-        public required string Password { get; set; }
+        public string Password { get; set; }
 
         [Required]
         [DefaultValue("0327858682")]
-        public required string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
-        public required UserType User_Type { get; set; }
+        public UserType User_Type { get; set; }
         public string? Avatar { get; set; }
         public string? Background { get; set; }
         public string? Description { get; set; }

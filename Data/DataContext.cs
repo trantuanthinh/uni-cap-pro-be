@@ -20,6 +20,7 @@ namespace uni_cap_pro_be.Data
         public DbSet<Sub_Order> Sub_Orders { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Discount_Detail> Discount_Details { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         // Setting-Data
         public DbSet<UnitMeasure> Unit_Measurements { get; set; }
@@ -92,7 +93,7 @@ namespace uni_cap_pro_be.Data
                 //     .WithOne(d => d.Product)
                 //     .HasForeignKey(origin => origin.ProductId);
 
-                //Product 1 - n UnitMeasure
+                //Product 1 - 1 UnitMeasure
                 entity
                     .HasOne(origin => origin.UnitMeasure)
                     .WithMany()
@@ -161,6 +162,13 @@ namespace uni_cap_pro_be.Data
 
             #region Discount_Detail
             modelBuilder.Entity<Discount_Detail>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+            #endregion
+
+            #region Comments
+            modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.Id);
             });

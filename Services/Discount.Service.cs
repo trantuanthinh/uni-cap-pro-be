@@ -50,7 +50,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateDiscount(Guid id, PatchRequest<DiscountRequest> patchRequest)
         {
-            Discount _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
+            Discount _item = _repository.SelectById(id);
             if (_item == null)
             {
                 return false;

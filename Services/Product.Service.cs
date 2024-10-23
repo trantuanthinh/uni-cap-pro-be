@@ -61,7 +61,7 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateProduct(Guid id, PatchRequest<ProductRequest> patchRequest)
         {
-            var _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
+            var _item = _repository.SelectById(id);
             if (_item == null)
             {
                 return false;

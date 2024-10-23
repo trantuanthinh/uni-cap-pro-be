@@ -36,13 +36,13 @@ namespace uni_cap_pro_be.Services
 
         public async Task<UserResponse> GetUser(Guid id)
         {
-            User _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
+            User _item = _repository.SelectById(id);
             return _item.ToResponse();
         }
 
         public async Task<bool> UpdateUser(Guid id, PatchRequest<UserRequest> patchRequest)
         {
-            User _item = _repository.SelectAll().Where(item => item.Id == id).FirstOrDefault();
+            User _item = _repository.SelectById(id);
             if (_item == null)
             {
                 return false;
@@ -64,33 +64,29 @@ namespace uni_cap_pro_be.Services
             QueryParameters queryParameters
         )
         {
-            // Fetch sub-orders associated with the user and apply query parameters
             List<Sub_Order>? subOrders = _sub_orderRepository
                 .SelectAll()
                 .Where(order => order.UserId == id)
-                .ToList(); // Materializing query into list
+                .ToList();
 
             // Track unique OrderIds from sub-orders
             List<Guid>? orderIds = subOrders
                 .Select(subOrder => subOrder.OrderId)
                 .Distinct()
-                .ToList(); // Only fetch distinct OrderIds
+                .ToList();
 
-            // Fetch corresponding orders including associated products and images
             List<Order>? orders = _orderRepository
                 .SelectAll()
                 .Include(order => order.Product)
                 .ThenInclude(product => product.Images)
                 .Where(order => orderIds.Contains(order.Id))
-                .ToList(); // Materialize query into list
+                .ToList();
 
-            // Create a dictionary to improve lookup for OrderId -> Product
             Dictionary<Guid, Product?>? orderProductMap = orders.ToDictionary(
                 order => order.Id,
                 order => order.Product
             );
 
-            // Map sub-orders to UserSub_OrderResponse
             List<UserSub_OrderResponse>? userSubOrderResponses = subOrders
                 .Select(subOrder => new UserSub_OrderResponse
                 {
@@ -103,7 +99,6 @@ namespace uni_cap_pro_be.Services
                 })
                 .ToList();
 
-            // Return the mapped sub-orders
             return userSubOrderResponses;
         }
     }

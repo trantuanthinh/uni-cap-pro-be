@@ -98,10 +98,10 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid UnitMeasureId { get; set; }
 
-        public string? Description { get; set; }
-
         [Required]
         public required Guid OwnerId { get; set; }
+
+        public string? Description { get; set; }
 
         [Required]
         public required ActiveStatus Active_Status { get; set; }
@@ -117,5 +117,6 @@ namespace uni_cap_pro_be.Models
         public Product_Category? Category { get; set; }
         public Discount? Discount { get; set; }
         public ICollection<Product_Image>? Images { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
     }
 }

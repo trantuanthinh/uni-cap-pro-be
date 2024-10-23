@@ -660,6 +660,49 @@ namespace uni_cap_pro_be
                     .ToList();
                 #endregion
 
+                #region seed comments
+                var comments = new List<(
+                    Guid UserId,
+                    User User,
+                    Guid ProductId,
+                    Product Product,
+                    string Content,
+                    int Rating
+                )>
+                {
+                    (
+                        userList[0].Id,
+                        userList[0],
+                        productList[0].Id,
+                        productList[0],
+                        "Wonderful product!",
+                        5
+                    ),
+                    (
+                        userList[1].Id,
+                        userList[1],
+                        productList[0].Id,
+                        productList[0],
+                        "Good product!",
+                        3
+                    )
+                };
+                var commentList = comments
+                    .Select(comment => new Comment
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        UserId = comment.UserId,
+                        ProductId = comment.ProductId,
+                        Content = comment.Content,
+                        User = comment.User,
+                        Product = comment.Product,
+                        Rating = comment.Rating
+                    })
+                    .ToList();
+                #endregion
+
                 #region Check and seed data
                 _dataContext.Unit_Measurements.AddRange(unitMeasureList);
 
@@ -673,6 +716,7 @@ namespace uni_cap_pro_be
 
                 _dataContext.Discounts.AddRange(discountList);
                 _dataContext.Discount_Details.AddRange(discountDetailList);
+                _dataContext.Comments.AddRange(commentList);
                 #endregion
 
                 _dataContext.SaveChanges();
