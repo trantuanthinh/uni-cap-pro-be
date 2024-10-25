@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni_cap_pro_be.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrations : Migration
+    public partial class DemoMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -257,17 +257,17 @@ namespace uni_cap_pro_be.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Comments",
+                name: "Feedbacks",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Sub_OrderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Content = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Content = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Video = table.Column<string>(type: "longtext", nullable: true)
@@ -275,15 +275,15 @@ namespace uni_cap_pro_be.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_Feedbacks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Products_ProductId",
+                        name: "FK_Feedbacks_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Sub_Orders_Sub_OrderId",
+                        name: "FK_Feedbacks_Sub_Orders_Sub_OrderId",
                         column: x => x.Sub_OrderId,
                         principalTable: "Sub_Orders",
                         principalColumn: "Id",
@@ -292,19 +292,19 @@ namespace uni_cap_pro_be.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ProductId",
-                table: "Comments",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_Sub_OrderId",
-                table: "Comments",
-                column: "Sub_OrderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Discount_Details_DiscountId",
                 table: "Discount_Details",
                 column: "DiscountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_ProductId",
+                table: "Feedbacks",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_Sub_OrderId",
+                table: "Feedbacks",
+                column: "Sub_OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ProductId",
@@ -380,10 +380,10 @@ namespace uni_cap_pro_be.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Discount_Details");
 
             migrationBuilder.DropTable(
-                name: "Discount_Details");
+                name: "Feedbacks");
 
             migrationBuilder.DropTable(
                 name: "Product_Images");

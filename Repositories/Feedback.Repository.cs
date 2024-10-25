@@ -5,6 +5,6 @@ using uni_cap_pro_be.Models;
 namespace uni_cap_pro_be.Repositories
 {
     // DONE
-    public class CommentRepository(DataContext context)
-        : BaseRepository<Comment, DataContext>(context) { }
+    public class FeedbackRepository(DataContext context)
+        : BaseRepository<Feedback, DataContext>(context) { }
 }

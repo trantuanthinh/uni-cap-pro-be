@@ -3,7 +3,7 @@ using uni_cap_pro_be.DTO.Response;
 namespace uni_cap_pro_be.Models
 {
     // DONE
-    public class CommentResponse
+    public class FeedbackResponse
     {
         public Guid Id { get; set; }
 

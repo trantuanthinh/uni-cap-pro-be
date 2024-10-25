@@ -679,8 +679,8 @@ namespace uni_cap_pro_be
                     .ToList();
                 #endregion
 
-                #region seed comments
-                var comments = new List<(
+                #region seed feedbacks
+                var feedbacks = new List<(
                     Guid Sub_OrderId,
                     Sub_Order Sub_Order,
                     Guid ProductId,
@@ -706,18 +706,18 @@ namespace uni_cap_pro_be
                         3
                     )
                 };
-                var commentList = comments
-                    .Select(comment => new Comment
+                var feedbackList = feedbacks
+                    .Select(feedback => new Feedback
                     {
                         Id = Guid.NewGuid(),
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
-                        Sub_OrderId = comment.Sub_OrderId,
-                        ProductId = comment.ProductId,
-                        Content = comment.Content,
-                        Sub_Order = comment.Sub_Order,
-                        Product = comment.Product,
-                        Rating = comment.Rating
+                        Sub_OrderId = feedback.Sub_OrderId,
+                        ProductId = feedback.ProductId,
+                        Content = feedback.Content,
+                        Sub_Order = feedback.Sub_Order,
+                        Product = feedback.Product,
+                        Rating = feedback.Rating
                     })
                     .ToList();
                 #endregion
@@ -735,7 +735,7 @@ namespace uni_cap_pro_be
 
                 _dataContext.Discounts.AddRange(discountList);
                 _dataContext.Discount_Details.AddRange(discountDetailList);
-                _dataContext.Comments.AddRange(commentList);
+                _dataContext.Feedbacks.AddRange(feedbackList);
                 #endregion
 
                 _dataContext.SaveChanges();

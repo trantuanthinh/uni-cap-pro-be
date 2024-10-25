@@ -20,7 +20,7 @@ namespace uni_cap_pro_be.Data
         public DbSet<Sub_Order> Sub_Orders { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Discount_Detail> Discount_Details { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         // Setting-Data
         public DbSet<UnitMeasure> Unit_Measurements { get; set; }
@@ -169,8 +169,8 @@ namespace uni_cap_pro_be.Data
             });
             #endregion
 
-            #region Comments
-            modelBuilder.Entity<Comment>(entity =>
+            #region Feedback
+            modelBuilder.Entity<Feedback>(entity =>
             {
                 entity.HasKey(e => e.Id);
             });

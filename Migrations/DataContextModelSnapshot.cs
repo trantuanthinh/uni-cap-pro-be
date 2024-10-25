@@ -22,46 +22,6 @@ namespace uni_cap_pro_be.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("uni_cap_pro_be.Models.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("Created_At")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("Modified_At")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("Sub_OrderId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Video")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("Sub_OrderId");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
                 {
                     b.Property<Guid>("Id")
@@ -103,6 +63,45 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("DiscountId");
 
                     b.ToTable("Discount_Details");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Sub_OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Video")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("Sub_OrderId");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
@@ -378,10 +377,19 @@ namespace uni_cap_pro_be.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("uni_cap_pro_be.Models.Comment", b =>
+            modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Discount", null)
+                        .WithMany("Discount_Details")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Feedback", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Product", "Product")
-                        .WithMany("Comments")
+                        .WithMany("Feedbacks")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -395,15 +403,6 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Sub_Order");
-                });
-
-            modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
-                {
-                    b.HasOne("uni_cap_pro_be.Models.Discount", null)
-                        .WithMany("Discount_Details")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
@@ -496,7 +495,7 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("Feedbacks");
 
                     b.Navigation("Images");
                 });

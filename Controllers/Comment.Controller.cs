@@ -5,6 +5,7 @@ using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
@@ -14,40 +15,50 @@ namespace uni_cap_pro_be.Controllers
     // DONE
     [Route("/[controller]")]
     [ApiController]
-    public class CommentsController(
+    public class FeedbacksController(
         DataContext dataContext,
         IMapper mapper,
         APIResponse apiResponse,
         SharedService sharedService,
-        CommentService service
+        FeedbackService service,
+        UserService userService
     ) : BaseAPIController(dataContext, mapper, apiResponse, sharedService)
     {
-        private readonly CommentService _service = service;
+        private readonly FeedbackService _service = service;
+        private readonly UserService _userService = userService;
 
         [HttpGet("products/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetComments(Guid productId)
+        public async Task<IActionResult> GetFeedbacks(Guid productId)
         {
-            string methodName = nameof(GetComments);
+            string methodName = nameof(GetFeedbacks);
 
-            ICollection<CommentResponse> _items = await _service.GetComments(productId);
+            ICollection<FeedbackResponse> _items = await _service.GetFeedbacks(productId);
             var okMessage = _apiResponse.Success(methodName, _items);
             return StatusCode(200, okMessage);
         }
 
         [HttpPost("products/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateComment(
+        public async Task<IActionResult> CreateFeedback(
             Guid productId,
-            [FromBody] CommentRequest item
+            [FromBody] FeedbackRequest item
         )
         {
-            string methodName = nameof(CreateComment);
+            string methodName = nameof(CreateFeedback);
 
-            Comment _item = _mapper.Map<Comment>(item);
-            bool isCreated = await _service.CreateComment(_item);
+            UserResponse userResponse = await _userService.GetUser(item.UserId);
+            if (userResponse == null)
+            {
+                var failedMessage = _apiResponse.Failure("User not found");
+                return StatusCode(404, failedMessage);
+            }
+
+            Feedback _item = _mapper.Map<Feedback>(item);
+            _item.ProductId = productId;
+            bool isCreated = await _service.CreateFeedback(_item);
             if (!isCreated)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
@@ -63,14 +74,14 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PatchComment(
+        public async Task<IActionResult> PatchFeedback(
             Guid id,
-            [FromBody] PatchRequest<CommentRequest> patchRequest
+            [FromBody] PatchRequest<FeedbackRequest> patchRequest
         )
         {
-            string methodName = nameof(PatchComment);
+            string methodName = nameof(PatchFeedback);
 
-            bool isUpdated = await _service.UpdateComment(id, patchRequest);
+            bool isUpdated = await _service.UpdateFeedback(id, patchRequest);
             if (!isUpdated)
             {
                 var failedMessage = _apiResponse.Failure(methodName, ModelState);
@@ -86,11 +97,11 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteComment(Guid id)
+        public async Task<IActionResult> DeleteFeedback(Guid id)
         {
-            string methodName = nameof(DeleteComment);
+            string methodName = nameof(DeleteFeedback);
 
-            bool isDeleted = await _service.DeleteComment(id);
+            bool isDeleted = await _service.DeleteFeedback(id);
             if (!isDeleted)
             {
                 var failedMessage = _apiResponse.Failure(methodName);

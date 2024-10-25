@@ -127,8 +127,8 @@ builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<Sub_OrderRepository>();
 builder.Services.AddScoped<Sub_OrderService>();
 
-builder.Services.AddScoped<CommentRepository>();
-builder.Services.AddScoped<CommentService>();
+builder.Services.AddScoped<FeedbackRepository>();
+builder.Services.AddScoped<FeedbackService>();
 
 builder.Services.AddScoped<DatabaseSeeder>();
 

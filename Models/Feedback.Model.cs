@@ -6,20 +6,20 @@ using uni_cap_pro_be.DTO.Response;
 namespace uni_cap_pro_be.Models
 {
     // DONE
-    public class Comment : BaseEntity<Guid>
+    public class Feedback : BaseEntity<Guid>
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Comment, CommentResponse>()
+            cfg.CreateMap<Feedback, FeedbackResponse>()
                 .ForMember(d => d.User, opt => opt.MapFrom(src => src.Sub_Order.User.ToResponse()))
                 .ForMember(d => d.Product, opt => opt.MapFrom(src => src.Product.ToResponse()));
         });
 
         static readonly IMapper mapper = config.CreateMapper();
 
-        public CommentResponse ToResponse()
+        public FeedbackResponse ToResponse()
         {
-            var res = mapper.Map<CommentResponse>(this);
+            var res = mapper.Map<FeedbackResponse>(this);
             return res;
         }
 
@@ -29,10 +29,10 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid ProductId { get; set; }
 
-        public required string Content { get; set; }
         public required int Rating { get; set; }
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
+        public string? Content { get; set; }
         public string? Image { get; set; }
         public string? Video { get; set; }
 

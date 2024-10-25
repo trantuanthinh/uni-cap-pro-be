@@ -11,13 +11,13 @@ using uni_cap_pro_be.Repositories;
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class CommentService(CommentRepository repository) : BaseService()
+    public class FeedbackService(FeedbackRepository repository) : BaseService()
     {
-        private readonly CommentRepository _repository = repository;
+        private readonly FeedbackRepository _repository = repository;
 
-        public async Task<ICollection<CommentResponse>> GetComments(Guid productId)
+        public async Task<ICollection<FeedbackResponse>> GetFeedbacks(Guid productId)
         {
-            ICollection<Comment> _items = _repository
+            ICollection<Feedback> _items = _repository
                 .SelectAll()
                 .Include(item => item.Sub_Order)
                 .ThenInclude(sub_order => sub_order.User)
@@ -27,7 +27,7 @@ namespace uni_cap_pro_be.Services
             return _items.AsEnumerable().Select(item => item.ToResponse()).ToList();
         }
 
-        public async Task<bool> CreateComment(Comment _item)
+        public async Task<bool> CreateFeedback(Feedback _item)
         {
             _item.Created_At = DateTime.UtcNow;
             _item.Modified_At = DateTime.UtcNow;
@@ -35,7 +35,7 @@ namespace uni_cap_pro_be.Services
             return _repository.Save();
         }
 
-        public async Task<bool> UpdateComment(Guid id, PatchRequest<CommentRequest> patchRequest)
+        public async Task<bool> UpdateFeedback(Guid id, PatchRequest<FeedbackRequest> patchRequest)
         {
             var _item = _repository.SelectById(id);
             if (_item == null)
@@ -48,7 +48,7 @@ namespace uni_cap_pro_be.Services
             return _repository.Save();
         }
 
-        public async Task<bool> DeleteComment(Guid id)
+        public async Task<bool> DeleteFeedback(Guid id)
         {
             _repository.Delete(id);
             return _repository.Save();

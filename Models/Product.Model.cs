@@ -117,6 +117,6 @@ namespace uni_cap_pro_be.Models
         public Product_Category? Category { get; set; }
         public Discount? Discount { get; set; }
         public ICollection<Product_Image>? Images { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<Feedback>? Feedbacks { get; set; }
     }
 }

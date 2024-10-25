@@ -16,7 +16,7 @@ namespace uni_cap_pro_be.AutoMapperHelp
 
             CreateMap<BuyTogetherRequest, Sub_Order>();
 
-            CreateMap<CommentRequest, Comment>();
+            CreateMap<FeedbackRequest, Feedback>();
 
             CreateMap<OrderRequest, Sub_Order>();
         }

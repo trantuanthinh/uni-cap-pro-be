@@ -32,6 +32,6 @@ namespace uni_cap_pro_be.DTO.Response
         public List<string>? Images { get; set; }
 
         [JsonIgnore]
-        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<Feedback>? Feedbacks { get; set; }
     }
 }
