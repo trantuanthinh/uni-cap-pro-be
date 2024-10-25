@@ -19,7 +19,8 @@ namespace uni_cap_pro_be.Services
         {
             ICollection<Comment> _items = _repository
                 .SelectAll()
-                .Include(item => item.User)
+                .Include(item => item.Sub_Order)
+                .ThenInclude(sub_order => sub_order.User)
                 .Where(item => item.ProductId == productId)
                 .ToList();
 

@@ -41,7 +41,7 @@ namespace uni_cap_pro_be
                 #region seed discounts
                 var discountList = new List<Discount>
                 {
-                    new Discount { Id = Guid.NewGuid(), ActiveStatus = ActiveStatus.ACTIVE }
+                    new Discount { Id = Guid.NewGuid(), Active_Status = ActiveStatus.ACTIVE }
                 };
                 var discountDetails = new List<(int Level, double Amount)>
                 {
@@ -84,7 +84,7 @@ namespace uni_cap_pro_be
                         "tran.tuan.thinh.0125@gmail.com",
                         "0395279915",
                         "Tran Tuan Thinh",
-                        UserType.Company
+                        UserType.COMPANY
                     ),
                     (
                         "thaohoang",
@@ -92,7 +92,7 @@ namespace uni_cap_pro_be
                         "thaoh1717@gmail.com",
                         "0327858682",
                         "ThaoHoang1717",
-                        UserType.Company
+                        UserType.COMPANY
                     ),
                     (
                         "company1",
@@ -100,7 +100,7 @@ namespace uni_cap_pro_be
                         "company1@gmail.com",
                         "1234567890",
                         "Company 1",
-                        UserType.Company
+                        UserType.COMPANY
                     ),
                     (
                         "company2",
@@ -108,7 +108,7 @@ namespace uni_cap_pro_be
                         "company2@gmail.com",
                         "9876543210",
                         "Company 2",
-                        UserType.Company
+                        UserType.COMPANY
                     ),
                     (
                         "producer1",
@@ -116,7 +116,7 @@ namespace uni_cap_pro_be
                         "producer1@gmail.com",
                         "1237894560",
                         "Producer 1",
-                        UserType.Producer
+                        UserType.PRODUCER
                     ),
                     (
                         "producer2",
@@ -124,7 +124,7 @@ namespace uni_cap_pro_be
                         "producer2@gmail.com",
                         "9873216540",
                         "Producer 2",
-                        UserType.Producer
+                        UserType.PRODUCER
                     ),
                 };
 
@@ -598,7 +598,8 @@ namespace uni_cap_pro_be
                 TimeSpan timeSpan = new(24, 0, 0);
                 var orders = new List<(Guid ProductId, Product Product)>
                 {
-                    (productList[0].Id, productList[0])
+                    (productList[0].Id, productList[0]),
+                    (productList[1].Id, productList[1])
                 };
                 var orderList = orders
                     .Select(order => new Order
@@ -620,26 +621,42 @@ namespace uni_cap_pro_be
 
                 // seed sub order
                 var sub_orders = new List<(
-                    Guid ProductId,
                     Guid UserId,
                     User User,
                     Guid OrderId,
                     Order Order,
                     int Quantity,
                     double Price,
-                    Product Product
+                    bool IsRating
                 )>
                 {
                     (
-                        productList[0].Id,
                         userList[0].Id,
                         userList[0],
                         orderList[0].Id,
                         orderList[0],
                         2,
                         productList[0].Price,
-                        productList[0]
-                    )
+                        false
+                    ),
+                    (
+                        userList[0].Id,
+                        userList[0],
+                        orderList[1].Id,
+                        orderList[1],
+                        2,
+                        productList[1].Price,
+                        true
+                    ),
+                    (
+                        userList[1].Id,
+                        userList[1],
+                        orderList[1].Id,
+                        orderList[1],
+                        2,
+                        productList[1].Price,
+                        true
+                    ),
                 };
                 foreach (var item in sub_orders)
                 {
@@ -656,14 +673,16 @@ namespace uni_cap_pro_be
                         OrderId = sub_order.OrderId,
                         Quantity = sub_order.Quantity,
                         Price = sub_order.Price,
+                        User = sub_order.User,
+                        IsRating = sub_order.IsRating
                     })
                     .ToList();
                 #endregion
 
                 #region seed comments
                 var comments = new List<(
-                    Guid UserId,
-                    User User,
+                    Guid Sub_OrderId,
+                    Sub_Order Sub_Order,
                     Guid ProductId,
                     Product Product,
                     string Content,
@@ -671,18 +690,18 @@ namespace uni_cap_pro_be
                 )>
                 {
                     (
-                        userList[0].Id,
-                        userList[0],
-                        productList[0].Id,
-                        productList[0],
+                        sub_orderList[1].Id,
+                        sub_orderList[1],
+                        productList[1].Id,
+                        productList[1],
                         "Wonderful product!",
                         5
                     ),
                     (
-                        userList[1].Id,
-                        userList[1],
-                        productList[0].Id,
-                        productList[0],
+                        sub_orderList[2].Id,
+                        sub_orderList[2],
+                        productList[1].Id,
+                        productList[1],
                         "Good product!",
                         3
                     )
@@ -693,10 +712,10 @@ namespace uni_cap_pro_be
                         Id = Guid.NewGuid(),
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
-                        UserId = comment.UserId,
+                        Sub_OrderId = comment.Sub_OrderId,
                         ProductId = comment.ProductId,
                         Content = comment.Content,
-                        User = comment.User,
+                        Sub_Order = comment.Sub_Order,
                         Product = comment.Product,
                         Rating = comment.Rating
                     })

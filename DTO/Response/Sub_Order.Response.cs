@@ -1,3 +1,5 @@
+using uni_cap_pro_be.Models;
+
 namespace uni_cap_pro_be.DTO.Response
 {
     // DONE
@@ -12,7 +14,8 @@ namespace uni_cap_pro_be.DTO.Response
 
         public int Quantity { get; set; }
         public double Price { get; set; }
+        public bool IsRating { get; set; }
 
-        // public required User User { get; set; }
+        public UserResponse? User { get; set; }
     }
 }

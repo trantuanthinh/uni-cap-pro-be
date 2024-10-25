@@ -95,6 +95,7 @@ namespace uni_cap_pro_be.Services
                     Modified_At = subOrder.Modified_At,
                     Quantity = subOrder.Quantity,
                     Price = subOrder.Price,
+                    IsRating = subOrder.IsRating,
                     Product = orderProductMap[subOrder.OrderId]?.ToResponse()
                 })
                 .ToList();

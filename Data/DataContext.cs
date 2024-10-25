@@ -47,6 +47,7 @@ namespace uni_cap_pro_be.Data
                 entity.HasIndex(e => e.Username).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.HasIndex(e => e.PhoneNumber).IsUnique();
+                entity.Property(e => e.Type).HasConversion(user_type_converter);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 
                 // User 1 - n Product
@@ -151,6 +152,7 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 
                 // Discount 1 - n Discount_Details
                 entity

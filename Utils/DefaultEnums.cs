@@ -10,8 +10,8 @@
 
     public enum UserType
     {
-        Company,
-        Producer
+        COMPANY,
+        PRODUCER
     }
 
     public enum ActiveStatus

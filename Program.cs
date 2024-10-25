@@ -138,7 +138,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (args.Length == 1 && args[0].ToLower().Equals("seeddata"))
+if (args.Length == 1 && args[0].ToLower().Equals("seed"))
 {
     SeedData(app);
 }

@@ -32,7 +32,8 @@ namespace uni_cap_pro_be.Models
 
         public int Quantity { get; set; }
         public double Price { get; set; }
+        public bool IsRating { get; set; }
 
-        // public required User User { get; set; }
+        public User? User { get; set; }
     }
 }

@@ -10,7 +10,9 @@ namespace uni_cap_pro_be.Models
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Comment, CommentResponse>();
+            cfg.CreateMap<Comment, CommentResponse>()
+                .ForMember(d => d.User, opt => opt.MapFrom(src => src.Sub_Order.User.ToResponse()))
+                .ForMember(d => d.Product, opt => opt.MapFrom(src => src.Product.ToResponse()));
         });
 
         static readonly IMapper mapper = config.CreateMapper();
@@ -22,7 +24,7 @@ namespace uni_cap_pro_be.Models
         }
 
         [Required]
-        public required Guid UserId { get; set; }
+        public required Guid Sub_OrderId { get; set; }
 
         [Required]
         public required Guid ProductId { get; set; }
@@ -31,8 +33,10 @@ namespace uni_cap_pro_be.Models
         public required int Rating { get; set; }
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
+        public string? Image { get; set; }
+        public string? Video { get; set; }
 
-        public User? User { get; set; }
+        public Sub_Order? Sub_Order { get; set; }
         public Product? Product { get; set; }
     }
 }

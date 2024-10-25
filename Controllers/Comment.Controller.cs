@@ -35,7 +35,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("products/{id:guid}")]
+        [HttpPost("products/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -1,3 +1,5 @@
+using uni_cap_pro_be.DTO.Response;
+
 namespace uni_cap_pro_be.Models
 {
     // DONE
@@ -10,7 +12,7 @@ namespace uni_cap_pro_be.Models
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 
-        public User? User { get; set; }
-        public Product? Product { get; set; }
+        public UserResponse? User { get; set; }
+        public ProductResponse? Product { get; set; }
     }
 }

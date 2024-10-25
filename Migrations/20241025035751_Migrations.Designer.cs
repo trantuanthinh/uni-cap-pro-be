@@ -12,8 +12,8 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241023120049_InitMigrate")]
-    partial class InitMigrate
+    [Migration("20241025035751_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
@@ -47,14 +50,17 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Sub_OrderId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("Video")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Sub_OrderId");
 
                     b.ToTable("Comments");
                 });
@@ -65,8 +71,9 @@ namespace uni_cap_pro_be.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("ActiveStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("Active_Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -284,6 +291,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsRating")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
@@ -302,6 +312,8 @@ namespace uni_cap_pro_be.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Sub_Orders");
                 });
@@ -347,8 +359,9 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -376,15 +389,15 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                    b.HasOne("uni_cap_pro_be.Models.Sub_Order", "Sub_Order")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Sub_OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
-                    b.Navigation("User");
+                    b.Navigation("Sub_Order");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
@@ -464,6 +477,14 @@ namespace uni_cap_pro_be.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>
