@@ -23,7 +23,6 @@ namespace uni_cap_pro_be.Services
                 .ThenInclude(sub_order => sub_order.User)
                 .Where(item => item.ProductId == productId)
                 .ToList();
-
             return _items.AsEnumerable().Select(item => item.ToResponse()).ToList();
         }
 

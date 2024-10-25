@@ -36,6 +36,10 @@ namespace uni_cap_pro_be.Services
                 .SelectAll()
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
+            if (_item == null)
+            {
+                return null;
+            }
             return _item.ToResponse();
         }
 

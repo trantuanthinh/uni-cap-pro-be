@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
 using uni_cap_pro_be.Core.QueryParameter;
@@ -36,7 +37,8 @@ namespace uni_cap_pro_be.Services
 
         public async Task<UserResponse> GetUser(Guid id)
         {
-            User _item = _repository.SelectById(id);
+            User _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("Not found GetUser!");
             return _item.ToResponse();
         }
 
@@ -79,6 +81,8 @@ namespace uni_cap_pro_be.Services
                 .SelectAll()
                 .Include(order => order.Product)
                 .ThenInclude(product => product.Images)
+                .Include(order => order.Product)
+                .ThenInclude(product => product.UnitMeasure)
                 .Where(order => orderIds.Contains(order.Id))
                 .ToList();
 

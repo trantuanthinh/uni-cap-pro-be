@@ -39,6 +39,10 @@ namespace uni_cap_pro_be.Services
                 .Include(item => item.Discount_Details)
                 .Where(item => item.Id == id)
                 .FirstOrDefault();
+            if (_item == null)
+            {
+                return null;
+            }
             return _item.ToResponse();
         }
 

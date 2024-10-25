@@ -48,6 +48,10 @@ namespace uni_cap_pro_be.Services
                 .Include(item => item.Images)
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
+            if (_item == null)
+            {
+                return null;
+            }
             return _item.ToResponse();
         }
 

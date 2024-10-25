@@ -30,6 +30,10 @@ namespace uni_cap_pro_be.Services
         public async Task<Sub_OrderResponse> GetSub_Order(Guid id)
         {
             Sub_Order _item = _repository.SelectById(id);
+            if (_item == null)
+            {
+                return null;
+            }
             return _item.ToResponse();
         }
 

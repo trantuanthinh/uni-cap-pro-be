@@ -21,11 +21,13 @@ namespace uni_cap_pro_be.Controllers
         APIResponse apiResponse,
         SharedService sharedService,
         FeedbackService service,
-        UserService userService
+        UserService userService,
+        ProductService productService
     ) : BaseAPIController(dataContext, mapper, apiResponse, sharedService)
     {
         private readonly FeedbackService _service = service;
         private readonly UserService _userService = userService;
+        private readonly ProductService _productService = productService;
 
         [HttpGet("products/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,6 +55,13 @@ namespace uni_cap_pro_be.Controllers
             if (userResponse == null)
             {
                 var failedMessage = _apiResponse.Failure("User not found");
+                return StatusCode(404, failedMessage);
+            }
+
+            ProductResponse productResponse = await _productService.GetProduct(productId);
+            if (productResponse == null)
+            {
+                var failedMessage = _apiResponse.Failure("Product not found");
                 return StatusCode(404, failedMessage);
             }
 

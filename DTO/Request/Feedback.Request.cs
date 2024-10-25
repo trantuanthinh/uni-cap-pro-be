@@ -8,6 +8,8 @@ namespace uni_cap_pro_be.DTO.Request
         [Required]
         public Guid UserId { get; set; }
 
-        public string? Content { get; set; }
+        [Required]
+        public required string Content { get; set; }
+        public int? Rating { get; set; }
     }
 }

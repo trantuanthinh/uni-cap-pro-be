@@ -51,6 +51,10 @@ namespace uni_cap_pro_be.Services
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.Id == id)
                 .FirstOrDefault();
+            if (_item == null)
+            {
+                return null;
+            }
             return _item.ToResponse();
         }
 
