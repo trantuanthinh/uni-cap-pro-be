@@ -1,4 +1,5 @@
 ﻿using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
@@ -29,11 +30,8 @@ namespace uni_cap_pro_be.Services
 
         public async Task<Sub_OrderResponse> GetSub_Order(Guid id)
         {
-            Sub_Order _item = _repository.SelectById(id);
-            if (_item == null)
-            {
-                return null;
-            }
+            Sub_Order _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("Sub_Order not found");
             return _item.ToResponse();
         }
 

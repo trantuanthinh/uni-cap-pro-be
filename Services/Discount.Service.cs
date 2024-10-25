@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
+using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.Core.QueryParameter;
-using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
@@ -34,15 +34,12 @@ namespace uni_cap_pro_be.Services
 
         public async Task<DiscountResponse> GetDiscount(Guid id)
         {
-            Discount _item = _repository
-                .SelectAll()
-                .Include(item => item.Discount_Details)
-                .Where(item => item.Id == id)
-                .FirstOrDefault();
-            if (_item == null)
-            {
-                return null;
-            }
+            Discount _item =
+                _repository
+                    .SelectAll()
+                    .Include(item => item.Discount_Details)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefault() ?? throw new NotFoundException("Discount not found");
             return _item.ToResponse();
         }
 

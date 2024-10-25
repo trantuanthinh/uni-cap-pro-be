@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
+using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
@@ -38,20 +39,17 @@ namespace uni_cap_pro_be.Services
 
         public async Task<ProductResponse> GetProduct(Guid id)
         {
-            var _item = await _repository
-                .SelectAll()
-                .Include(item => item.Owner)
-                .Include(item => item.Category)
-                .Include(item => item.UnitMeasure)
-                .Include(item => item.Discount)
-                .ThenInclude(discount => discount.Discount_Details)
-                .Include(item => item.Images)
-                .Where(item => item.Id == id)
-                .FirstOrDefaultAsync();
-            if (_item == null)
-            {
-                return null;
-            }
+            Product _item =
+                await _repository
+                    .SelectAll()
+                    .Include(item => item.Owner)
+                    .Include(item => item.Category)
+                    .Include(item => item.UnitMeasure)
+                    .Include(item => item.Discount)
+                    .ThenInclude(discount => discount.Discount_Details)
+                    .Include(item => item.Images)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefaultAsync() ?? throw new NotFoundException("Product not found");
             return _item.ToResponse();
         }
 

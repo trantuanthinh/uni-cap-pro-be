@@ -1,20 +1,10 @@
-namespace Core.Exceptions
+namespace uni_cap_pro_be.Core.Exceptions
 {
-    public class NotFoundException : Exception
-    {
-        public NotFoundException(string message)
-            : base(message) { }
-    }
+    public class NotFoundException(string message) : Exception(message) { }
 
-    public class InvalidOperationException : Exception
-    {
-        public InvalidOperationException(string message)
-            : base(message) { }
-    }
+    public class InvalidOperationException(string message) : Exception(message) { }
 
-    public class UnauthorizedAccessException : Exception
-    {
-        public UnauthorizedAccessException(string message)
-            : base(message) { }
-    }
+    public class UnauthorizedAccessException(string message) : Exception(message) { }
+
+    public class UnauthenticatedException(string message) : Exception(message) { }
 }

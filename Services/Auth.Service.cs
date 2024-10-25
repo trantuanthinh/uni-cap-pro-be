@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.Exceptions;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Utils;
@@ -27,12 +28,9 @@ namespace uni_cap_pro_be.Services
 
         public User AuthenticatedUser(SignInRequest item)
         {
-            User _user = GetUserByUsernameType(item.Username);
-
-            if (_user == null)
-            {
-                return null;
-            }
+            User _user =
+                GetUserByUsernameType(item.Username)
+                ?? throw new NotFoundException("User not found");
 
             bool verifyPassword = _sharedService.VerifyPassword(item.Password, _user.Password);
 

@@ -1,7 +1,7 @@
-﻿using Core.Exceptions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
+using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.DTO.Request;
 using uni_cap_pro_be.DTO.Response;
@@ -38,7 +38,7 @@ namespace uni_cap_pro_be.Services
         public async Task<UserResponse> GetUser(Guid id)
         {
             User _item =
-                _repository.SelectById(id) ?? throw new NotFoundException("Not found GetUser!");
+                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
             return _item.ToResponse();
         }
 

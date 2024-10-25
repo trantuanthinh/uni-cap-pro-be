@@ -49,11 +49,6 @@ namespace uni_cap_pro_be.Controllers
 
             OrderResponse _item = await _service.GetOrder(id);
 
-            if (_item == null)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(404, failedMessage);
-            }
             var okMessage = _apiResponse.Success(methodName, _item);
             return StatusCode(200, okMessage);
         }

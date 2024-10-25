@@ -34,12 +34,6 @@ namespace uni_cap_pro_be.Controllers
 
             User _user = _service.AuthenticatedUser(item);
 
-            if (_user == null)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(401, failedMessage);
-            }
-
             string _token = _jwtService.GenerateJwtToken(_user);
 
             var okMessage = _apiResponse.Success(_token, methodName, _user.ToResponse());

@@ -49,11 +49,7 @@ namespace uni_cap_pro_be.Controllers
             string methodName = nameof(GetProduct_Category);
 
             Product_CategoryResponse _item = await _service.GetProduct_Category(id);
-            if (_item == null)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(404, failedMessage);
-            }
+
             var okMessage = _apiResponse.Success(methodName, _item);
             return StatusCode(200, okMessage);
         }
