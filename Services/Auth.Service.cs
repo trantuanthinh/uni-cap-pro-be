@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Core;
+using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.DTO.Request;
-using uni_cap_pro_be.Exceptions;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Utils;

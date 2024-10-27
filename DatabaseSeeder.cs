@@ -174,8 +174,6 @@ namespace uni_cap_pro_be
                     Guid UnitMeasureId,
                     UnitMeasure UnitMeasure,
                     double Price,
-                    int TotalRatingValue,
-                    int TotalRatingQuantity,
                     string Description,
                     Guid OwnerId,
                     User Owner
@@ -189,8 +187,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         30000,
-                        120,
-                        30,
                         "Fresh organic apples, rich in flavor and nutrients.",
                         userList[4].Id,
                         userList[4]
@@ -202,8 +198,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         20000,
-                        80,
-                        20,
                         "Sweet and ripe bananas, perfect for a healthy snack.",
                         userList[4].Id,
                         userList[4]
@@ -215,8 +209,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         15000,
-                        90,
-                        20,
                         "Crisp and fresh organic carrots, ideal for salads and snacking.",
                         userList[4].Id,
                         userList[4]
@@ -228,8 +220,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         18000,
-                        70,
-                        20,
                         "Nutritious and fresh broccoli, perfect for a healthy diet.",
                         userList[4].Id,
                         userList[4]
@@ -241,8 +231,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         12000,
-                        85,
-                        25,
                         "High-quality whole wheat flour for baking and cooking.",
                         userList[4].Id,
                         userList[4]
@@ -254,8 +242,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         10000,
-                        60,
-                        18,
                         "Nutritious brown rice, ideal for a variety of dishes.",
                         userList[4].Id,
                         userList[4]
@@ -267,8 +253,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         37000,
-                        110,
-                        22,
                         "Juicy and sweet organic strawberries, perfect for desserts.",
                         userList[4].Id,
                         userList[4]
@@ -280,8 +264,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         24000,
-                        65,
-                        14,
                         "Delicious sweet potatoes, great for baking or roasting.",
                         userList[4].Id,
                         userList[4]
@@ -293,8 +275,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         27500,
-                        65,
-                        13,
                         "Fresh red bell peppers, ideal for salads and stir-fries.",
                         userList[4].Id,
                         userList[4]
@@ -306,8 +286,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         31000,
-                        80,
-                        16,
                         "High-protein quinoa, perfect as a side dish or main course.",
                         userList[4].Id,
                         userList[4]
@@ -319,8 +297,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         18000,
-                        70,
-                        17,
                         "Healthy oats for breakfast or baking.",
                         userList[4].Id,
                         userList[4]
@@ -332,8 +308,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         36000,
-                        95,
-                        19,
                         "Tropical pineapples, sweet and juicy.",
                         userList[4].Id,
                         userList[4]
@@ -345,8 +319,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         15000,
-                        50,
-                        10,
                         "Fresh zucchini, versatile for various dishes.",
                         userList[4].Id,
                         userList[4]
@@ -358,8 +330,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[1].Id,
                         unitMeasureList[1],
                         22000,
-                        90,
-                        20,
                         "Pure and fresh milk, sourced from local dairy farms.",
                         userList[4].Id,
                         userList[4]
@@ -372,8 +342,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         20000,
-                        50,
-                        11,
                         "Sweet and tender baby carrots.",
                         userList[5].Id,
                         userList[5]
@@ -385,8 +353,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         22000,
-                        55,
-                        13,
                         "Fresh green beans, ideal for stir-fries and sides.",
                         userList[5].Id,
                         userList[5]
@@ -398,8 +364,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         28000,
-                        50,
-                        14,
                         "Nutritious millet, great for various recipes.",
                         userList[5].Id,
                         userList[5]
@@ -411,8 +375,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         34000,
-                        0,
-                        0,
                         "Healthy buckwheat, a great addition to your pantry.",
                         userList[5].Id,
                         userList[5]
@@ -424,8 +386,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         40000,
-                        85,
-                        22,
                         "Sweet and juicy mangoes, perfect for smoothies and desserts.",
                         userList[5].Id,
                         userList[5]
@@ -437,8 +397,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         32000,
-                        75,
-                        18,
                         "Fresh papayas, great for fruit salads and juices.",
                         userList[5].Id,
                         userList[5]
@@ -450,8 +408,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         25000,
-                        70,
-                        16,
                         "Sweet cherry tomatoes, perfect for salads and snacks.",
                         userList[5].Id,
                         userList[5]
@@ -463,8 +419,6 @@ namespace uni_cap_pro_be
                         unitMeasureList[0].Id,
                         unitMeasureList[0],
                         50000,
-                        110,
-                        25,
                         "Aged cheddar cheese with a rich, creamy flavor.",
                         userList[5].Id,
                         userList[5]
@@ -542,8 +496,8 @@ namespace uni_cap_pro_be
                         UnitMeasure = product.UnitMeasure,
                         UnitMeasureId = product.UnitMeasureId,
                         Active_Status = ActiveStatus.ACTIVE,
-                        Total_Rating_Value = product.TotalRatingValue,
-                        Total_Rating_Quantity = product.TotalRatingQuantity,
+                        Total_Rating_Value = 0,
+                        Total_Rating_Quantity = 0,
                         Description = product.Description,
                         OwnerId = product.OwnerId,
                         Owner = product.Owner,
@@ -706,6 +660,11 @@ namespace uni_cap_pro_be
                         3
                     )
                 };
+                foreach (var item in feedbacks)
+                {
+                    item.Product.Total_Rating_Value += item.Rating;
+                    item.Product.Total_Rating_Quantity += 1;
+                }
                 var feedbackList = feedbacks
                     .Select(feedback => new Feedback
                     {

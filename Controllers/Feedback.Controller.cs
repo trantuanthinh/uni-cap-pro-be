@@ -58,10 +58,10 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(404, failedMessage);
             }
 
-            ProductResponse productResponse = await _productService.GetProduct(productId);
-            if (productResponse == null)
+            bool isUpdated = await _productService.UpdateProductRating(productId, item.Rating);
+            if (!isUpdated)
             {
-                var failedMessage = _apiResponse.Failure("Product not found");
+                var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(404, failedMessage);
             }
 

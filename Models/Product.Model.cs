@@ -15,7 +15,7 @@ namespace uni_cap_pro_be.Models
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<Product, ProductResponse>()
                 .ForMember(d => d.Owner, opt => opt.MapFrom(src => src.Owner.Name))
-                .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.ToResponse()))
+                .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(d => d.Discount, opt => opt.MapFrom(src => src.Discount.ToResponse()))
                 .ForMember(d => d.UnitMeasure, opt => opt.MapFrom(src => src.UnitMeasure.Symbol))
                 // .ForMember(

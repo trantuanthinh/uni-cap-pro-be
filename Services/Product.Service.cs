@@ -79,5 +79,15 @@ namespace uni_cap_pro_be.Services
             _repository.Delete(id);
             return _repository.Save();
         }
+
+        public async Task<bool> UpdateProductRating(Guid id, int rating)
+        {
+            Product _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("Product not found");
+            _item.Total_Rating_Value += rating;
+            _item.Total_Rating_Quantity += 1;
+            _repository.Update(_item);
+            return _repository.Save();
+        }
     }
 }
