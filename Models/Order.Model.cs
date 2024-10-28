@@ -19,7 +19,7 @@ namespace uni_cap_pro_be.Models
                 )
                 .ForMember(
                     d => d.Is_Remained,
-                    opt => opt.MapFrom(src => (src.EndTime - DateTime.UtcNow) > TimeSpan.Zero)
+                    opt => opt.MapFrom(src => src.EndTime > DateTime.UtcNow)
                 );
         });
 

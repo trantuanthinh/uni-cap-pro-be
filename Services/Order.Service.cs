@@ -31,6 +31,7 @@ namespace uni_cap_pro_be.Services
                 .ThenInclude(product => product.Discount)
                 .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Sub_Orders)
+                .Where(item => item.EndTime > DateTime.UtcNow)
                 .ApplyQueryParameters(queryParameters);
 
             return _items
