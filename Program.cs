@@ -90,9 +90,10 @@ builder.Services.AddSingleton<JWTService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddSingleton<BaseResponse<object>>();
 builder.Services.AddSingleton<SharedService>();
 builder.Services.AddSingleton<APIResponse>();
-builder.Services.AddSingleton<BaseResponse<object>>();
+builder.Services.AddSingleton<OtpService>();
 
 builder.Services.AddScoped<BaseAPIController>();
 

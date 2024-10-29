@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
@@ -64,6 +65,58 @@ namespace uni_cap_pro_be.Controllers
             }
 
             var okMessage = _apiResponse.Success(methodName, _item);
+            return StatusCode(200, okMessage);
+        }
+
+        [HttpPost("send-otp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SendOTP([FromBody] OTPRequest item)
+        {
+            string methodName = nameof(SendOTP);
+
+            if (!_sharedService.IsValidGmail(item.Email))
+            {
+                ModelState.AddModelError("", "Invalid Email address");
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(400, failedMessage);
+            }
+
+            bool isSent = await _service.SendOTP(item.Email);
+            if (!isSent)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, item.Email);
+            return StatusCode(200, okMessage);
+        }
+
+        [HttpPost("verify-otp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> VerifyOTP([FromBody] OTPVerifyRequest item)
+        {
+            string methodName = nameof(VerifyOTP);
+
+            if (!_sharedService.IsValidGmail(item.Email))
+            {
+                ModelState.AddModelError("", "Invalid email address");
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(400, failedMessage);
+            }
+
+            bool isVerified = await _service.VerifyOTP(item.Email, item.OTP);
+            if (!isVerified)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, item.Email);
             return StatusCode(200, okMessage);
         }
     }

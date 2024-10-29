@@ -9,10 +9,15 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class AuthService(AuthRepository repository, SharedService sharedService) : BaseService()
+    public class AuthService(
+        AuthRepository repository,
+        SharedService sharedService,
+        OtpService otpService
+    ) : BaseService()
     {
         public readonly AuthRepository _repository = repository;
         public readonly SharedService _sharedService = sharedService;
+        public readonly OtpService _otpService = otpService;
 
         public async Task<bool> CreateUser(User _item)
         {
@@ -40,6 +45,16 @@ namespace uni_cap_pro_be.Services
             }
 
             return _user;
+        }
+
+        public async Task<bool> SendOTP(string email)
+        {
+            return await _otpService.SendOTP(email);
+        }
+
+        public async Task<bool> VerifyOTP(string email, string otp)
+        {
+            return await _otpService.VerifyOTP(email, otp);
         }
 
         public async Task<bool> IsUserUniqueAsync(User _item)
