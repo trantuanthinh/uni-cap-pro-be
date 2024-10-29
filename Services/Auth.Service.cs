@@ -47,14 +47,27 @@ namespace uni_cap_pro_be.Services
             return _user;
         }
 
-        public async Task<bool> SendOTP(string email)
+        public async Task<bool> SendOTP(OTPRequest item)
         {
-            return await _otpService.SendOTP(email);
+            User _user =
+                GetUserByEmail(item.Email) ?? throw new NotFoundException("User not found");
+            return await _otpService.SendOTP(item.Email);
         }
 
-        public async Task<bool> VerifyOTP(string email, string otp)
+        public async Task<bool> VerifyOTP(OTPVerifyRequest item)
         {
-            return await _otpService.VerifyOTP(email, otp);
+            User _item =
+                GetUserByEmail(item.Email) ?? throw new NotFoundException("User not found");
+            return await _otpService.VerifyOTP(item.Email, item.OTP);
+        }
+
+        public async Task<bool> ResetPassword(ResetPasswordRequest item)
+        {
+            User _item =
+                GetUserByEmail(item.Email) ?? throw new NotFoundException("User not found");
+            _item.Password = _sharedService.HashPassword(item.Password);
+            _repository.Update(_item);
+            return _repository.Save();
         }
 
         public async Task<bool> IsUserUniqueAsync(User _item)

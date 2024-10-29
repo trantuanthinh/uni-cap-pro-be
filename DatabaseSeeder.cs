@@ -81,7 +81,7 @@ namespace uni_cap_pro_be
                     (
                         "trantuanthinh",
                         "Tran Tuan Thinh",
-                        "tran.tuan.thinh.0125@gmail.com",
+                        "conan246817@gmail.com",
                         "0395279915",
                         "Tran Tuan Thinh",
                         UserType.COMPANY

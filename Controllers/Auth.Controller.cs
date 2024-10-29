@@ -68,6 +68,7 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
+        // 1: Send OTP, 2: Verify OTP, 3: Change Password
         [HttpPost("send-otp")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -83,14 +84,14 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(400, failedMessage);
             }
 
-            bool isSent = await _service.SendOTP(item.Email);
+            bool isSent = await _service.SendOTP(item);
             if (!isSent)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(500, failedMessage);
             }
 
-            var okMessage = _apiResponse.Success(methodName, item.Email);
+            var okMessage = _apiResponse.Success(methodName, 2); // step 1: send otp success, next step 2: verify
             return StatusCode(200, okMessage);
         }
 
@@ -109,14 +110,40 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(400, failedMessage);
             }
 
-            bool isVerified = await _service.VerifyOTP(item.Email, item.OTP);
+            bool isVerified = await _service.VerifyOTP(item);
             if (!isVerified)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
                 return StatusCode(500, failedMessage);
             }
 
-            var okMessage = _apiResponse.Success(methodName, item.Email);
+            var okMessage = _apiResponse.Success(methodName, 3); // step 2: verify otp success, next step 3: change password
+            return StatusCode(200, okMessage);
+        }
+
+        [HttpPost("reset-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest item)
+        {
+            string methodName = nameof(ResetPassword);
+
+            if (!_sharedService.IsValidGmail(item.Email))
+            {
+                ModelState.AddModelError("", "Invalid email address");
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(400, failedMessage);
+            }
+
+            bool isReset = await _service.ResetPassword(item);
+            if (!isReset)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, true);
             return StatusCode(200, okMessage);
         }
     }

@@ -23,6 +23,8 @@ public class OtpService
 
     public async Task<bool> SendOTP(string email)
     {
+        OtpStorage.TryRemove(email, out _);
+
         // Generate the OTP and set its expiry time
         string _otp = GenerateOtp();
         DateTime _expiry = DateTime.UtcNow.AddMinutes(5);
