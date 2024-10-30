@@ -87,7 +87,7 @@ namespace uni_cap_pro_be.Services
             _item.Total_Rating_Value += rating;
             _item.Total_Rating_Quantity += 1;
             _repository.Update(_item);
-            return _repository.Save();
+            return await _repository.SaveAsync();
         }
     }
 }

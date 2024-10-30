@@ -2,10 +2,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Base.Entity;
-using uni_cap_pro_be.Core.QueryParameter;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
-using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Services;
 using uni_cap_pro_be.Utils;
@@ -21,15 +19,15 @@ namespace uni_cap_pro_be.Controllers
         APIResponse apiResponse,
         SharedService sharedService,
         FeedbackService service,
-        UserService userService,
+        Sub_OrderService subOrderService,
         ProductService productService
     ) : BaseAPIController(dataContext, mapper, apiResponse, sharedService)
     {
         private readonly FeedbackService _service = service;
-        private readonly UserService _userService = userService;
+        private readonly Sub_OrderService _subOrderService = subOrderService;
         private readonly ProductService _productService = productService;
 
-        [HttpGet("products/{productId:guid}")]
+        [HttpGet("product/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFeedbacks(Guid productId)
         {
@@ -40,33 +38,15 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
-        [HttpPost("products/{productId:guid}")]
+        [HttpPost("product")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateFeedback(
-            Guid productId,
-            [FromBody] FeedbackRequest item
-        )
+        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackRequest item)
         {
             string methodName = nameof(CreateFeedback);
 
-            UserResponse userResponse = await _userService.GetUser(item.UserId);
-            if (userResponse == null)
-            {
-                var failedMessage = _apiResponse.Failure("User not found");
-                return StatusCode(404, failedMessage);
-            }
-
-            bool isUpdated = await _productService.UpdateProductRating(productId, item.Rating);
-            if (!isUpdated)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(404, failedMessage);
-            }
-
             Feedback _item = _mapper.Map<Feedback>(item);
-            _item.ProductId = productId;
             bool isCreated = await _service.CreateFeedback(_item);
             if (!isCreated)
             {
@@ -74,7 +54,23 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(500, failedMessage);
             }
 
-            var okMessage = _apiResponse.Success(methodName, _item);
+            bool isUpdated_1 = await _subOrderService.UpdateSub_OrderRating(_item.Sub_OrderId);
+            if (!isUpdated_1)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(404, failedMessage);
+            }
+
+            bool isUpdated_2 = await _productService.UpdateProductRating(
+                _item.ProductId,
+                _item.Rating
+            );
+            if (!isUpdated_2)
+            {
+                var failedMessage = _apiResponse.Failure(methodName);
+                return StatusCode(404, failedMessage);
+            }
+            var okMessage = _apiResponse.Success(methodName, item);
             return StatusCode(200, okMessage);
         }
 

@@ -74,5 +74,11 @@ namespace uni_cap_pro_be.Core.Base.Repository
             int saved = _dbContext.SaveChanges();
             return saved > 0;
         }
+
+        public async Task<bool> SaveAsync()
+        {
+            int saved = await _dbContext.SaveChangesAsync();
+            return saved > 0;
+        }
     }
 }

@@ -28,8 +28,6 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> CreateFeedback(Feedback _item)
         {
-            _item.Created_At = DateTime.UtcNow;
-            _item.Modified_At = DateTime.UtcNow;
             _repository.Add(_item);
             return _repository.Save();
         }
