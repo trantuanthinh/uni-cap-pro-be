@@ -111,5 +111,45 @@ namespace uni_cap_pro_be.Controllers
             var okMessage = _apiResponse.Success(methodName, _item);
             return StatusCode(200, okMessage);
         }
+
+        [HttpPut("avatar/{id:guid}")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PutAvatar(IFormFile file, Guid id)
+        {
+            string methodName = nameof(PutAvatar);
+            string base64 = _sharedService.ImageToBase64(file);
+
+            bool isAdded = await _service.UploadAvatar(id, base64);
+            if (!isAdded)
+            {
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, id);
+            return StatusCode(200, okMessage);
+        }
+
+        [HttpDelete("avatar/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAvatar(Guid id)
+        {
+            string methodName = nameof(DeleteAvatar);
+
+            bool isDeleted = await _service.DeleteAvatar(id);
+            if (!isDeleted)
+            {
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success(methodName, id);
+            return StatusCode(200, okMessage);
+        }
     }
 }

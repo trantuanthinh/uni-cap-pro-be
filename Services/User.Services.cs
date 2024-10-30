@@ -44,11 +44,8 @@ namespace uni_cap_pro_be.Services
 
         public async Task<bool> UpdateUser(Guid id, PatchRequest<UserRequest> patchRequest)
         {
-            User _item = _repository.SelectById(id);
-            if (_item == null)
-            {
-                return false;
-            }
+            User _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
 
             patchRequest.Patch(ref _item);
             _repository.Update(_item);
@@ -105,6 +102,26 @@ namespace uni_cap_pro_be.Services
                 .ToList();
 
             return userSubOrderResponses;
+        }
+
+        public async Task<bool> UploadAvatar(Guid id, string base64)
+        {
+            User _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
+
+            _item.Avatar = base64;
+            _repository.Update(_item);
+            return _repository.Save();
+        }
+
+        public async Task<bool> DeleteAvatar(Guid id)
+        {
+            User _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
+
+            _item.Avatar = null;
+            _repository.Update(_item);
+            return _repository.Save();
         }
     }
 }
