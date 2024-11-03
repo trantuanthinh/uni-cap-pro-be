@@ -1,17 +1,18 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Mail;
-using MimeKit;
+using uni_cap_pro_be.Utils;
 
 public class OtpService
 {
-    private readonly IConfiguration _configuration;
+    private readonly MailService _mailService;
+    private readonly double _expiryMinute = 5;
     private static readonly ConcurrentDictionary<string, (string Otp, DateTime Expiry)> OtpStorage =
         new();
 
-    public OtpService(IConfiguration configuration)
+    public OtpService(MailService mailService)
     {
-        _configuration = configuration;
+        _mailService = mailService;
     }
 
     public string GenerateOtp()
@@ -23,86 +24,50 @@ public class OtpService
 
     public async Task<bool> SendOTP(string email)
     {
+        // Remove any existing OTP entry for the email
         OtpStorage.TryRemove(email, out _);
 
-        // Generate the OTP and set its expiry time
-        string _otp = GenerateOtp();
-        DateTime _expiry = DateTime.UtcNow.AddMinutes(5);
-        TimeSpan timeLeft = _expiry - DateTime.UtcNow;
-        int _expiryMinute = (int)Math.Ceiling(timeLeft.TotalMinutes);
-        OtpStorage.TryAdd(email, (_otp, _expiry));
+        // Generate a new OTP and set expiry
+        string otp = GenerateOtp();
+        DateTime expiry = DateTime.UtcNow.AddMinutes(_expiryMinute);
+        OtpStorage.TryAdd(email, (otp, expiry));
 
-        // Retrieve SMTP credentials from configuration
-        NetworkCredential networkCredential = new NetworkCredential(
-            _configuration["SmtpSettings:Username"],
-            _configuration["SmtpSettings:AppPassword"]
-        );
+        string body =
+            $@"
+            <!DOCTYPE html>
+            <html lang=""en"">
+            <body style=""font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px;"">
+                <div style=""background-color: #ffffff; padding: 20px 30px; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; margin: 0 auto;"">
+                    <h1 style=""color: #333; font-size: 24px; margin-bottom: 20px;"">OTP Verification</h1>
+                    <p style=""font-size: 16px; color: #555; margin-bottom: 10px;"">
+                        Your OTP code is 
+                        <strong style=""color: #007bff; font-size: 18px;"">{otp}</strong>
+                    </p>
+                    <p style=""font-size: 14px; color: #888; margin-bottom: 20px;"">
+                        It will expire in {_expiryMinute} minutes.
+                    </p>
+                    <p style=""font-size: 14px; color: #ff0000; font-weight: bold;"">
+                        Please do not share this code with anyone for security reasons.
+                    </p>
+                </div>
+            </body>
+            </html>";
 
-        try
-        {
-            // Configure the SMTP client
-            using SmtpClient client = new SmtpClient
-            {
-                Host = _configuration["SmtpSettings:Host"],
-                Port = int.Parse(_configuration["SmtpSettings:Port"]),
-                EnableSsl = true,
-                UseDefaultCredentials = false,
-                Credentials = networkCredential
-            };
-
-            // Create the email message
-            MailAddress from = new MailAddress(
-                _configuration["SmtpSettings:Username"],
-                "TTT - OTP Service"
-            );
-            MailAddress to = new MailAddress(email);
-            using MailMessage message = new MailMessage(from, to)
-            {
-                Subject = "OTP Verification",
-                Body =
-                    $@"
-                        <!DOCTYPE html>
-                        <html lang=""en"">
-                        <body style=""font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px;"">
-                            <div style=""background-color: #ffffff; padding: 20px 30px; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; margin: 0 auto;"">
-                                <h1 style=""color: #333; font-size: 24px; margin-bottom: 20px;"">OTP Verification</h1>
-                                <p style=""font-size: 16px; color: #555; margin-bottom: 10px;"">
-                                    Your OTP code is 
-                                    <strong style=""color: #007bff; font-size: 18px;"">{_otp}</strong>
-                                </p>
-                                <p style=""font-size: 14px; color: #888; margin-bottom: 20px;"">
-                                    It will expire in {_expiryMinute} minutes.
-                                </p>
-                                <p style=""font-size: 14px; color: #ff0000; font-weight: bold;"">
-                                    Please do not share this code with anyone for security reasons.
-                                </p>
-                            </div>
-                        </body>
-                        </html>",
-                IsBodyHtml = true
-            };
-
-            await client.SendMailAsync(message);
-            return true; // OTP sent successfully
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to send OTP: {ex.Message}");
-            return false; // OTP sending failed
-        }
+        return await _mailService.SendMail(email, "OTP Verification", body);
     }
 
     public async Task<bool> VerifyOTP(string email, string inputOTP)
     {
-        if (OtpStorage.TryGetValue(email, out (string OTP, DateTime Expiry) stored))
+        if (OtpStorage.TryGetValue(email, out var stored) && stored.Expiry > DateTime.UtcNow)
         {
-            if (stored.OTP == inputOTP && stored.Expiry > DateTime.UtcNow)
+            if (stored.Otp == inputOTP)
             {
+                OtpStorage.TryRemove(email, out _); // Remove OTP after successful verification
                 return true;
             }
             else
             {
-                OtpStorage.TryRemove(email, out _);
+                OtpStorage.TryRemove(email, out _); // Remove OTP if verification fails
             }
         }
         return false;

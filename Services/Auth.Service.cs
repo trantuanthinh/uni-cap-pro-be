@@ -54,19 +54,17 @@ namespace uni_cap_pro_be.Services
             return await _otpService.SendOTP(item.Email);
         }
 
-        public async Task<bool> VerifyOTP(OTPVerifyRequest item)
-        {
-            User _item =
-                GetUserByEmail(item.Email) ?? throw new NotFoundException("User not found");
-            return await _otpService.VerifyOTP(item.Email, item.OTP);
-        }
-
         public async Task<bool> ResetPassword(ResetPasswordRequest item)
         {
             User _item =
                 GetUserByEmail(item.Email) ?? throw new NotFoundException("User not found");
-            _item.Password = _sharedService.HashPassword(item.Password);
-            _repository.Update(_item);
+
+            // Verify OTP
+            if (await _otpService.VerifyOTP(item.Email, item.OTP))
+            {
+                _item.Password = _sharedService.HashPassword(item.Password);
+                _repository.Update(_item);
+            }
             return _repository.Save();
         }
 
