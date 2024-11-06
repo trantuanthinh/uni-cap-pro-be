@@ -41,7 +41,12 @@ namespace uni_cap_pro_be
                 #region seed discounts
                 var discountList = new List<Discount>
                 {
-                    new Discount { Id = Guid.NewGuid(), Active_Status = ActiveStatus.ACTIVE }
+                    new Discount
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Default Discount",
+                        Active_Status = ActiveStatus.ACTIVE
+                    }
                 };
                 var discountDetails = new List<(int Level, double Amount)>
                 {
@@ -84,7 +89,7 @@ namespace uni_cap_pro_be
                         "conan246817@gmail.com",
                         "0395279915",
                         "Tran Tuan Thinh",
-                        UserType.COMPANY
+                        UserType.BUYER
                     ),
                     (
                         "thaohoang",
@@ -92,39 +97,39 @@ namespace uni_cap_pro_be
                         "thaoh1717@gmail.com",
                         "0327858682",
                         "ThaoHoang1717",
-                        UserType.COMPANY
+                        UserType.BUYER
                     ),
                     (
                         "company1",
                         "Company 1",
                         "company1@gmail.com",
                         "1234567890",
-                        "Company 1",
-                        UserType.COMPANY
+                        "Buyer 1",
+                        UserType.BUYER
                     ),
                     (
                         "company2",
                         "Company 2",
                         "company2@gmail.com",
                         "9876543210",
-                        "Company 2",
-                        UserType.COMPANY
+                        "Buyer 2",
+                        UserType.BUYER
                     ),
                     (
                         "producer1",
                         "Producer 1",
                         "producer1@gmail.com",
                         "1237894560",
-                        "Producer 1",
-                        UserType.PRODUCER
+                        "Saler 1",
+                        UserType.SELLER
                     ),
                     (
                         "producer2",
                         "Producer 2",
                         "producer2@gmail.com",
                         "9873216540",
-                        "Producer 2",
-                        UserType.PRODUCER
+                        "Saler 2",
+                        UserType.SELLER
                     ),
                 };
 

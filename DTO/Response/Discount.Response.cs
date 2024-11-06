@@ -10,8 +10,7 @@ namespace uni_cap_pro_be.DTO.Response
     {
         public Guid Id { get; set; }
         public ActiveStatus ActiveStatus { get; set; }
-        public string Type { get; set; }
-        public string Summary { get; set; }
+        public string Name { get; set; }
         public required ICollection<Discount_Detail> Discount_Details { get; set; }
     }
 }

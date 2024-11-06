@@ -12,20 +12,7 @@ namespace uni_cap_pro_be.Models
         // Mapping from Discount to DiscountResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Discount, DiscountResponse>()
-                .ForMember(d => d.Type, opt => opt.MapFrom(src => "Type "))
-                .ForMember(
-                    d => d.Summary,
-                    opt =>
-                        opt.MapFrom(src =>
-                            string.Join(
-                                ", ",
-                                src.Discount_Details.Select(item =>
-                                    $"{item.Level} -> {item.Amount}"
-                                )
-                            )
-                        )
-                );
+            cfg.CreateMap<Discount, DiscountResponse>();
         });
 
         static readonly IMapper mapper = config.CreateMapper();
@@ -36,6 +23,7 @@ namespace uni_cap_pro_be.Models
             return res;
         }
 
+        public string Name { get; set; }
         public ActiveStatus Active_Status { get; set; }
 
         [JsonIgnore]

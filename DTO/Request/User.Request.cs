@@ -24,10 +24,9 @@ namespace uni_cap_pro_be.DTO.Request
         [DefaultValue("0327858682")]
         public string PhoneNumber { get; set; }
 
-        [Required]
-        public UserType User_Type { get; set; }
-        public string? Avatar { get; set; }
-        public string? Background { get; set; }
-        public string? Description { get; set; }
+        public UserType User_Type { get; set; } = UserType.BUYER;
+        public string? Avatar { get; set; } = null;
+        public string? Background { get; set; } = null;
+        public string? Description { get; set; } = null;
     }
 }
