@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241106081551_Migrations")]
+    [Migration("20241107155959_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -266,6 +266,42 @@ namespace uni_cap_pro_be.Migrations
                     b.ToTable("Product_Images");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.District", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProvinceId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("Districts");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.Province", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provinces");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.UnitMeasure", b =>
                 {
                     b.Property<Guid>("Id")
@@ -283,6 +319,27 @@ namespace uni_cap_pro_be.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Unit_Measurements");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.Ward", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
+
+                    b.ToTable("Wards");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
@@ -473,6 +530,28 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.District", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.Province", "Province")
+                        .WithMany("Districts")
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.Ward", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.District", "District")
+                        .WithMany("Wards")
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("District");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Order", null)
@@ -510,6 +589,16 @@ namespace uni_cap_pro_be.Migrations
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.District", b =>
+                {
+                    b.Navigation("Wards");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.Province", b =>
+                {
+                    b.Navigation("Districts");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>

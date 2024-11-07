@@ -95,6 +95,7 @@ builder.Services.AddSingleton<SharedService>();
 builder.Services.AddSingleton<APIResponse>();
 builder.Services.AddSingleton<MailService>();
 builder.Services.AddSingleton<OtpService>();
+builder.Services.AddSingleton<ReaderCsv>();
 
 builder.Services.AddScoped<BaseAPIController>();
 

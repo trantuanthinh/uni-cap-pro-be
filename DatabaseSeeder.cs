@@ -1,4 +1,5 @@
-﻿using uni_cap_pro_be.Data;
+﻿using CsvHelper.Configuration;
+using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Utils;
@@ -9,10 +10,44 @@ namespace uni_cap_pro_be
     public class DatabaseSeeder
     {
         private readonly DataContext _dataContext;
+        private readonly ReaderCsv _readerCsv;
 
-        public DatabaseSeeder(DataContext dataContext)
+        public DatabaseSeeder(DataContext dataContext, ReaderCsv readerCsv)
         {
             _dataContext = dataContext;
+            _readerCsv = readerCsv;
+        }
+
+        public class ProvinceMap : ClassMap<Province>
+        {
+            public ProvinceMap()
+            {
+                // Map from CSV column to C# property
+                Map(m => m.Id).Name("Id").TypeConverterOption.NullValues("");
+                Map(m => m.Name).Name("Name");
+            }
+        }
+
+        public class DistrictMap : ClassMap<District>
+        {
+            public DistrictMap()
+            {
+                // Map from CSV column to C# property
+                Map(m => m.Id).Name("Id").TypeConverterOption.NullValues("");
+                Map(m => m.Name).Name("Name");
+                Map(m => m.ProvinceId).Name("ProvinceId");
+            }
+        }
+
+        public class WardMap : ClassMap<Ward>
+        {
+            public WardMap()
+            {
+                // Map from CSV column to C# property
+                Map(m => m.Id).Name("Id").TypeConverterOption.NullValues("");
+                Map(m => m.Name).Name("Name");
+                Map(m => m.DistrictId).Name("DistrictId");
+            }
         }
 
         public void SeedDataContext()
@@ -36,6 +71,10 @@ namespace uni_cap_pro_be
                         Symbol = um.Symbol
                     })
                     .ToList();
+
+                var provinceList = _readerCsv.ReadCsv("Filtered_Provinces.csv", new ProvinceMap());
+                var districtList = _readerCsv.ReadCsv("Filtered_Districts.csv", new DistrictMap());
+                var wardList = _readerCsv.ReadCsv("Filtered_Wards.csv", new WardMap());
                 #endregion
 
                 #region seed discounts
@@ -688,6 +727,9 @@ namespace uni_cap_pro_be
 
                 #region Check and seed data
                 _dataContext.Unit_Measurements.AddRange(unitMeasureList);
+                _dataContext.Provinces.AddRange(provinceList);
+                _dataContext.Districts.AddRange(districtList);
+                _dataContext.Wards.AddRange(wardList);
 
                 _dataContext.Users.AddRange(userList);
                 _dataContext.Product_Categories.AddRange(productCategoryList);

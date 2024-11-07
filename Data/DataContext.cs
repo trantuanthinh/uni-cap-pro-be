@@ -24,6 +24,9 @@ namespace uni_cap_pro_be.Data
 
         // Setting-Data
         public DbSet<UnitMeasure> Unit_Measurements { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Ward> Wards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +40,33 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<UnitMeasure>(entity =>
             {
                 entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<Province>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                // District 1 - n Province
+                entity
+                    .HasOne(d => d.Province)
+                    .WithMany(p => p.Districts)
+                    .HasForeignKey(d => d.ProvinceId);
+            });
+
+            modelBuilder.Entity<Ward>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                // Ward 1 - n District
+                entity
+                    .HasOne(d => d.District)
+                    .WithMany(p => p.Wards)
+                    .HasForeignKey(d => d.DistrictId);
             });
             #endregion
 
