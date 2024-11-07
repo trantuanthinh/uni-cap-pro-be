@@ -22,6 +22,11 @@ namespace uni_cap_pro_be.Core.Base.Repository
             return _dbSet;
         }
 
+        public T SelectById(Guid id)
+        {
+            return _dbSet.Find(id);
+        }
+
         // public DbSet<T> GetDbSet()
         // {
         //     return _dbSet;
@@ -64,11 +69,6 @@ namespace uni_cap_pro_be.Core.Base.Repository
         //     return obj != null;
         // }
 
-        public T SelectById(Guid id)
-        {
-            return _dbSet.Find(id);
-        }
-
         public bool Save()
         {
             int saved = _dbContext.SaveChanges();
@@ -79,6 +79,30 @@ namespace uni_cap_pro_be.Core.Base.Repository
         {
             int saved = await _dbContext.SaveChangesAsync();
             return saved > 0;
+        }
+    }
+
+    public class BaseRepositoryAddress<T, DbContextType> : IBaseRepositoryAddress<T>
+        where T : BaseEntity<string>
+        where DbContextType : DbContext
+    {
+        protected readonly DbContextType _dbContext;
+        protected readonly DbSet<T> _dbSet;
+
+        public BaseRepositoryAddress(DbContextType context)
+        {
+            _dbContext = context;
+            _dbSet = _dbContext.Set<T>();
+        }
+
+        public IQueryable<T> SelectAll()
+        {
+            return _dbSet;
+        }
+
+        public T SelectById(string id)
+        {
+            return _dbSet.Find(id);
         }
     }
 }

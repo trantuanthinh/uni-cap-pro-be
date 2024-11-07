@@ -102,6 +102,10 @@ builder.Services.AddScoped<BaseAPIController>();
 // Setting Data
 builder.Services.AddScoped<UnitMeasureRepository>();
 builder.Services.AddScoped<UnitMeasureService>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<ProvinceRepository>();
+builder.Services.AddScoped<DistrictRepository>();
+builder.Services.AddScoped<WardRepository>();
 
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<AuthService>();
