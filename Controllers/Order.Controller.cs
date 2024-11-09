@@ -58,37 +58,36 @@ namespace uni_cap_pro_be.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateOrder([FromBody] OrderRequest item)
         {
-            string methodName = nameof(CreateOrder);
+            // string methodName = nameof(CreateOrder);
 
-            Sub_Order _suborder = _mapper.Map<Sub_Order>(item);
+            // Sub_Order _suborder = _mapper.Map<Sub_Order>(item);
 
-            Order _order = new Order
-            {
-                Id = Guid.NewGuid(),
-                ProductId = item.ProductId,
-                Total_Price = item.Price,
-                Total_Quantity = item.Quantity,
-                IsShare = item.IsShare,
-                IsPaid = false
-            };
+            // Order _order = new Order
+            // {
+            //     Id = Guid.NewGuid(),
+            //     Total_Price = item.Price,
+            //     IsShare = item.IsShare,
+            //     IsPaid = false
+            // };
 
-            bool isOrderCreated = await _service.CreateOrder(_order);
-            if (!isOrderCreated)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(500, failedMessage);
-            }
+            // bool isOrderCreated = await _service.CreateOrder(_order);
+            // if (!isOrderCreated)
+            // {
+            //     var failedMessage = _apiResponse.Failure(methodName);
+            //     return StatusCode(500, failedMessage);
+            // }
 
-            _suborder.OrderId = _order.Id;
-            bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
-            if (!isSubOrderCreated)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(500, failedMessage);
-            }
+            // _suborder.OrderId = _order.Id;
+            // bool isSubOrderCreated = await _subOrderService.CreateSub_Order(_suborder);
+            // if (!isSubOrderCreated)
+            // {
+            //     var failedMessage = _apiResponse.Failure(methodName);
+            //     return StatusCode(500, failedMessage);
+            // }
 
-            var okMessage = _apiResponse.Success(methodName, _order);
-            return StatusCode(200, okMessage);
+            // var okMessage = _apiResponse.Success(methodName, _order);
+            // return StatusCode(200, okMessage);
+            return Ok();
         }
 
         [HttpPost("buy-together/{orderId:guid}")]

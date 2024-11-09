@@ -16,12 +16,7 @@ namespace uni_cap_pro_be.Models
             cfg.CreateMap<Product, ProductResponse>()
                 .ForMember(d => d.Owner, opt => opt.MapFrom(src => src.Owner.Name))
                 .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(d => d.Discount, opt => opt.MapFrom(src => src.Discount.ToResponse()))
                 .ForMember(d => d.UnitMeasure, opt => opt.MapFrom(src => src.UnitMeasure.Symbol))
-                // .ForMember(
-                //     dest => dest.Images,
-                //     opt => opt.MapFrom(src => src.Images.Select(img => img.Name).ToList()) // Map danh sách tên từ Product_Image
-                // )
                 .ForMember(d => d.Images, opt => opt.MapFrom(src => src.GetImageUrls()))
         );
 
@@ -81,9 +76,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid CategoryId { get; set; }
 
-        [Required]
-        public required Guid DiscountId { get; set; }
-
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 
@@ -108,6 +100,7 @@ namespace uni_cap_pro_be.Models
 
         public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
         public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
+        public int Purchased_Quantity { get; set; } // the total number of products which is purchased by user
 
         [Required]
         public required UnitMeasure UnitMeasure { get; set; }
@@ -115,7 +108,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required User Owner { get; set; }
         public Product_Category? Category { get; set; }
-        public Discount? Discount { get; set; }
         public ICollection<Product_Image>? Images { get; set; }
         public ICollection<Feedback>? Feedbacks { get; set; }
     }

@@ -25,8 +25,6 @@ namespace uni_cap_pro_be.Services
                 .Include(item => item.Owner)
                 .Include(item => item.Category)
                 .Include(item => item.UnitMeasure)
-                .Include(item => item.Discount)
-                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Images)
                 .ApplyQueryParameters(queryParameters);
 
@@ -45,8 +43,6 @@ namespace uni_cap_pro_be.Services
                     .Include(item => item.Owner)
                     .Include(item => item.Category)
                     .Include(item => item.UnitMeasure)
-                    .Include(item => item.Discount)
-                    .ThenInclude(discount => discount.Discount_Details)
                     .Include(item => item.Images)
                     .Where(item => item.Id == id)
                     .FirstOrDefaultAsync() ?? throw new NotFoundException("Product not found");

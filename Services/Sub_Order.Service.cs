@@ -50,7 +50,6 @@ namespace uni_cap_pro_be.Services
         public async Task<bool> UpdateSub_OrderRating(Guid id)
         {
             Sub_Order _item = _repository.SelectById(id);
-            _item.IsRating = true;
             _repository.Update(_item);
             return await _repository.SaveAsync();
         }

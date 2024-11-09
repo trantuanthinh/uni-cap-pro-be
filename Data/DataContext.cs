@@ -18,6 +18,7 @@ namespace uni_cap_pro_be.Data
         public DbSet<Product_Category> Product_Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Sub_Order> Sub_Orders { get; set; }
+        public DbSet<Item_Order> Item_Orders { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Discount_Detail> Discount_Details { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
@@ -86,7 +87,7 @@ namespace uni_cap_pro_be.Data
                     .WithOne(d => d.Owner)
                     .HasForeignKey(d => d.OwnerId);
 
-                // User 1 - n sub_order
+                // User 1 - n Sub_order
                 // entity
                 //     .HasMany(origin => origin.Sub_Orders)
                 //     .WithOne(d => d.User)
@@ -111,18 +112,6 @@ namespace uni_cap_pro_be.Data
                     .HasOne(origin => origin.Category)
                     .WithMany()
                     .HasForeignKey(origin => origin.CategoryId);
-
-                //Product n - 1 Discount
-                entity
-                    .HasOne(origin => origin.Discount)
-                    .WithMany()
-                    .HasForeignKey(origin => origin.DiscountId);
-
-                //Product 1 - n image
-                // entity
-                //     .HasMany(origin => origin.Images)
-                //     .WithOne(d => d.Product)
-                //     .HasForeignKey(origin => origin.ProductId);
 
                 //Product 1 - 1 UnitMeasure
                 entity
@@ -157,13 +146,7 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
 
-                // Order n - 1 Product
-                entity
-                    .HasOne(origin => origin.Product)
-                    .WithMany()
-                    .HasForeignKey(origin => origin.ProductId);
-
-                // Order 1 - n Sub_Orders
+                // Order 1 - n Sub_Order
                 entity
                     .HasMany(origin => origin.Sub_Orders)
                     .WithOne()
@@ -175,6 +158,19 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Sub_Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                // Sub_Orders 1 - n Item_Order
+                entity
+                    .HasMany(origin => origin.Item_Orders)
+                    .WithOne()
+                    .HasForeignKey(origin => origin.Sub_OrderId);
+            });
+            #endregion
+
+            #region Item_Order
+            modelBuilder.Entity<Item_Order>(entity =>
+            {
+                entity.HasKey(e => e.Id);
             });
             #endregion
 
@@ -184,7 +180,7 @@ namespace uni_cap_pro_be.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
 
-                // Discount 1 - n Discount_Details
+                // Discount 1 - n Discount_Detail
                 entity
                     .HasMany(origin => origin.Discount_Details)
                     .WithOne()

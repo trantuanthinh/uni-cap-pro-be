@@ -23,13 +23,6 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<Order> _items = _repository
                 .SelectAll()
-                .Include(item => item.Product)
-                .ThenInclude(product => product.UnitMeasure)
-                .Include(item => item.Product)
-                .ThenInclude(product => product.Images)
-                .Include(item => item.Product)
-                .ThenInclude(product => product.Discount)
-                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.EndTime > DateTime.UtcNow)
                 .ApplyQueryParameters(queryParameters);
@@ -46,11 +39,6 @@ namespace uni_cap_pro_be.Services
             Order _item =
                 _repository
                     .SelectAll()
-                    .Include(item => item.Product)
-                    .ThenInclude(product => product.UnitMeasure)
-                    .Include(item => item.Product)
-                    .ThenInclude(product => product.Discount)
-                    .ThenInclude(discount => discount.Discount_Details)
                     .Include(item => item.Sub_Orders)
                     .Where(item => item.Id == id)
                     .FirstOrDefault() ?? throw new NotFoundException("Order not found");
@@ -69,7 +57,6 @@ namespace uni_cap_pro_be.Services
                 _item.EndTime = DateTime.UtcNow;
             }
             _item.Delivery_Status = DeliveryStatus.PENDING;
-            _item.IsPaid = false;
             _item.Level = 1;
             _repository.Add(_item);
             return _repository.Save();
@@ -98,9 +85,6 @@ namespace uni_cap_pro_be.Services
         {
             Order _item = _repository
                 .SelectAll()
-                .Include(item => item.Product)
-                .ThenInclude(product => product.Discount)
-                .ThenInclude(discount => discount.Discount_Details)
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.Id == orderId)
                 .FirstOrDefault();
@@ -109,10 +93,7 @@ namespace uni_cap_pro_be.Services
 
         public bool CheckValid(Order order)
         {
-            return order.Level <= 5
-                && !order.IsPaid
-                && order.IsShare
-                && order.EndTime > DateTime.UtcNow;
+            return order.Level <= 5 && order.IsShare && order.EndTime > DateTime.UtcNow;
         }
 
         public async Task<bool> AddSubOrder(Order order)
@@ -122,27 +103,27 @@ namespace uni_cap_pro_be.Services
             double total_price = 0;
             int total_quantity = 0;
 
-            foreach (var discount_detail in order.Product.Discount.Discount_Details)
-            {
-                if (discount_detail.Level == order.Level)
-                {
-                    discount = discount_detail.Amount;
-                    break;
-                }
-            }
-            foreach (var sub_order in order.Sub_Orders)
-            {
-                sub_order.Price = order.Product.Price - (order.Product.Price * discount);
-                _sub_orderRepository.Update(sub_order);
-                bool checkSubOrder = _sub_orderRepository.Save();
-                if (!checkSubOrder)
-                {
-                    total_price += sub_order.Price;
-                    total_quantity += sub_order.Quantity;
-                }
-            }
-            order.Total_Price = total_price;
-            order.Total_Quantity = total_quantity;
+            // foreach (var discount_detail in order.Product.Discount.Discount_Details)
+            // {
+            //     if (discount_detail.Level == order.Level)
+            //     {
+            //         discount = discount_detail.Amount;
+            //         break;
+            //     }
+            // }
+            // foreach (var sub_order in order.Sub_Orders)
+            // {
+            //     sub_order.Price = order.Product.Price - (order.Product.Price * discount);
+            //     _sub_orderRepository.Update(sub_order);
+            //     bool checkSubOrder = _sub_orderRepository.Save();
+            //     if (!checkSubOrder)
+            //     {
+            //         total_price += sub_order.Price;
+            //         total_quantity += sub_order.Quantity;
+            //     }
+            // }
+            // order.Total_Price = total_price;
+            // order.Total_Quantity = total_quantity;
 
             _repository.Update(order);
             return _repository.Save();

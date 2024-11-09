@@ -63,45 +63,46 @@ namespace uni_cap_pro_be.Services
             QueryParameters queryParameters
         )
         {
-            List<Sub_Order>? subOrders = _sub_orderRepository
-                .SelectAll()
-                .Where(order => order.UserId == id)
-                .ToList();
+            // List<Sub_Order>? subOrders = _sub_orderRepository
+            //     .SelectAll()
+            //     .Where(order => order.UserId == id)
+            //     .ToList();
 
-            // Track unique OrderIds from sub-orders
-            List<Guid>? orderIds = subOrders
-                .Select(subOrder => subOrder.OrderId)
-                .Distinct()
-                .ToList();
+            // // Track unique OrderIds from sub-orders
+            // List<Guid>? orderIds = subOrders
+            //     .Select(subOrder => subOrder.OrderId)
+            //     .Distinct()
+            //     .ToList();
 
-            List<Order>? orders = _orderRepository
-                .SelectAll()
-                .Include(order => order.Product)
-                .ThenInclude(product => product.Images)
-                .Include(order => order.Product)
-                .ThenInclude(product => product.UnitMeasure)
-                .Where(order => orderIds.Contains(order.Id))
-                .ToList();
+            // List<Order>? orders = _orderRepository
+            //     .SelectAll()
+            //     .Include(order => order.Product)
+            //     .ThenInclude(product => product.Images)
+            //     .Include(order => order.Product)
+            //     .ThenInclude(product => product.UnitMeasure)
+            //     .Where(order => orderIds.Contains(order.Id))
+            //     .ToList();
 
-            Dictionary<Guid, Product?>? orderProductMap = orders.ToDictionary(
-                order => order.Id,
-                order => order.Product
-            );
+            // Dictionary<Guid, Product?>? orderProductMap = orders.ToDictionary(
+            //     order => order.Id,
+            //     order => order.Product
+            // );
 
-            List<UserSub_OrderResponse>? userSubOrderResponses = subOrders
-                .Select(subOrder => new UserSub_OrderResponse
-                {
-                    Id = subOrder.Id,
-                    Created_At = subOrder.Created_At,
-                    Modified_At = subOrder.Modified_At,
-                    Quantity = subOrder.Quantity,
-                    Price = subOrder.Price,
-                    IsRating = subOrder.IsRating,
-                    Product = orderProductMap[subOrder.OrderId]?.ToResponse()
-                })
-                .ToList();
+            // List<UserSub_OrderResponse>? userSubOrderResponses = subOrders
+            //     .Select(subOrder => new UserSub_OrderResponse
+            //     {
+            //         Id = subOrder.Id,
+            //         Created_At = subOrder.Created_At,
+            //         Modified_At = subOrder.Modified_At,
+            //         Quantity = subOrder.Quantity,
+            //         Price = subOrder.Price,
+            //         IsRating = subOrder.IsRating,
+            //         Product = orderProductMap[subOrder.OrderId]?.ToResponse()
+            //     })
+            //     .ToList();
 
-            return userSubOrderResponses;
+            // return userSubOrderResponses;
+            return null;
         }
 
         public async Task<bool> UploadAvatar(Guid id, string base64)

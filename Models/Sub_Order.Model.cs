@@ -30,10 +30,12 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid OrderId { get; set; }
 
-        public int Quantity { get; set; }
-        public double Price { get; set; }
-        public bool IsRating { get; set; }
+        [Required]
+        public required bool IsPaid { get; set; }
+        public double Total_Price { get; set; }
 
         public User? User { get; set; }
+        public Order? Order { get; set; }
+        public List<Item_Order>? Item_Orders { get; set; }
     }
 }

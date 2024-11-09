@@ -2,6 +2,7 @@
 using AutoMapper;
 using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.DTO.Response;
+using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
@@ -12,7 +13,6 @@ namespace uni_cap_pro_be.Models
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Order, OrderResponse>()
-                .ForMember(d => d.Product, opt => opt.MapFrom(src => src.Product.ToResponse()))
                 .ForMember(
                     d => d.TimeLeft,
                     opt => opt.MapFrom(src => src.EndTime - DateTime.UtcNow)
@@ -35,13 +35,10 @@ namespace uni_cap_pro_be.Models
         public DateTime Modified_At { get; set; }
 
         [Required]
-        public required Guid ProductId { get; set; }
+        public required string ProvinceId { get; set; }
 
         [Required]
         public required double Total_Price { get; set; }
-
-        [Required]
-        public required int Total_Quantity { get; set; }
 
         public DateTime EndTime { get; set; }
         public DeliveryStatus Delivery_Status { get; set; }
@@ -50,10 +47,7 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required bool IsShare { get; set; }
 
-        [Required]
-        public required bool IsPaid { get; set; }
-
-        public Product? Product { get; set; }
+        public Province? Province { get; set; }
         public List<Sub_Order>? Sub_Orders { get; set; }
     }
 }
