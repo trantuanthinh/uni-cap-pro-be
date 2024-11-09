@@ -90,7 +90,7 @@ namespace uni_cap_pro_be.Controllers
             return Ok();
         }
 
-        [HttpPost("buy-together/{orderId:guid}")]
+        [HttpPost("group-buy/{orderId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status412PreconditionFailed)]

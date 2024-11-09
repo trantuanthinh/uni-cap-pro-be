@@ -100,7 +100,7 @@ namespace uni_cap_pro_be.Models
 
         public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
         public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
-        public int Purchased_Quantity { get; set; } // the total number of products which is purchased by user
+        public int Total_Sold_Quantity { get; set; } // the total number of products which is purchased by user
 
         [Required]
         public required UnitMeasure UnitMeasure { get; set; }

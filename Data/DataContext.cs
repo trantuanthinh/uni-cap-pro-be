@@ -200,6 +200,7 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
             });
+
             #endregion
         }
     }

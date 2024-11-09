@@ -54,7 +54,7 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(500, failedMessage);
             }
 
-            bool isUpdated_1 = await _subOrderService.UpdateSub_OrderRating(_item.Sub_OrderId);
+            bool isUpdated_1 = await _subOrderService.UpdateSub_OrderRating(_item.Item_OrderId);
             if (!isUpdated_1)
             {
                 var failedMessage = _apiResponse.Failure(methodName);
