@@ -23,14 +23,14 @@ namespace uni_cap_pro_be.Models
         }
 
         [Required]
-        public required Guid Sub_OrderId { get; set; }
+        public required int Quantity { get; set; }
+        public bool IsRating { get; set; }
 
         [Required]
         public required Guid ProductId { get; set; }
 
         [Required]
-        public required int Quantity { get; set; }
-        public bool IsRating { get; set; }
+        public required Guid Sub_OrderId { get; set; }
 
         public Product? Product { get; set; }
         public Sub_Order? Sub_Order { get; set; }

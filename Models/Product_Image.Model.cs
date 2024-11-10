@@ -17,7 +17,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public Guid ProductId { get; set; }
 
-        [Required]
         public Product? Product { get; set; }
     }
 }

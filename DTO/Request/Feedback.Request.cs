@@ -6,7 +6,7 @@ namespace uni_cap_pro_be.DTO.Request
     public class FeedbackRequest
     {
         [Required]
-        public required Guid Sub_OrderId { get; set; }
+        public required Guid Item_OrderId { get; set; }
 
         [Required]
         public required Guid ProductId { get; set; }

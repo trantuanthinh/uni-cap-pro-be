@@ -37,6 +37,8 @@ namespace uni_cap_pro_be.Data
             var user_type_converter = new EnumToStringConverter<UserType>();
             var delivery_status_converter = new EnumToStringConverter<DeliveryStatus>();
 
+            // o: orignal, d: destination
+
             #region Setting-Data
             modelBuilder.Entity<UnitMeasure>(entity =>
             {
@@ -52,22 +54,24 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
 
-                // District 1 - n Province
+                // District n - 1 Province
                 entity
-                    .HasOne(d => d.Province)
-                    .WithMany(p => p.Districts)
-                    .HasForeignKey(d => d.ProvinceId);
+                    .HasOne(o => o.Province)
+                    .WithMany(d => d.Districts)
+                    .HasForeignKey(o => o.ProvinceId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Ward>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
-                // Ward 1 - n District
+                // Ward n - 1 District
                 entity
-                    .HasOne(d => d.District)
-                    .WithMany(p => p.Wards)
-                    .HasForeignKey(d => d.DistrictId);
+                    .HasOne(o => o.District)
+                    .WithMany(d => d.Wards)
+                    .HasForeignKey(o => o.DistrictId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
@@ -80,18 +84,6 @@ namespace uni_cap_pro_be.Data
                 entity.HasIndex(e => e.PhoneNumber).IsUnique();
                 entity.Property(e => e.Type).HasConversion(user_type_converter);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
-
-                // User 1 - n Product
-                entity
-                    .HasMany(origin => origin.Products)
-                    .WithOne(d => d.Owner)
-                    .HasForeignKey(d => d.OwnerId);
-
-                // User 1 - n Sub_order
-                // entity
-                //     .HasMany(origin => origin.Sub_Orders)
-                //     .WithOne(d => d.User)
-                //     .HasForeignKey(d => d.UserId);
             });
             #endregion
 
@@ -103,21 +95,16 @@ namespace uni_cap_pro_be.Data
 
                 //Product n - 1 User
                 entity
-                    .HasOne(origin => origin.Owner)
+                    .HasOne(o => o.Owner)
                     .WithMany(d => d.Products)
-                    .HasForeignKey(origin => origin.OwnerId);
+                    .HasForeignKey(o => o.OwnerId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 //Product n - 1 Category
-                entity
-                    .HasOne(origin => origin.Category)
-                    .WithMany()
-                    .HasForeignKey(origin => origin.CategoryId);
+                entity.HasOne(o => o.Category).WithMany().HasForeignKey(o => o.CategoryId);
 
-                //Product 1 - 1 UnitMeasure
-                entity
-                    .HasOne(origin => origin.UnitMeasure)
-                    .WithMany()
-                    .HasForeignKey(origin => origin.UnitMeasureId);
+                //Product n - 1 UnitMeasure
+                entity.HasOne(o => o.UnitMeasure).WithMany().HasForeignKey(o => o.UnitMeasureId);
             });
             #endregion
 
@@ -125,12 +112,13 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Product_Image>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
 
                 // Product_Image n - 1 Product
                 entity
-                    .HasOne(origin => origin.Product)
+                    .HasOne(o => o.Product)
                     .WithMany(d => d.Images)
-                    .HasForeignKey(origin => origin.ProductId);
+                    .HasForeignKey(o => o.ProductId);
             });
 
             // Product_Category
@@ -145,12 +133,6 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
-                // Order 1 - n Sub_Order
-                entity
-                    .HasMany(origin => origin.Sub_Orders)
-                    .WithOne()
-                    .HasForeignKey(origin => origin.OrderId);
             });
             #endregion
 
@@ -159,11 +141,12 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
 
-                // Sub_Orders 1 - n Item_Order
+                // Sub_Order n - 1 Order
                 entity
-                    .HasMany(origin => origin.Item_Orders)
-                    .WithOne()
-                    .HasForeignKey(origin => origin.Sub_OrderId);
+                    .HasOne(o => o.Order)
+                    .WithMany(d => d.Sub_Orders)
+                    .HasForeignKey(o => o.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
@@ -171,6 +154,13 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Item_Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                // Item_Order n - 1 Sub_Order
+                entity
+                    .HasOne(o => o.Sub_Order)
+                    .WithMany(d => d.Item_Orders)
+                    .HasForeignKey(o => o.Sub_OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
@@ -179,19 +169,18 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
-
-                // Discount 1 - n Discount_Detail
-                entity
-                    .HasMany(origin => origin.Discount_Details)
-                    .WithOne()
-                    .HasForeignKey(origin => origin.DiscountId);
             });
-            #endregion
 
-            #region Discount_Detail
             modelBuilder.Entity<Discount_Detail>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                // Discount_Detail n - 1 Discount
+                entity
+                    .HasOne(o => o.Discount)
+                    .WithMany(d => d.Discount_Details)
+                    .HasForeignKey(o => o.DiscountId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 

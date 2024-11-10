@@ -50,7 +50,6 @@ namespace uni_cap_pro_be.Models
         public string? Background { get; set; }
         public string? Description { get; set; }
 
-        public ICollection<Product>? Products { get; set; } // for user type producer
-        // public ICollection<Sub_Order>? Sub_Orders { get; set; } // for user type company
+        public ICollection<Product>? Products { get; set; } // for user type seller
     }
 }

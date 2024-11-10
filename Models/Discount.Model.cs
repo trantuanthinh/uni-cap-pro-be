@@ -26,7 +26,6 @@ namespace uni_cap_pro_be.Models
         public string Name { get; set; }
         public ActiveStatus Active_Status { get; set; }
 
-        [JsonIgnore]
         public ICollection<Discount_Detail>? Discount_Details { get; set; }
     }
 }

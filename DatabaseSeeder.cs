@@ -666,33 +666,12 @@ namespace uni_cap_pro_be
                 #endregion
 
                 #region seed product_images
-                var productImages = new List<(string Name, Guid ProductId, Product Product)>
+                var productImages = new List<(string Name, Guid ProductId, Product Product)>();
+
+                for (int i = 0; i < productList.Count; i++)
                 {
-                    // Images for Producer 1
-                    ("Organic Apples.jpg", productList[0].Id, productList[0]),
-                    ("Ripe Bananas.jpg", productList[1].Id, productList[1]),
-                    ("Organic Carrots.jpg", productList[2].Id, productList[2]),
-                    ("Fresh Broccoli.jpg", productList[3].Id, productList[3]),
-                    ("Whole Wheat Flour.jpg", productList[4].Id, productList[4]),
-                    ("Brown Rice.jpg", productList[5].Id, productList[5]),
-                    ("Organic Strawberries.jpg", productList[6].Id, productList[6]),
-                    ("Sweet Potatoes.jpg", productList[7].Id, productList[7]),
-                    ("Bell Peppers.jpg", productList[8].Id, productList[8]),
-                    ("Quinoa.jpg", productList[9].Id, productList[9]),
-                    ("Oats.jpg", productList[10].Id, productList[10]),
-                    ("Pineapples.jpg", productList[11].Id, productList[11]),
-                    ("Zucchini.jpg", productList[12].Id, productList[12]),
-                    ("Fresh Milk.jpg", productList[13].Id, productList[13]),
-                    // Producer 2's images
-                    ("Baby Carrots.jpg", productList[14].Id, productList[14]),
-                    ("Green Beans.jpg", productList[15].Id, productList[15]),
-                    ("Millet.jpg", productList[16].Id, productList[16]),
-                    ("Buckwheat.jpg", productList[17].Id, productList[17]),
-                    ("Mangoes.jpg", productList[18].Id, productList[18]),
-                    ("Papayas.jpg", productList[19].Id, productList[19]),
-                    ("Cherry Tomatoes.jpg", productList[20].Id, productList[20]),
-                    ("Cheddar Cheese.jpg", productList[21].Id, productList[21])
-                };
+                    productImages.Add((productList[i].Name, productList[i].Id, productList[i]));
+                }
 
                 var productImageList = productImages
                     .Select(image => new Product_Image
@@ -777,12 +756,24 @@ namespace uni_cap_pro_be
                     item.Product.Total_Sold_Quantity += item.Quantity;
                     item.Sub_Order.Total_Price += item.Product.Price;
                 }
+
+                var item_orderList = item_orders
+                    .Select(item_order => new Item_Order
+                    {
+                        Id = Guid.NewGuid(),
+                        Sub_OrderId = item_order.Sub_OrderId,
+                        ProductId = item_order.ProductId,
+                        Product = item_order.Product,
+                        Quantity = item_order.Quantity,
+                        IsRating = false,
+                    })
+                    .ToList();
                 #endregion
 
                 #region seed feedbacks
                 var feedbacks = new List<(
                     Guid Item_OrderId,
-                    Sub_Order Sub_Order,
+                    Item_Order Item_Order,
                     Guid ProductId,
                     Product Product,
                     string Content,
@@ -790,16 +781,16 @@ namespace uni_cap_pro_be
                 )>
                 {
                     (
-                        sub_orderList[1].Id,
-                        sub_orderList[1],
+                        item_orderList[1].Id,
+                        item_orderList[1],
                         productList[1].Id,
                         productList[1],
                         "Wonderful product!",
                         5
                     ),
                     (
-                        sub_orderList[2].Id,
-                        sub_orderList[2],
+                        item_orderList[2].Id,
+                        item_orderList[2],
                         productList[1].Id,
                         productList[1],
                         "Good product!",
@@ -810,7 +801,9 @@ namespace uni_cap_pro_be
                 {
                     item.Product.Total_Rating_Value += item.Rating;
                     item.Product.Total_Rating_Quantity += 1;
+                    item.Item_Order.IsRating = true;
                 }
+
                 var feedbackList = feedbacks
                     .Select(feedback => new Feedback
                     {
@@ -820,11 +813,12 @@ namespace uni_cap_pro_be
                         Item_OrderId = feedback.Item_OrderId,
                         ProductId = feedback.ProductId,
                         Content = feedback.Content,
-                        Sub_Order = feedback.Sub_Order,
+                        Item_Order = feedback.Item_Order,
                         Product = feedback.Product,
                         Rating = feedback.Rating
                     })
                     .ToList();
+
                 #endregion
 
                 #region Check and seed data
@@ -836,11 +830,11 @@ namespace uni_cap_pro_be
                 _dataContext.Users.AddRange(userList);
                 _dataContext.Product_Categories.AddRange(productCategoryList);
                 _dataContext.Products.AddRange(productList);
-
-                // _dataContext.Product_Images.AddRange(productImageList); -- wait
+                _dataContext.Product_Images.AddRange(productImageList);
 
                 _dataContext.Orders.AddRange(orderList);
                 _dataContext.Sub_Orders.AddRange(sub_orderList);
+                _dataContext.Item_Orders.AddRange(item_orderList);
 
                 _dataContext.Discounts.AddRange(discountList);
                 _dataContext.Discount_Details.AddRange(discountDetailList);
