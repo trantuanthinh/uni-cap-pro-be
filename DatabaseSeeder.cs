@@ -670,15 +670,17 @@ namespace uni_cap_pro_be
 
                 for (int i = 0; i < productList.Count; i++)
                 {
-                    productImages.Add((productList[i].Name, productList[i].Id, productList[i]));
+                    productImages.Add(
+                        (productList[i].Name + ".jpg", productList[i].Id, productList[i])
+                    );
                 }
 
                 var productImageList = productImages
                     .Select(image => new Product_Image
                     {
                         Id = Guid.NewGuid(),
-                        Name = image.Name,
                         Created_At = DateTime.UtcNow,
+                        Name = image.Name,
                         ProductId = image.ProductId,
                         Product = image.Product
                     })
