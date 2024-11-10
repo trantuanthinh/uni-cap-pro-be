@@ -46,6 +46,7 @@ namespace uni_cap_pro_be.Models
 
         [Required]
         public required bool IsShare { get; set; }
+        public required bool IsActive { get; set; }
 
         public Province? Province { get; set; }
         public List<Sub_Order>? Sub_Orders { get; set; }

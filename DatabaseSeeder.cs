@@ -708,6 +708,7 @@ namespace uni_cap_pro_be
                         Level = 0,
                         Delivery_Status = DeliveryStatus.PENDING,
                         IsShare = true,
+                        IsActive = true,
                     })
                     .ToList();
 

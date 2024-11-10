@@ -170,7 +170,8 @@ namespace uni_cap_pro_be.Migrations
                     EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Delivery_Status = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    IsShare = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsShare = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

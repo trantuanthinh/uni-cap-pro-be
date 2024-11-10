@@ -14,6 +14,7 @@ namespace uni_cap_pro_be.DTO.Response
         public DeliveryStatus Delivery_Status { get; set; }
         public int Level { get; set; }
         public bool IsShare { get; set; }
+        public bool IsActive { get; set; }
         public List<Sub_Order>? Sub_Orders { get; set; }
 
         public TimeSpan TimeLeft { get; set; }

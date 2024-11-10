@@ -150,6 +150,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsShare")
                         .HasColumnType("tinyint(1)");
 

@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241110113555_Migrations")]
+    [Migration("20241110120436_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -152,6 +152,9 @@ namespace uni_cap_pro_be.Migrations
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsShare")
                         .HasColumnType("tinyint(1)");
