@@ -197,12 +197,12 @@ namespace uni_cap_pro_be
                 {
                     "Fresh Fruits and Vegetables",
                     "Dried Fruits and Vegetables",
-                    "Beverages from Agricultural Products",
-                    "Snacks and Baked Goods from Agricultural Products",
-                    "Spices and Cooking Ingredients",
+                    "Beverages",
+                    "Snacks and Baked",
+                    "Cooking Ingredients",
                     "Nuts and Grains",
-                    "Organic Agricultural Products",
-                    "Pre-packaged Salad and Fresh Cuts"
+                    "Organic",
+                    "Pre-packaged Salad"
                 };
                 var productCategoryList = productCategories
                     .Select(category => new Product_Category
