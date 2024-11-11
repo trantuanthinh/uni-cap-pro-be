@@ -15,6 +15,7 @@ namespace uni_cap_pro_be.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Product_Image> Product_Images { get; set; }
+        public DbSet<Product_Main_Category> Product_Main_Categories { get; set; }
         public DbSet<Product_Category> Product_Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Sub_Order> Sub_Orders { get; set; }
@@ -120,12 +121,28 @@ namespace uni_cap_pro_be.Data
                     .WithMany(d => d.Images)
                     .HasForeignKey(o => o.ProductId);
             });
+            #endregion
+
+            #region Category
+            // Product_Main_Category
+            modelBuilder.Entity<Product_Main_Category>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
 
             // Product_Category
             modelBuilder.Entity<Product_Category>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Name).IsUnique();
+
+                // Product_Category n - 1 Product_Main_Category
+                entity
+                    .HasOne(o => o.Main_Category)
+                    .WithMany(d => d.Categories)
+                    .HasForeignKey(o => o.Main_CategoryId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 

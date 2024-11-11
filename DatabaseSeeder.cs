@@ -193,24 +193,55 @@ namespace uni_cap_pro_be
                 #endregion
 
                 #region seed product_categories
-                var productCategories = new List<string>
+                var mainCategories = new List<string>
                 {
-                    "Fresh Fruits and Vegetables",
-                    "Dried Fruits and Vegetables",
-                    "Beverages",
-                    "Snacks and Baked",
+                    "Groceries and Food Staples",
+                    "Snacks and Confectionery",
                     "Cooking Ingredients",
-                    "Nuts and Grains",
-                    "Organic",
-                    "Pre-packaged Salad"
+                    "Personal Care Products",
                 };
+                var mainCategoryList = mainCategories
+                    .Select(category => new Product_Main_Category
+                    {
+                        Id = Guid.NewGuid(),
+                        Created_At = DateTime.UtcNow,
+                        Modified_At = DateTime.UtcNow,
+                        Name = category
+                    })
+                    .ToList();
+
+                var productCategories = new List<(Guid mainId, string Name)>
+                {
+                    (mainCategoryList[0].Id, "Rice"),
+                    (mainCategoryList[0].Id, "Cooking Oil"),
+                    (mainCategoryList[0].Id, "Sugar"),
+                    (mainCategoryList[0].Id, "Flour"),
+                    (mainCategoryList[0].Id, "Instant Noodles"),
+                    (mainCategoryList[0].Id, "Spices and Seasonings"),
+                    (mainCategoryList[0].Id, "Canned Goods"),
+                    (mainCategoryList[1].Id, "Biscuits and Cookies"),
+                    (mainCategoryList[1].Id, "Chips and Crackers"),
+                    (mainCategoryList[1].Id, "Candies and Chocolates"),
+                    (mainCategoryList[1].Id, "Nuts and Dried Fruits"),
+                    (mainCategoryList[2].Id, "Sauces and Condiments"),
+                    (mainCategoryList[2].Id, "Pasta and Noodles"),
+                    (mainCategoryList[2].Id, "Baking Supplies"),
+                    (mainCategoryList[2].Id, "Cooking Spices"),
+                    (mainCategoryList[3].Id, "Soaps and Body Washes"),
+                    (mainCategoryList[3].Id, "Shampoos and Conditioners"),
+                    (mainCategoryList[3].Id, "Toothpaste and Oral Care Items"),
+                    (mainCategoryList[3].Id, "Deodorants and Antiperspirants"),
+                    (mainCategoryList[3].Id, "Sanitary Napkins and Feminine Care Products"),
+                };
+
                 var productCategoryList = productCategories
                     .Select(category => new Product_Category
                     {
                         Id = Guid.NewGuid(),
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
-                        Name = category,
+                        Main_CategoryId = category.mainId,
+                        Name = category.Name,
                     })
                     .ToList();
                 #endregion

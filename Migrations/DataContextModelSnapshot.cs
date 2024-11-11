@@ -248,6 +248,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Created_At")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid>("Main_CategoryId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
@@ -256,6 +259,8 @@ namespace uni_cap_pro_be.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Main_CategoryId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -287,6 +292,30 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Product_Images");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Main_Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Modified_At")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Product_Main_Categories");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.District", b =>
@@ -552,6 +581,17 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("UnitMeasure");
                 });
 
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Product_Main_Category", "Main_Category")
+                        .WithMany("Categories")
+                        .HasForeignKey("Main_CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Main_Category");
+                });
+
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>
                 {
                     b.HasOne("uni_cap_pro_be.Models.Product", "Product")
@@ -624,6 +664,11 @@ namespace uni_cap_pro_be.Migrations
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.Product_Main_Category", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Setting_Data_Models.District", b =>

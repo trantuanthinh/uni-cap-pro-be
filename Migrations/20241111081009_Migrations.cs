@@ -31,7 +31,7 @@ namespace uni_cap_pro_be.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Product_Categories",
+                name: "Product_Main_Categories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -42,7 +42,7 @@ namespace uni_cap_pro_be.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Product_Main_Categories", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -129,6 +129,29 @@ namespace uni_cap_pro_be.Migrations
                         name: "FK_Discount_Details_Discounts_DiscountId",
                         column: x => x.DiscountId,
                         principalTable: "Discounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Product_Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Main_CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Product_Categories_Product_Main_Categories_Main_CategoryId",
+                        column: x => x.Main_CategoryId,
+                        principalTable: "Product_Main_Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -411,6 +434,11 @@ namespace uni_cap_pro_be.Migrations
                 column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_Categories_Main_CategoryId",
+                table: "Product_Categories",
+                column: "Main_CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Product_Categories_Name",
                 table: "Product_Categories",
                 column: "Name",
@@ -426,6 +454,12 @@ namespace uni_cap_pro_be.Migrations
                 name: "IX_Product_Images_ProductId",
                 table: "Product_Images",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_Main_Categories_Name",
+                table: "Product_Main_Categories",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -522,6 +556,9 @@ namespace uni_cap_pro_be.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Product_Main_Categories");
 
             migrationBuilder.DropTable(
                 name: "Provinces");
