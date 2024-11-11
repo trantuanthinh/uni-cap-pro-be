@@ -862,6 +862,7 @@ namespace uni_cap_pro_be
                 _dataContext.Wards.AddRange(wardList);
 
                 _dataContext.Users.AddRange(userList);
+                _dataContext.Product_Main_Categories.AddRange(mainCategoryList);
                 _dataContext.Product_Categories.AddRange(productCategoryList);
                 _dataContext.Products.AddRange(productList);
                 _dataContext.Product_Images.AddRange(productImageList);
