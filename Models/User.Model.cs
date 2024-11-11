@@ -2,6 +2,7 @@
 using AutoMapper;
 using uni_cap_pro_be.Core.Data.Base.Entity;
 using uni_cap_pro_be.DTO.Response;
+using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Models
@@ -12,6 +13,7 @@ namespace uni_cap_pro_be.Models
         // Mapping from User to UserResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<User, UserResponse>()
+                .ForMember(d => d.Province, opt => opt.MapFrom(src => src.Province))
         );
 
         static readonly IMapper mapper = config.CreateMapper();
@@ -50,6 +52,21 @@ namespace uni_cap_pro_be.Models
         public string? Background { get; set; }
         public string? Description { get; set; }
 
+        [Required]
+        public required string Address { get; set; }
+
+        [Required]
+        public required string ProvinceId { get; set; }
+
+        [Required]
+        public required string DistrictId { get; set; }
+
+        [Required]
+        public required string WardId { get; set; }
+
         public ICollection<Product>? Products { get; set; } // for user type seller
+        public Province Province { get; set; }
+        public District District { get; set; }
+        public Ward Ward { get; set; }
     }
 }

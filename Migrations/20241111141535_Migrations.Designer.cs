@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111122728_Migrations")]
+    [Migration("20241111141535_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -440,6 +440,10 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Avatar")
                         .HasColumnType("longtext");
 
@@ -451,6 +455,10 @@ namespace uni_cap_pro_be.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -471,6 +479,10 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("ProvinceId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -479,7 +491,13 @@ namespace uni_cap_pro_be.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("WardId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -487,8 +505,12 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
+                    b.HasIndex("ProvinceId");
+
                     b.HasIndex("Username")
                         .IsUnique();
+
+                    b.HasIndex("WardId");
 
                     b.ToTable("Users");
                 });
@@ -645,6 +667,33 @@ namespace uni_cap_pro_be.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("uni_cap_pro_be.Models.User", b =>
+                {
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.Province", "Province")
+                        .WithMany()
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.Ward", "Ward")
+                        .WithMany()
+                        .HasForeignKey("WardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("District");
+
+                    b.Navigation("Province");
+
+                    b.Navigation("Ward");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount", b =>

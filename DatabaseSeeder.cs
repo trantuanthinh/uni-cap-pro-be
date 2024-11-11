@@ -187,7 +187,14 @@ namespace uni_cap_pro_be
                         Active_Status = ActiveStatus.ACTIVE,
                         Type = user.Type,
                         Avatar = null,
-                        Description = user.Description
+                        Description = user.Description,
+                        Address = "Nguyen Van Tiet",
+                        ProvinceId = provinceList[0].Id,
+                        Province = provinceList[0],
+                        DistrictId = districtList[0].Id,
+                        District = districtList[0],
+                        WardId = wardList[0].Id,
+                        Ward = wardList[0],
                     })
                     .ToList();
                 #endregion
@@ -877,7 +884,6 @@ namespace uni_cap_pro_be
                 #endregion
 
                 _dataContext.SaveChanges();
-                Console.WriteLine("Database seeding completed.");
             }
             catch (Exception ex)
             {

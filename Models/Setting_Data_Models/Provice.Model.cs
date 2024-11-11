@@ -9,7 +9,7 @@ namespace uni_cap_pro_be.Models.Setting_Data_Models
     public class Province : BaseEntity<string>
     {
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<District, ProvinceResponse>()
+            cfg.CreateMap<Province, ProvinceResponse>()
         );
 
         static readonly IMapper mapper = config.CreateMapper();

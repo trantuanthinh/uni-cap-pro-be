@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Response;
-using uni_cap_pro_be.Models.Setting_Data_Models;
 using uni_cap_pro_be.Services.Setting_Data_Services;
 using uni_cap_pro_be.Utils;
 

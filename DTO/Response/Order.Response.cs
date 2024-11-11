@@ -9,7 +9,7 @@ namespace uni_cap_pro_be.DTO.Response
         public Guid Id { get; set; }
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
-        public required double Total_Price { get; set; }
+        public double Total_Price { get; set; }
         public DateTime EndTime { get; set; }
         public DeliveryStatus Delivery_Status { get; set; }
         public int Level { get; set; }
