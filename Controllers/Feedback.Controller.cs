@@ -18,14 +18,10 @@ namespace uni_cap_pro_be.Controllers
         IMapper mapper,
         APIResponse apiResponse,
         SharedService sharedService,
-        FeedbackService service,
-        Sub_OrderService subOrderService,
-        ProductService productService
+        FeedbackService service
     ) : BaseAPIController(dataContext, mapper, apiResponse, sharedService)
     {
         private readonly FeedbackService _service = service;
-        private readonly Sub_OrderService _subOrderService = subOrderService;
-        private readonly ProductService _productService = productService;
 
         [HttpGet("product/{productId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,22 +50,6 @@ namespace uni_cap_pro_be.Controllers
                 return StatusCode(500, failedMessage);
             }
 
-            bool isUpdated_1 = await _subOrderService.UpdateSub_OrderRating(_item.Item_OrderId);
-            if (!isUpdated_1)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(404, failedMessage);
-            }
-
-            bool isUpdated_2 = await _productService.UpdateProductRating(
-                _item.ProductId,
-                _item.Rating
-            );
-            if (!isUpdated_2)
-            {
-                var failedMessage = _apiResponse.Failure(methodName);
-                return StatusCode(404, failedMessage);
-            }
             var okMessage = _apiResponse.Success(methodName, item);
             return StatusCode(200, okMessage);
         }

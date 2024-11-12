@@ -922,8 +922,8 @@ namespace uni_cap_pro_be
         FOR EACH ROW
         BEGIN
             UPDATE product_categories
-            SET total_product = total_product + NEW.quantity
-            WHERE id = NEW.CategoryId;
+            SET Total_Product = Total_Product + NEW.Quantity
+            WHERE Id = NEW.CategoryId;
         END;";
 
                 var afterProductsUpdateTrigger =
@@ -933,11 +933,11 @@ namespace uni_cap_pro_be
         FOR EACH ROW
         BEGIN
             DECLARE quantityDiff INT;
-            IF NEW.quantity <> OLD.quantity THEN
-                SET quantityDiff = NEW.quantity - OLD.quantity;
+            IF NEW.Quantity <> OLD.Quantity THEN
+                SET quantityDiff = NEW.Quantity - OLD.Quantity;
                 UPDATE product_categories
-                SET total_product = total_product + quantityDiff
-                WHERE id = NEW.CategoryId;
+                SET Total_Product = Total_Product + quantityDiff
+                WHERE Id = NEW.CategoryId;
             END IF;
         END;";
 
@@ -948,8 +948,8 @@ namespace uni_cap_pro_be
         FOR EACH ROW
         BEGIN
             UPDATE product_main_categories
-            SET total_product = total_product + NEW.total_product
-            WHERE id = NEW.Main_CategoryId;
+            SET Total_Product = Total_Product + NEW.total_product
+            WHERE Id = NEW.Main_CategoryId;
         END;";
 
                 var afterProductCategoriesUpdateTrigger =
@@ -959,19 +959,55 @@ namespace uni_cap_pro_be
         FOR EACH ROW
         BEGIN
             DECLARE quantityDiff INT;
-            IF NEW.total_product <> OLD.total_product THEN
-                SET quantityDiff = NEW.total_product - OLD.total_product;
+            IF NEW.Total_Product <> OLD.Total_Product THEN
+                SET quantityDiff = NEW.Total_Product - OLD.Total_Product;
                 UPDATE product_main_categories
-                SET total_product = total_product + quantityDiff
-                WHERE id = NEW.Main_CategoryId;
+                SET Total_Product = Total_Product + quantityDiff
+                WHERE Id = NEW.Main_CategoryId;
             END IF;
         END;";
 
+                var afterFeedbacksInsertTrigger =
+                    @"
+        CREATE TRIGGER after_feedbacks_insert
+        AFTER INSERT ON feedbacks
+        FOR EACH ROW
+        BEGIN
+            UPDATE products
+            SET 
+                Total_Rating_Quantity = Total_Rating_Quantity + 1, 
+                Total_Rating_Value = Total_Rating_Value + NEW.Rating
+            WHERE Id = NEW.ProductId;
+
+            UPDATE item_orders
+            SET IsRating = true
+            WHERE Id = NEW.Item_OrderId; 
+        END";
+
+                var afterFeedbacksUpdateTrigger =
+                    @"
+        CREATE TRIGGER after_feedbacks_update
+        AFTER UPDATE ON feedbacks
+        FOR EACH ROW
+        BEGIN
+            DECLARE quantityDiff INT;
+
+            IF NEW.Rating <> OLD.Rating THEN
+                SET quantityDiff = NEW.Rating - OLD.Rating;
+
+                UPDATE products
+                SET Total_Rating_Value = Total_Rating_Value + quantityDiff
+                WHERE Id = NEW.ProductId;
+            END IF;
+        END";
                 // Execute each SQL command separately
                 context.Database.ExecuteSqlRaw(afterProductsInsertTrigger);
-                context.Database.ExecuteSqlRaw(afterProductsUpdateTrigger);
                 context.Database.ExecuteSqlRaw(afterProductCategoriesInsertTrigger);
+                context.Database.ExecuteSqlRaw(afterFeedbacksInsertTrigger);
+
+                context.Database.ExecuteSqlRaw(afterProductsUpdateTrigger);
                 context.Database.ExecuteSqlRaw(afterProductCategoriesUpdateTrigger);
+                context.Database.ExecuteSqlRaw(afterFeedbacksUpdateTrigger);
             }
             catch (Exception ex)
             {

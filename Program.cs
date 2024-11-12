@@ -172,6 +172,5 @@ static void SeedData(IHost app)
     using var scope = app.Services.CreateScope();
     var seed_service = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
     seed_service.SeedDataContext();
-
     Console.WriteLine("Database seeding completed.");
 }
