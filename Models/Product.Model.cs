@@ -85,7 +85,7 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required double Price { get; set; }
 
-        public required double Quantity { get; set; }
+        public required int Quantity { get; set; }
 
         [Required]
         public required Guid UnitMeasureId { get; set; }

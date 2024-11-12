@@ -23,6 +23,7 @@ namespace uni_cap_pro_be.Models
 
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
+        public long Total_Product { get; set; }
 
         [Required]
         public required string Name { get; set; }

@@ -211,8 +211,8 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<Guid?>("Product_CategoryId")
                         .HasColumnType("char(36)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Total_Rating_Quantity")
                         .HasColumnType("int");
@@ -257,6 +257,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
+
+                    b.Property<long>("Total_Product")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -309,6 +312,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
+
+                    b.Property<long>("Total_Product")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 

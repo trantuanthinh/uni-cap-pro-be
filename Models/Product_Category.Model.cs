@@ -26,6 +26,7 @@ namespace uni_cap_pro_be.Models
 
         [Required]
         public required string Name { get; set; }
+        public long Total_Product { get; set; }
 
         [Required]
         public required Guid Main_CategoryId { get; set; }

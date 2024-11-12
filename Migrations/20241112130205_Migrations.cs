@@ -37,6 +37,7 @@ namespace uni_cap_pro_be.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Total_Product = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -109,6 +110,7 @@ namespace uni_cap_pro_be.Migrations
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Total_Product = table.Column<long>(type: "bigint", nullable: false),
                     Main_CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
@@ -268,7 +270,7 @@ namespace uni_cap_pro_be.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<double>(type: "double", nullable: false),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     UnitMeasureId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OwnerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Description = table.Column<string>(type: "longtext", nullable: true)

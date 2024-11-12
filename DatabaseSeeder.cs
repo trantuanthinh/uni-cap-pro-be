@@ -1,4 +1,5 @@
 ﻿using CsvHelper.Configuration;
+using Microsoft.EntityFrameworkCore;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Models.Setting_Data_Models;
@@ -213,32 +214,41 @@ namespace uni_cap_pro_be
                         Id = Guid.NewGuid(),
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
+                        Total_Product = 0,
                         Name = category
                     })
                     .ToList();
 
-                var productCategories = new List<(Guid mainId, string Name)>
+                var productCategories = new List<(
+                    Guid mainId,
+                    Product_Main_Category mainCategory,
+                    string Name
+                )>
                 {
-                    (mainCategoryList[0].Id, "Rice"),
-                    (mainCategoryList[0].Id, "Cooking Oil"),
-                    (mainCategoryList[0].Id, "Sugar"),
-                    (mainCategoryList[0].Id, "Flour"),
-                    (mainCategoryList[0].Id, "Instant Noodles"),
-                    (mainCategoryList[0].Id, "Spices and Seasonings"),
-                    (mainCategoryList[0].Id, "Canned Goods"),
-                    (mainCategoryList[1].Id, "Biscuits and Cookies"),
-                    (mainCategoryList[1].Id, "Chips and Crackers"),
-                    (mainCategoryList[1].Id, "Candies and Chocolates"),
-                    (mainCategoryList[1].Id, "Nuts and Dried Fruits"),
-                    (mainCategoryList[2].Id, "Sauces and Condiments"),
-                    (mainCategoryList[2].Id, "Pasta and Noodles"),
-                    (mainCategoryList[2].Id, "Baking Supplies"),
-                    (mainCategoryList[2].Id, "Cooking Spices"),
-                    (mainCategoryList[3].Id, "Soaps and Body Washes"),
-                    (mainCategoryList[3].Id, "Shampoos and Conditioners"),
-                    (mainCategoryList[3].Id, "Toothpaste and Oral Care Items"),
-                    (mainCategoryList[3].Id, "Deodorants and Antiperspirants"),
-                    (mainCategoryList[3].Id, "Sanitary Napkins and Feminine Care Products"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Rice"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Cooking Oil"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Sugar"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Flour"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Instant Noodles"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Spices and Seasonings"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Canned Goods"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Biscuits and Cookies"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Chips and Crackers"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Candies and Chocolates"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Nuts and Dried Fruits"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Sauces and Condiments"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Pasta and Noodles"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Baking Supplies"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Cooking Spices"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Soaps and Body Washes"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Shampoos and Conditioners"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Toothpaste and Oral Care Items"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Deodorants and Antiperspirants"),
+                    (
+                        mainCategoryList[3].Id,
+                        mainCategoryList[3],
+                        "Sanitary Napkins and Feminine Care Products"
+                    ),
                 };
 
                 var productCategoryList = productCategories
@@ -248,6 +258,8 @@ namespace uni_cap_pro_be
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
                         Main_CategoryId = category.mainId,
+                        Main_Category = category.mainCategory,
+                        Total_Product = 0,
                         Name = category.Name,
                     })
                     .ToList();
@@ -701,6 +713,12 @@ namespace uni_cap_pro_be
                         Images = [],
                     })
                     .ToList();
+
+                foreach (var product in productList)
+                {
+                    product.Category.Total_Product += product.Quantity;
+                    product.Category.Main_Category.Total_Product += product.Category.Total_Product;
+                }
                 #endregion
 
                 #region seed product_images
@@ -884,11 +902,81 @@ namespace uni_cap_pro_be
                 #endregion
 
                 _dataContext.SaveChanges();
+                CreateTriggers(_dataContext);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
+        }
+
+        public void CreateTriggers(DataContext context)
+        {
+            try
+            {
+                var afterProductsInsertTrigger =
+                    @"
+        CREATE TRIGGER after_products_insert
+        AFTER INSERT ON products
+        FOR EACH ROW
+        BEGIN
+            UPDATE product_categories
+            SET total_product = total_product + NEW.quantity
+            WHERE id = NEW.CategoryId;
+        END;";
+
+                var afterProductsUpdateTrigger =
+                    @"
+        CREATE TRIGGER after_products_update
+        AFTER UPDATE ON products
+        FOR EACH ROW
+        BEGIN
+            DECLARE quantityDiff INT;
+            IF NEW.quantity <> OLD.quantity THEN
+                SET quantityDiff = NEW.quantity - OLD.quantity;
+                UPDATE product_categories
+                SET total_product = total_product + quantityDiff
+                WHERE id = NEW.CategoryId;
+            END IF;
+        END;";
+
+                var afterProductCategoriesInsertTrigger =
+                    @"
+        CREATE TRIGGER after_product_categories_insert
+        AFTER INSERT ON product_categories
+        FOR EACH ROW
+        BEGIN
+            UPDATE product_main_categories
+            SET total_product = total_product + NEW.total_product
+            WHERE id = NEW.Main_CategoryId;
+        END;";
+
+                var afterProductCategoriesUpdateTrigger =
+                    @"
+        CREATE TRIGGER after_product_categories_update
+        AFTER UPDATE ON product_categories
+        FOR EACH ROW
+        BEGIN
+            DECLARE quantityDiff INT;
+            IF NEW.total_product <> OLD.total_product THEN
+                SET quantityDiff = NEW.total_product - OLD.total_product;
+                UPDATE product_main_categories
+                SET total_product = total_product + quantityDiff
+                WHERE id = NEW.Main_CategoryId;
+            END IF;
+        END;";
+
+                // Execute each SQL command separately
+                context.Database.ExecuteSqlRaw(afterProductsInsertTrigger);
+                context.Database.ExecuteSqlRaw(afterProductsUpdateTrigger);
+                context.Database.ExecuteSqlRaw(afterProductCategoriesInsertTrigger);
+                context.Database.ExecuteSqlRaw(afterProductCategoriesUpdateTrigger);
+            }
+            catch (Exception ex)
+            {
+                // Log the error or handle it according to your needs
+                Console.WriteLine($"Error creating triggers: {ex.Message}");
             }
         }
     }
