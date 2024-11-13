@@ -1,7 +1,5 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
-using CsvHelper.Configuration.Attributes;
 
 namespace uni_cap_pro_be.DTO.Request
 {
@@ -9,7 +7,7 @@ namespace uni_cap_pro_be.DTO.Request
     public class ContactRequest
     {
         [Required]
-        [DefaultValue("conan246817@gmail.com")]
+        [DefaultValue("tran.tuan.thinh.0125@gmail.com")]
         public required string Email { get; set; }
 
         [Required]
