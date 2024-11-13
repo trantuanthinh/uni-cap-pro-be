@@ -13,13 +13,17 @@ namespace uni_cap_pro_be.Models
         // Mapping from User to UserResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<User, UserResponse>()
-                .ForMember(d => d.Province, opt => opt.MapFrom(src => src.Province))
+                .ForMember(d => d.Province, opt => opt.MapFrom(src => "aaaa"))
+                .ForMember(d => d.District, opt => opt.MapFrom(src => src.District.Name))
+                .ForMember(d => d.Ward, opt => opt.MapFrom(src => src.Ward.Name))
         );
 
         static readonly IMapper mapper = config.CreateMapper();
 
         public UserResponse ToResponse()
         {
+            if (Province == null)
+                Console.WriteLine("Province is null");
             var res = mapper.Map<UserResponse>(this);
             return res;
         }
@@ -65,8 +69,8 @@ namespace uni_cap_pro_be.Models
         public required string WardId { get; set; }
 
         public ICollection<Product>? Products { get; set; } // for user type seller
-        public Province Province { get; set; }
-        public District District { get; set; }
-        public Ward Ward { get; set; }
+        public Province? Province { get; set; }
+        public District? District { get; set; }
+        public Ward? Ward { get; set; }
     }
 }

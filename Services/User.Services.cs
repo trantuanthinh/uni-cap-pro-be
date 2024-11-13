@@ -26,6 +26,9 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<User> _items = _repository
                 .SelectAll()
+                .Include(item => item.Province)
+                .Include(item => item.District)
+                .Include(item => item.Ward)
                 .ApplyQueryParameters(queryParameters);
 
             return _items
@@ -38,7 +41,13 @@ namespace uni_cap_pro_be.Services
         public async Task<UserResponse> GetUser(Guid id)
         {
             User _item =
-                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
+                _repository
+                    .SelectAll()
+                    .Include(item => item.Province)
+                    .Include(item => item.District)
+                    .Include(item => item.Ward)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefault() ?? throw new NotFoundException("User not found");
             return _item.ToResponse();
         }
 

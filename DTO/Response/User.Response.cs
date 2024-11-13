@@ -12,20 +12,20 @@ namespace uni_cap_pro_be.DTO.Response
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }
 
-        public required string Username { get; set; }
+        public string Username { get; set; }
 
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
-        public required string Email { get; set; }
+        public string Email { get; set; }
 
-        public required string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public required UserType Type { get; set; }
+        public UserType Type { get; set; }
 
-        public required string Address { get; set; }
-        public required string Province { get; set; }
-        public required string District { get; set; }
-        public required string Ward { get; set; }
+        public string Address { get; set; }
+        public string Province { get; set; }
+        public string District { get; set; }
+        public string Ward { get; set; }
 
         public required ActiveStatus Active_Status { get; set; }
 

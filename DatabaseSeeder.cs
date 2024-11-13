@@ -157,19 +157,19 @@ namespace uni_cap_pro_be
                         UserType.BUYER
                     ),
                     (
-                        "producer1",
-                        "Producer 1",
-                        "producer1@gmail.com",
+                        "seller1",
+                        "Seller 1",
+                        "seller1@gmail.com",
                         "1237894560",
-                        "Saler 1",
+                        "Seller 1",
                         UserType.SELLER
                     ),
                     (
-                        "producer2",
-                        "Producer 2",
-                        "producer2@gmail.com",
+                        "seller2",
+                        "Seller 2",
+                        "seller2@gmail.com",
                         "9873216540",
-                        "Saler 2",
+                        "Seller 2",
                         UserType.SELLER
                     ),
                 };

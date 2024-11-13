@@ -85,6 +85,27 @@ namespace uni_cap_pro_be.Data
                 entity.HasIndex(e => e.PhoneNumber).IsUnique();
                 entity.Property(e => e.Type).HasConversion(user_type_converter);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
+
+                // User n - 1 Province
+                entity
+                    .HasOne(o => o.Province)
+                    .WithMany()
+                    .HasForeignKey(o => o.ProvinceId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // User n - 1 District
+                entity
+                    .HasOne(o => o.District)
+                    .WithMany()
+                    .HasForeignKey(o => o.DistrictId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // User n - 1 Ward
+                entity
+                    .HasOne(o => o.Ward)
+                    .WithMany()
+                    .HasForeignKey(o => o.WardId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
