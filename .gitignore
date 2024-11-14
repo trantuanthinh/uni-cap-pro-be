@@ -67,7 +67,7 @@ _ReSharper*
 .*crunch*.local.xml
 
 # appsettings
-appsettings.json
+appsettings*.json
 
 # Installshield output folder
 [Ee]xpress
