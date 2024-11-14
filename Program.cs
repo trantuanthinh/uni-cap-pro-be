@@ -14,6 +14,7 @@ using uni_cap_pro_be.Services.Setting_Data_Services;
 using uni_cap_pro_be.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://*:5130");
 
 // Configure DbContext
 builder.Services.AddDbContext<DataContext>(options =>
@@ -145,10 +146,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (args.Length == 1 && args[0].ToLower().Equals("seed"))
-{
-    SeedData(app);
-}
+SeedData(app);
 
 // Configure the HTTP request pipeline
 app.UseCors("AllowAll");

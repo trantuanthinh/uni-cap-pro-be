@@ -9,7 +9,7 @@ namespace uni_cap_pro_be.Utils
     // DONE
     public class ReaderCsv
     {
-        private readonly string directory = @"D:\UniCapProject\Vietnam-Address";
+        private readonly string directory = @"/usr/src/app/Vietnam-Filtered-Address";
 
         public ReaderCsv() { }
 
@@ -17,7 +17,6 @@ namespace uni_cap_pro_be.Utils
             where T : BaseEntity<string>
         {
             string filePath = Path.Combine(directory, fileName);
-
             var records = new List<T>();
 
             using (var reader = new StreamReader(filePath))

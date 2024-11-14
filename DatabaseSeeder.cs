@@ -58,6 +58,16 @@ namespace uni_cap_pro_be
                 // Ensure the database is created
                 _dataContext.Database.EnsureCreated();
 
+                if (
+                    _dataContext.Unit_Measurements.Any()
+                    || _dataContext.Districts.Any()
+                    || _dataContext.Provinces.Any()
+                    || _dataContext.Wards.Any()
+                )
+                {
+                    return;
+                }
+
                 #region seed settings-data
                 var unitMeasures = new List<(string Name, string Symbol)>
                 {
