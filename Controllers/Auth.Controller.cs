@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Middleware;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Services;
@@ -29,7 +30,7 @@ namespace uni_cap_pro_be.Controllers
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<User> Signin([FromBody] SignInRequest item)
+        public async Task<IActionResult> Signin([FromBody] SignInRequest item)
         {
             string methodName = nameof(Signin);
 

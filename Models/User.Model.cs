@@ -13,7 +13,7 @@ namespace uni_cap_pro_be.Models
         // Mapping from User to UserResponse
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
             cfg.CreateMap<User, UserResponse>()
-                .ForMember(d => d.Province, opt => opt.MapFrom(src => "aaaa"))
+                .ForMember(d => d.Province, opt => opt.MapFrom(src => src.Province.Name))
                 .ForMember(d => d.District, opt => opt.MapFrom(src => src.District.Name))
                 .ForMember(d => d.Ward, opt => opt.MapFrom(src => src.Ward.Name))
         );
@@ -22,8 +22,6 @@ namespace uni_cap_pro_be.Models
 
         public UserResponse ToResponse()
         {
-            if (Province == null)
-                Console.WriteLine("Province is null");
             var res = mapper.Map<UserResponse>(this);
             return res;
         }

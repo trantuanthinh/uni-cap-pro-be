@@ -23,11 +23,17 @@ namespace uni_cap_pro_be.DTO.Response
         public UserType Type { get; set; }
 
         public string Address { get; set; }
+
+        public string ProvinceId { get; set; }
+
+        public string DistrictId { get; set; }
+
+        public string WardId { get; set; }
         public string Province { get; set; }
         public string District { get; set; }
         public string Ward { get; set; }
 
-        public required ActiveStatus Active_Status { get; set; }
+        public ActiveStatus Active_Status { get; set; }
 
         public string? Avatar { get; set; }
         public string? Background { get; set; }

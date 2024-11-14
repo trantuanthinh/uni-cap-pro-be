@@ -2,6 +2,7 @@
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Core.Exceptions;
 using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Repositories;
 using uni_cap_pro_be.Utils;
@@ -100,6 +101,9 @@ namespace uni_cap_pro_be.Services
         {
             User _user = _repository
                 .SelectAll()
+                .Include(item => item.Province)
+                .Include(item => item.District)
+                .Include(item => item.Ward)
                 .Where(item => item.Email == email)
                 .FirstOrDefault();
             return _user;
@@ -109,6 +113,9 @@ namespace uni_cap_pro_be.Services
         {
             User _user = _repository
                 .SelectAll()
+                .Include(item => item.Province)
+                .Include(item => item.District)
+                .Include(item => item.Ward)
                 .Where(item => item.PhoneNumber == phoneNumber)
                 .FirstOrDefault();
             return _user;
@@ -118,6 +125,9 @@ namespace uni_cap_pro_be.Services
         {
             User _user = _repository
                 .SelectAll()
+                .Include(item => item.Province)
+                .Include(item => item.District)
+                .Include(item => item.Ward)
                 .Where(item => item.Username == username)
                 .FirstOrDefault();
             return _user;
