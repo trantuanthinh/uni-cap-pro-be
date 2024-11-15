@@ -8,16 +8,19 @@ using uni_cap_pro_be.DTO.Response;
 using uni_cap_pro_be.Extensions;
 using uni_cap_pro_be.Models;
 using uni_cap_pro_be.Repositories;
+using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Services
 {
     // DONE
     public class UserService(
+        SharedService sharedService,
         UserRepository repository,
         OrderRepository orderRepository,
         Sub_OrderRepository sub_orderRepository
     ) : BaseService()
     {
+        private readonly SharedService _sharedService = sharedService;
         private readonly UserRepository _repository = repository;
         private readonly OrderRepository _orderRepository = orderRepository;
         private readonly Sub_OrderRepository _sub_orderRepository = sub_orderRepository;
@@ -120,6 +123,21 @@ namespace uni_cap_pro_be.Services
                 _repository.SelectById(id) ?? throw new NotFoundException("User not found");
 
             _item.Avatar = base64;
+            _repository.Update(_item);
+            return _repository.Save();
+        }
+
+        public async Task<bool> ChangePassword(Guid id, string oldPassword, string newPassword)
+        {
+            User _item =
+                _repository.SelectById(id) ?? throw new NotFoundException("User not found");
+
+            if (!_sharedService.VerifyPassword(oldPassword, _item.Password))
+            {
+                return false;
+            }
+
+            _item.Password = _sharedService.HashPassword(newPassword);
             _repository.Update(_item);
             return _repository.Save();
         }

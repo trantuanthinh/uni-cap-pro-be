@@ -48,6 +48,32 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
+        [HttpPost("change-password/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ChangePassword(
+            Guid id,
+            [FromBody] UserChangePasswordRequest item
+        )
+        {
+            string methodName = nameof(ChangePassword);
+
+            bool isChanged = await _service.ChangePassword(
+                id,
+                item.CurrentPassword,
+                item.NewPassword
+            );
+            if (!isChanged)
+            {
+                var failedMessage = _apiResponse.Failure(methodName, ModelState);
+                return StatusCode(500, failedMessage);
+            }
+
+            var okMessage = _apiResponse.Success($"{methodName} Successfully", id);
+            return StatusCode(200, okMessage);
+        }
+
         // [Authorize]
         [HttpPatch("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

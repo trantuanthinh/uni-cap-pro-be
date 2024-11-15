@@ -25,20 +25,29 @@ namespace uni_cap_pro_be.DTO.Request
         public string PhoneNumber { get; set; }
 
         [Required]
-        public required string Address { get; set; }
+        public string Address { get; set; }
 
         [Required]
-        public required string ProvinceId { get; set; }
+        public string ProvinceId { get; set; }
 
         [Required]
-        public required string DistrictId { get; set; }
+        public string DistrictId { get; set; }
 
         [Required]
-        public required string WardId { get; set; }
+        public string WardId { get; set; }
 
         public UserType User_Type { get; set; } = UserType.BUYER;
         public string? Avatar { get; set; } = null;
         public string? Background { get; set; } = null;
         public string? Description { get; set; } = null;
+    }
+
+    public class UserChangePasswordRequest
+    {
+        [Required]
+        public string CurrentPassword { get; set; }
+
+        [Required]
+        public string NewPassword { get; set; }
     }
 }
