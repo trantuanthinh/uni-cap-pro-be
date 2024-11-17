@@ -25,7 +25,6 @@ namespace uni_cap_pro_be.Data
         public DbSet<Feedback> Feedbacks { get; set; }
 
         // Setting-Data
-        public DbSet<UnitMeasure> Unit_Measurements { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Ward> Wards { get; set; }
@@ -41,11 +40,6 @@ namespace uni_cap_pro_be.Data
             // o: orignal, d: destination
 
             #region Setting-Data
-            modelBuilder.Entity<UnitMeasure>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-            });
-
             modelBuilder.Entity<Province>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -124,9 +118,6 @@ namespace uni_cap_pro_be.Data
 
                 //Product n - 1 Category
                 entity.HasOne(o => o.Category).WithMany().HasForeignKey(o => o.CategoryId);
-
-                //Product n - 1 UnitMeasure
-                entity.HasOne(o => o.UnitMeasure).WithMany().HasForeignKey(o => o.UnitMeasureId);
             });
             #endregion
 

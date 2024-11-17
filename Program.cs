@@ -101,8 +101,6 @@ builder.Services.AddSingleton<ReaderCsv>();
 builder.Services.AddScoped<BaseAPIController>();
 
 // Setting Data
-builder.Services.AddScoped<UnitMeasureRepository>();
-builder.Services.AddScoped<UnitMeasureService>();
 builder.Services.AddScoped<AddressService>();
 builder.Services.AddScoped<ProvinceRepository>();
 builder.Services.AddScoped<DistrictRepository>();

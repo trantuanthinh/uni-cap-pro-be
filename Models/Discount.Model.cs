@@ -23,6 +23,8 @@ namespace uni_cap_pro_be.Models
             return res;
         }
 
+        public DateTime Created_At { get; set; }
+        public DateTime Modified_At { get; set; }
         public string Name { get; set; }
         public ActiveStatus Active_Status { get; set; }
 

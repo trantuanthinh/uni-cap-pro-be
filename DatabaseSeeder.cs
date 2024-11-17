@@ -58,66 +58,64 @@ namespace uni_cap_pro_be
                 // Ensure the database is created
                 _dataContext.Database.EnsureCreated();
 
-                if (
-                    _dataContext.Unit_Measurements.Any()
-                    || _dataContext.Districts.Any()
-                    || _dataContext.Provinces.Any()
-                    || _dataContext.Wards.Any()
-                )
+                bool hasProvinces = _dataContext.Provinces.Any();
+                bool hasDistricts = _dataContext.Districts.Any();
+                bool hasWards = _dataContext.Wards.Any();
+
+                if (hasProvinces || hasDistricts || hasWards)
                 {
                     return;
                 }
 
                 #region seed settings-data
-                var unitMeasures = new List<(string Name, string Symbol)>
-                {
-                    ("Kilogram", "kg"),
-                    ("Liter", "l"),
-                };
-                var unitMeasureList = unitMeasures
-                    .Select(um => new UnitMeasure
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = um.Name,
-                        Symbol = um.Symbol
-                    })
-                    .ToList();
-
                 var provinceList = _readerCsv.ReadCsv("Filtered_Provinces.csv", new ProvinceMap());
                 var districtList = _readerCsv.ReadCsv("Filtered_Districts.csv", new DistrictMap());
                 var wardList = _readerCsv.ReadCsv("Filtered_Wards.csv", new WardMap());
                 #endregion
 
                 #region seed discounts
-                var discountList = new List<Discount>
-                {
-                    new Discount
+                var discounts = new List<string> { "Group-Buy Discount", "Tiered Discount" };
+                var discountList = discounts
+                    .Select(discount => new Discount
                     {
                         Id = Guid.NewGuid(),
-                        Name = "Group-Buy Discount",
-                        Active_Status = ActiveStatus.ACTIVE
-                    }
-                };
-                var discountDetails = new List<(int Level, double Amount)>
+                        Name = discount,
+                        Created_At = DateTime.Now,
+                        Modified_At = DateTime.Now
+                    })
+                    .ToList();
+
+                var discountDetails = new List<(
+                    Guid discountId,
+                    Discount discount,
+                    int level,
+                    double amount
+                )>
                 {
                     // Group-Buy Discount
-                    (1, 0),
-                    (2, 0.1),
-                    (3, 0.15),
-                    (4, 0.2),
-                    (5, 0.25),
-                    (6, 0.4)
+                    (discountList[0].Id, discountList[0], 1, 0),
+                    (discountList[0].Id, discountList[0], 2, 0.1),
+                    (discountList[0].Id, discountList[0], 3, 0.15),
+                    (discountList[0].Id, discountList[0], 4, 0.2),
+                    (discountList[0].Id, discountList[0], 5, 0.25),
+                    (discountList[0].Id, discountList[0], 6, 0.4),
+                    // Tiered Discount
+                    (discountList[1].Id, discountList[1], 1, 0),
+                    (discountList[1].Id, discountList[1], 2, 0.05),
+                    (discountList[1].Id, discountList[1], 3, 0.07),
+                    (discountList[1].Id, discountList[1], 4, 0.1),
                 };
 
                 var discountDetailList = discountDetails
-                    .Select(detail => new Discount_Detail
+                    .Select(discount_detail => new Discount_Detail
                     {
                         Id = Guid.NewGuid(),
-                        DiscountId = discountList[0].Id,
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
-                        Level = detail.Level,
-                        Amount = detail.Amount,
+                        DiscountId = discount_detail.discountId,
+                        Discount = discount_detail.discount,
+                        Level = discount_detail.level,
+                        Amount = discount_detail.amount,
                     })
                     .ToList();
                 #endregion
@@ -213,10 +211,10 @@ namespace uni_cap_pro_be
                 #region seed product_categories
                 var mainCategories = new List<string>
                 {
-                    "Groceries and Food Staples",
-                    "Snacks and Confectionery",
                     "Cooking Ingredients",
+                    "Groceries and Food Staples",
                     "Personal Care Products",
+                    "Snacks and Confectionery",
                 };
                 var mainCategoryList = mainCategories
                     .Select(category => new Product_Main_Category
@@ -235,30 +233,29 @@ namespace uni_cap_pro_be
                     string Name
                 )>
                 {
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Rice"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Cooking Oil"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Sugar"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Flour"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Instant Noodles"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Spices and Seasonings"),
+                    // Cooking Ingredients
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Baking Supplies"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Cooking Spices"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Pasta and Noodles"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Sauces and Condiments"),
+                    // Groceries and Food Staples
                     (mainCategoryList[0].Id, mainCategoryList[0], "Canned Goods"),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Biscuits and Cookies"),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Chips and Crackers"),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Candies and Chocolates"),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Nuts and Dried Fruits"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Sauces and Condiments"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Pasta and Noodles"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Baking Supplies"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Cooking Spices"),
-                    (mainCategoryList[3].Id, mainCategoryList[3], "Soaps and Body Washes"),
-                    (mainCategoryList[3].Id, mainCategoryList[3], "Shampoos and Conditioners"),
-                    (mainCategoryList[3].Id, mainCategoryList[3], "Toothpaste and Oral Care Items"),
-                    (mainCategoryList[3].Id, mainCategoryList[3], "Deodorants and Antiperspirants"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Cooking Oil"),
+                    (mainCategoryList[0].Id, mainCategoryList[0], "Flour"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Rice"),
+                    // Personal Care Products
                     (
-                        mainCategoryList[3].Id,
-                        mainCategoryList[3],
-                        "Sanitary Napkins and Feminine Care Products"
+                        mainCategoryList[1].Id,
+                        mainCategoryList[1],
+                        "Deodorants and Antiperspirants"
                     ),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Shamppos and Conditioners"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Soaps and Body Washes"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Toothpaste and Oral Care Items"),
+                    // Snacks and Confectionery
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Dried Vegetables"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Dried Fruits"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Nuts and Seeds"),
                 };
 
                 var productCategoryList = productCategories
@@ -280,8 +277,6 @@ namespace uni_cap_pro_be
                     string Name,
                     Guid CategoryId,
                     Product_Category Category,
-                    Guid UnitMeasureId,
-                    UnitMeasure UnitMeasure,
                     double Price,
                     string Description,
                     Guid OwnerId,
@@ -290,358 +285,348 @@ namespace uni_cap_pro_be
                 {
                     // Producer 1's products
                     (
-                        "Fresh Apples",
+                        "Cornstarch",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
                         30000,
-                        "These fresh, organic apples are handpicked at the peak of ripeness, delivering a crisp texture and rich, juicy flavor that only nature can provide. Grown without pesticides, they are packed with essential vitamins and antioxidants, making them a wholesome choice for snacking, baking, or juicing. Their natural sweetness and satisfying crunch make them a favorite for both kids and adults.",
+                        "Cornstarch is a fine powder made from the endosperm of corn kernels. It is commonly used as a thickening agent in cooking and baking, providing a smooth texture for sauces, gravies, and soups. It is also used in some cosmetic and pharmaceutical applications.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Cherry Tomatoes",
+                        "Grain Powder",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
                         20000,
-                        "Bursting with a delicate sweetness and a vibrant red hue, these organic cherry tomatoes are perfect for salads, cooking, or simply as a healthy snack. Carefully grown with natural methods, they are packed with lycopene, vitamins, and fiber, offering not only a delicious taste but also numerous health benefits. These tomatoes add a fresh, flavorful touch to any meal, enhancing both color and nutrition.",
+                        "Grain powder is a finely ground product derived from various types of grains, offering a rich, earthy flavor. It can be used in baking, cooking, or as an ingredient in smoothies and shakes for a healthy, fiber-rich boost.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Dried Mango Slices",
+                        "Cinnamon",
                         productCategoryList[1].Id,
                         productCategoryList[1],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
                         15000,
-                        "Our dried mango slices are a delightful tropical treat, offering the luscious sweetness of ripe mangoes with a chewy texture that’s perfect for on-the-go snacking. These slices are naturally rich in vitamin C, fiber, and antioxidants, promoting skin health and immunity. With no added sugar or preservatives, they bring a pure and delicious flavor straight from the orchard, ideal for a nutritious snack or a flavorful addition to recipes.",
+                        "Cinnamon is a spice made from the inner bark of Cinnamomum trees. It is known for its warm, sweet flavor and is commonly used in both sweet and savory dishes, including baked goods, teas, and curries. It also offers various health benefits.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Banana Chips",
-                        productCategoryList[1].Id,
-                        productCategoryList[1],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        18000,
-                        "Crispy and naturally sweet, these banana chips are a healthy and satisfying alternative to traditional snacks. Made from fresh bananas, they are carefully sliced and dehydrated to preserve their nutrients and natural flavors. Packed with potassium and fiber, they support heart health and digestive wellness, making them a guilt-free treat perfect for anytime munching or adding crunch to your favorite desserts.",
-                        userList[4].Id,
-                        userList[4]
-                    ),
-                    (
-                        "100% Orange Juice",
+                        "Egg Noodles",
                         productCategoryList[2].Id,
                         productCategoryList[2],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        18000,
+                        "Egg noodles are a type of pasta made from eggs and flour. Known for their soft and chewy texture, they are commonly used in soups, stir-fries, and various Asian dishes.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Rice Vermicelli",
+                        productCategoryList[2].Id,
+                        productCategoryList[2],
                         12000,
-                        "This 100% pure orange juice brings the sunshine of freshly picked oranges into your glass, packed with vitamin C, folate, and antioxidants. It has a smooth, refreshing taste with a hint of natural sweetness, making it perfect for breakfast or as an energizing refreshment throughout the day. With no added sugars or preservatives, it’s a naturally healthy choice for the whole family.",
+                        "Rice vermicelli is a thin noodle made from rice flour. It is commonly used in Asian cuisines, particularly in soups, spring rolls, and stir-fries. It has a light texture and absorbs flavors well.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Aloe Vera Drink",
-                        productCategoryList[2].Id,
-                        productCategoryList[2],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Oyster Sauce",
+                        productCategoryList[3].Id,
+                        productCategoryList[3],
                         10000,
-                        "Our aloe vera drink offers a refreshing way to enjoy the hydrating and soothing benefits of aloe. Naturally rich in vitamins, minerals, and amino acids, it promotes digestive health and provides a calming effect on the body. The subtle, mildly sweet taste makes it a delightful, guilt-free beverage for any time of the day, with added hydration benefits for healthy skin and well-being.",
+                        "Oyster sauce is a savory, dark sauce made from oyster extracts, sugar, salt, and sometimes other seasonings. It is commonly used in Chinese cooking to enhance the flavor of stir-fries, vegetables, and meat dishes.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Rice Crackers",
+                        "Soy Sauce",
                         productCategoryList[3].Id,
                         productCategoryList[3],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
                         37000,
-                        "Light, crunchy, and subtly seasoned, these rice crackers make an excellent snack that pairs well with dips, cheese, or just on their own. Made from high-quality rice, they are gluten-free and baked to perfection, offering a delightful balance of flavor and crunch. Ideal for a healthy, on-the-go snack or as a sophisticated party appetizer, they provide a satisfying crunch without added guilt.",
+                        "Soy sauce is a fermented sauce made from soybeans, wheat, salt, and water. It has a salty, umami-rich flavor and is widely used in Asian cooking as a seasoning for dishes such as stir-fries, sushi, and soups.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Nut & Seed Energy Bars",
-                        productCategoryList[3].Id,
-                        productCategoryList[3],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Canned Sweet Corn",
+                        productCategoryList[4].Id,
+                        productCategoryList[4],
                         24000,
-                        "Packed with wholesome nuts and seeds, these energy bars are a nutrient-dense snack for sustained energy. With a combination of protein, fiber, and healthy fats, they are designed to fuel your day naturally, without artificial ingredients. Perfect for pre- or post-workout, or as a midday pick-me-up, each bar provides a delicious and nourishing boost that’s both filling and flavorful.",
+                        "Canned sweet corn is a convenient and ready-to-eat product made from sweet corn kernels. It can be used in a variety of dishes, including salads, soups, and side dishes, providing a natural sweetness and nutritional value.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Garlic Powder",
-                        productCategoryList[4].Id,
-                        productCategoryList[4],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Coconut Oil",
+                        productCategoryList[5].Id,
+                        productCategoryList[5],
                         27500,
-                        "A must-have in every kitchen, this high-quality garlic powder brings robust flavor and aroma to any dish. Made from finely ground, fresh garlic bulbs, it’s a convenient way to add depth and complexity to soups, sauces, marinades, and rubs. Full of natural garlic’s health benefits, it’s rich in antioxidants and supports immune health, making it a versatile and essential spice in your pantry.",
+                        "Coconut oil is a natural oil extracted from the flesh of coconuts. It is commonly used in cooking, baking, and skin care products due to its moisturizing and antibacterial properties.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Turmeric Powder",
-                        productCategoryList[4].Id,
-                        productCategoryList[4],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Corn Flour",
+                        productCategoryList[6].Id,
+                        productCategoryList[6],
                         31000,
-                        "This vibrant turmeric powder is packed with curcumin, known for its powerful anti-inflammatory and antioxidant properties. Sourced from high-quality turmeric roots, it adds a warm, earthy flavor and a golden color to curries, soups, and smoothies. An essential spice in many cuisines, it’s also renowned for supporting joint health and immune function.",
+                        "Corn flour is a finely ground flour made from corn kernels. It is used in baking, as a thickening agent in sauces and soups, and to create a crisp texture in frying applications.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Raw Cashews",
-                        productCategoryList[5].Id,
-                        productCategoryList[5],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Rice Flour",
+                        productCategoryList[6].Id,
+                        productCategoryList[6],
                         18000,
-                        "These raw cashews are naturally delicious and packed with essential nutrients. Rich in healthy fats, protein, and magnesium, they make a wholesome snack on their own or can be used as a creamy addition to recipes. Perfect for vegan and paleo diets, they add a buttery, slightly sweet flavor to both sweet and savory dishes.",
+                        "Rice flour is a fine flour made from ground rice. It is commonly used in gluten-free baking, as a thickener for sauces, and in Asian dishes such as rice cakes and dumplings.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Macadamia Nuts",
-                        productCategoryList[5].Id,
-                        productCategoryList[5],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Basmati Rice",
+                        productCategoryList[7].Id,
+                        productCategoryList[7],
                         36000,
-                        "Known for their creamy texture and rich, buttery taste, these macadamia nuts are a true gourmet delight. Grown naturally, they are full of monounsaturated fats and are a good source of antioxidants, which help in supporting heart health. Enjoy them as a luxurious snack or incorporate them into baked goods for a rich flavor profile.",
+                        "Basmati rice is a fragrant, long-grain rice variety often used in Indian and Middle Eastern cuisines. Known for its delicate aroma and fluffy texture, it is ideal for pilafs, curries, and side dishes.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Organic Brown Rice",
-                        productCategoryList[6].Id,
-                        productCategoryList[6],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Lavender & Aloe Vera Natural Deodorant",
+                        productCategoryList[8].Id,
+                        productCategoryList[8],
                         15000,
-                        "Our organic brown rice is whole grain, nutrient-dense, and perfect for a healthy, balanced diet. It has a nutty flavor and chewy texture that complements various dishes, from stir-fries to grain bowls. Packed with fiber, vitamins, and minerals, it’s a staple for those looking to enhance their meals with whole, natural goodness.",
+                        "Lavender & Aloe Vera Natural Deodorant combines the soothing properties of aloe vera with the calming scent of lavender. This natural deodorant offers long-lasting freshness without synthetic fragrances or harsh chemicals.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Organic Tomato Sauce",
-                        productCategoryList[6].Id,
-                        productCategoryList[6],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
+                        "Aloe Vera Shampoo",
+                        productCategoryList[9].Id,
+                        productCategoryList[9],
                         22000,
-                        "This rich, organic tomato sauce is made from sun-ripened tomatoes, providing a natural and delicious foundation for pasta, pizza, and other culinary creations. With no artificial additives, it’s a flavorful and healthy choice, offering the fresh taste of tomatoes while adding depth and brightness to any dish.",
+                        "Aloe vera shampoo nourishes the scalp and hair with the natural soothing properties of aloe vera. It provides hydration and helps strengthen hair, leaving it soft, shiny, and manageable.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Garden Salad Mix",
-                        productCategoryList[7].Id,
-                        productCategoryList[7],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
+                        "Coconut Oil Soap",
+                        productCategoryList[10].Id,
+                        productCategoryList[10],
                         22000,
-                        "A vibrant mix of fresh, crisp greens, perfect for creating a wholesome, nutrient-packed salad. This garden salad mix offers a balance of flavors and textures, bringing a burst of freshness to any meal. It’s an ideal base for a light, refreshing salad or a healthy addition to sandwiches and wraps.",
+                        "Coconut oil soap is a natural soap made from coconut oil, known for its moisturizing and skin-softening properties. It gently cleanses the skin, leaving it feeling soft, smooth, and hydrated.",
                         userList[4].Id,
                         userList[4]
                     ),
                     (
-                        "Sliced Bell Peppers",
-                        productCategoryList[7].Id,
-                        productCategoryList[7],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
+                        "Coconut Vanilla",
+                        productCategoryList[10].Id,
+                        productCategoryList[10],
                         25000,
-                        "Colorful, crunchy, and packed with vitamin C, these sliced bell peppers are perfect for salads, stir-fries, or snacks. They add a fresh, sweet flavor and a vibrant touch to any dish, while also providing antioxidants and fiber. Great for those looking to add a healthy, natural burst of color and nutrients to their meals.",
+                        "Coconut vanilla soap combines the rich, creamy scent of coconut with the sweet, aromatic fragrance of vanilla. This soap nourishes the skin while offering a luxurious, aromatic experience.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Aloe Vera Toothpaste",
+                        productCategoryList[11].Id,
+                        productCategoryList[11],
+                        25000,
+                        "Aloe vera toothpaste provides a gentle yet effective clean while soothing the gums with aloe vera. This natural toothpaste is designed to protect enamel and promote healthy gums without harsh chemicals.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Bamboo Charcoal Toothpaste",
+                        productCategoryList[11].Id,
+                        productCategoryList[11],
+                        25000,
+                        "Bamboo charcoal toothpaste uses the natural purifying properties of bamboo charcoal to help remove impurities, brighten teeth, and promote healthy gums. Its gentle formula is ideal for sensitive teeth and gums.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Dried Apricots",
+                        productCategoryList[12].Id,
+                        productCategoryList[12],
+                        25000,
+                        "Dried apricots are naturally sweet and rich in vitamins and fiber. They make for a healthy snack and are also great in baked goods, salads, or as a topping for cereals and yogurt.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Dried Carrot Chips",
+                        productCategoryList[13].Id,
+                        productCategoryList[13],
+                        20000,
+                        "Dried carrot chips are a crunchy, nutritious snack made from dehydrated carrots. They are packed with vitamins and are perfect for a healthy snack or as an addition to salads and dishes.",
+                        userList[4].Id,
+                        userList[4]
+                    ),
+                    (
+                        "Almonds",
+                        productCategoryList[14].Id,
+                        productCategoryList[14],
+                        35000,
+                        "Almonds are a rich source of vitamins, minerals, and healthy fats. Great for snacking, baking, or adding to meals.",
                         userList[4].Id,
                         userList[4]
                     ),
                     // Producer 2's products
                     (
-                        "Bananas",
+                        "Oatmeal",
                         productCategoryList[0].Id,
                         productCategoryList[0],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
                         30000,
-                        "Sweet and ripe bananas, rich in potassium and fiber, offering a natural energy boost. They are perfect for snacking, adding to smoothies, or incorporating into baked goods like banana bread, making them a versatile and healthy addition to any diet.",
+                        "Oatmeal is a versatile breakfast option made from ground oats, providing a warm and hearty meal. It is often used as a base for toppings like fruits, nuts, or sweeteners, and offers a good source of fiber and nutrients.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Mixed Leafy Greens",
-                        productCategoryList[0].Id,
-                        productCategoryList[0],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Garlic",
+                        productCategoryList[1].Id,
+                        productCategoryList[1],
                         20000,
-                        "A fresh and vibrant mix of nutrient-packed leafy greens, including spinach, kale, and arugula, rich in vitamins, antioxidants, and fiber. Ideal for creating healthy salads, adding to smoothies, or incorporating into soups and wraps, these greens support overall wellness and digestive health.",
+                        "Garlic is a pungent herb commonly used in cooking for its strong flavor and aroma. It has various health benefits, including being known for its antioxidant and antimicrobial properties.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Sweet Potato Crisps",
-                        productCategoryList[1].Id,
-                        productCategoryList[1],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Spaghetti",
+                        productCategoryList[2].Id,
+                        productCategoryList[2],
                         15000,
-                        "Crisp, lightly salted sweet potato chips, made from fresh, high-quality sweet potatoes. These chips are a healthier alternative to regular potato chips, packed with vitamins A and C and a great source of dietary fiber. Perfect for satisfying your crunchy snack cravings while maintaining a nutritious diet.",
+                        "Spaghetti is a popular type of pasta made from durum wheat. It is a staple in Italian cuisine, commonly served with a variety of sauces, such as marinara, meat sauce, or pesto.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Dried Pineapple Rings",
-                        productCategoryList[1].Id,
-                        productCategoryList[1],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Tomato Ketchup",
+                        productCategoryList[3].Id,
+                        productCategoryList[3],
                         18000,
-                        "Delicious and naturally sweet dried pineapple rings, carefully dehydrated to preserve their tropical flavor. Rich in vitamin C, antioxidants, and digestive enzymes, these pineapple rings are a perfect on-the-go snack, or can be used in baking, smoothies, or as a topping for cereals and salads.",
+                        "Tomato ketchup is a sweet and tangy condiment made from tomatoes, vinegar, sugar, and spices. It is a popular addition to burgers, fries, and other fast food items.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Green Smoothie Blend",
-                        productCategoryList[2].Id,
-                        productCategoryList[2],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
+                        "Canned Tomato Puree",
+                        productCategoryList[4].Id,
+                        productCategoryList[4],
                         12000,
-                        "A nutritious blend of green vegetables like spinach, kale, and other leafy greens, specifically designed for making healthy smoothies. Packed with essential vitamins, minerals, and antioxidants, this blend supports detoxification, boosts energy levels, and aids in digestion, helping you maintain a balanced and healthy lifestyle.",
+                        "Canned tomato puree is a smooth, thick liquid made from fresh tomatoes. It's commonly used in soups, sauces, and stews as a base ingredient for rich, savory flavors.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Herbal Tea Mix",
-                        productCategoryList[2].Id,
-                        productCategoryList[2],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        10000,
-                        "A soothing and aromatic blend of natural herbs like chamomile, peppermint, and lemongrass, perfect for winding down after a long day. This herbal tea mix offers calming properties, promotes relaxation, and aids in digestion, making it an ideal choice for those seeking natural remedies to improve overall wellness and stress relief.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
-                    (
-                        "Sweet Corn Puffs",
-                        productCategoryList[3].Id,
-                        productCategoryList[3],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        37000,
-                        "Light and airy sweet corn puffs, made from high-quality corn that delivers a crunchy texture and a delicious, mildly sweet flavor. These puffs are a low-calorie, gluten-free snack that can be enjoyed by both kids and adults. They're perfect for quick munching, in lunchboxes, or as a side dish to complement meals.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
-                    (
-                        "Potato Chips",
-                        productCategoryList[3].Id,
-                        productCategoryList[3],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        24000,
-                        "Crispy, golden-brown potato chips made from premium potatoes, lightly salted to bring out their natural flavor. These chips are a classic, satisfying snack that pairs well with dips, sandwiches, or as a standalone treat. They offer a crunchy indulgence for those who love simple, savory flavors.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
-                    (
-                        "Fermented Chili Sauce",
+                        "Olive Oil",
                         productCategoryList[4].Id,
                         productCategoryList[4],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        27500,
-                        "A spicy, tangy fermented chili sauce made from fresh, ripe chilies and garlic, offering bold, complex flavors with just the right amount of heat. Perfect for drizzling on grilled meats, mixing into stir-fries, or as a dipping sauce for appetizers, this chili sauce adds a fiery kick to any dish.",
+                        12000,
+                        "Olive oil is a healthy, monounsaturated fat used in cooking, frying, and as a dressing. It's known for its rich flavor and potential health benefits, including heart health.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Ginger Paste",
-                        productCategoryList[4].Id,
-                        productCategoryList[4],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        31000,
-                        "Fresh, aromatic ginger paste, a convenient alternative to grating fresh ginger. This paste is ideal for adding depth and spice to your dishes, whether in soups, stir-fries, marinades, or curries. Rich in gingerol, it offers anti-inflammatory and digestive benefits, making it a staple in many kitchens.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
-                    (
-                        "Rolled Oats",
+                        "Vegetable Oil",
                         productCategoryList[5].Id,
                         productCategoryList[5],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        18000,
-                        "Nutritious rolled oats, perfect for preparing a hearty and filling breakfast. Rich in fiber, antioxidants, and vitamins, these oats help regulate blood sugar levels, support heart health, and promote digestive well-being. They're ideal for making oatmeal, granola, or adding to baking recipes for added nutrition.",
+                        12000,
+                        "Vegetable oil is a commonly used cooking oil extracted from plants. It has a neutral flavor and is often used for frying, sautéing, and baking.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Whole Wheat Flour",
+                        productCategoryList[6].Id,
+                        productCategoryList[6],
+                        37000,
+                        "Whole wheat flour is made from the entire grain of wheat, offering more fiber and nutrients compared to refined flour. It is used in baking bread, pancakes, and other whole grain products.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Sticky Rice",
+                        productCategoryList[7].Id,
+                        productCategoryList[7],
+                        24000,
+                        "Sticky rice, also known as glutinous rice, is a type of rice that becomes sticky when cooked. It is commonly used in Asian cuisines, especially in dishes like sushi and sticky rice with mango.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Natural Coconut Oil Deodorant",
+                        productCategoryList[8].Id,
+                        productCategoryList[8],
+                        27500,
+                        "Natural coconut oil deodorant is an eco-friendly alternative to traditional deodorants. It uses the moisturizing properties of coconut oil to keep you feeling fresh and odor-free without harsh chemicals.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Coconut Oil Conditioner",
+                        productCategoryList[9].Id,
+                        productCategoryList[9],
+                        31000,
+                        "Coconut oil conditioner nourishes and hydrates the hair with the natural benefits of coconut oil. It helps in repairing dry or damaged hair while leaving it soft and shiny.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Matcha Soap",
+                        productCategoryList[10].Id,
+                        productCategoryList[10],
+                        36000,
+                        "Matcha soap is made with green tea powder, offering antioxidant properties that help nourish and cleanse the skin. It provides a refreshing scent and is great for exfoliating.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Herbal Toothpaste",
+                        productCategoryList[11].Id,
+                        productCategoryList[11],
+                        15000,
+                        "Herbal toothpaste is made with natural ingredients like neem, mint, and clove. It helps in oral care by freshening breath, cleaning teeth, and offering antibacterial properties.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Dried Mango",
+                        productCategoryList[12].Id,
+                        productCategoryList[12],
+                        22000,
+                        "Dried mango is a sweet and chewy snack made from mangoes that have been dehydrated. It's a convenient, healthy snack with a rich flavor and is packed with vitamins and antioxidants.",
+                        userList[5].Id,
+                        userList[5]
+                    ),
+                    (
+                        "Dried Tomato Slices",
+                        productCategoryList[13].Id,
+                        productCategoryList[13],
+                        22000,
+                        "Dried tomato slices are a flavorful and convenient ingredient for cooking. They can be rehydrated or added directly to soups, sauces, and salads for a tangy burst of flavor.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
                         "Chia Seeds",
-                        productCategoryList[5].Id,
-                        productCategoryList[5],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        36000,
-                        "Tiny but mighty chia seeds, packed with omega-3 fatty acids, fiber, protein, and essential minerals. These seeds are great for adding to smoothies, yogurt, salads, or baking. They absorb liquid, creating a gel-like texture, making them an ideal ingredient for chia pudding or as a thickener for sauces and soups.",
-                        userList[4].Id,
-                        userList[4]
-                    ),
-                    (
-                        "Organic Mixed Beans",
-                        productCategoryList[6].Id,
-                        productCategoryList[6],
-                        unitMeasureList[0].Id,
-                        unitMeasureList[0],
-                        15000,
-                        "A mix of organic beans including kidney, black, and pinto beans, providing a great source of plant-based protein, fiber, and essential vitamins. Perfect for adding to soups, stews, salads, or making homemade bean burgers, these mixed beans offer versatile, nutritious options for a variety of dishes.",
+                        productCategoryList[14].Id,
+                        productCategoryList[14],
+                        25000,
+                        "Chia seeds are tiny, nutrient-dense seeds that are packed with omega-3 fatty acids, fiber, and antioxidants. They are great for adding to smoothies, yogurt, or baked goods.",
                         userList[5].Id,
                         userList[5]
                     ),
                     (
-                        "Organic Applesauce",
-                        productCategoryList[6].Id,
-                        productCategoryList[6],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
-                        22000,
-                        "Smooth and sweet organic applesauce made from fresh, locally grown apples. This applesauce contains no added sugars or preservatives, offering a pure and natural flavor. Ideal as a snack, a topping for oatmeal, or as an ingredient in baking recipes, it's a wholesome, guilt-free treat for all ages.",
+                        "FlaxSeed",
+                        productCategoryList[14].Id,
+                        productCategoryList[14],
+                        25000,
+                        "Flaxseeds are a rich source of fiber, omega-3 fatty acids, and lignans. They can be used in smoothies, baked goods, or as a topping for yogurt or cereal.",
                         userList[5].Id,
                         userList[5]
-                    ),
-                    (
-                        "Carrot Sticks",
-                        productCategoryList[7].Id,
-                        productCategoryList[7],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
-                        22000,
-                        "Fresh, crunchy carrot sticks, rich in vitamins A and C, perfect for a healthy snack. These carrot sticks are not only great for munching on their own but also pair wonderfully with dips, or can be added to salads and stir-fries to boost your vegetable intake in a tasty way.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
-                    (
-                        "Caesar Salad Kit",
-                        productCategoryList[7].Id,
-                        productCategoryList[7],
-                        unitMeasureList[1].Id,
-                        unitMeasureList[1],
-                        22000,
-                        "A complete Caesar salad kit containing crisp Romaine lettuce, savory croutons, and a rich, creamy Caesar dressing. This kit makes preparing a delicious and satisfying salad quick and easy, offering a balanced mix of fresh, high-quality ingredients that are perfect for a light lunch or a hearty side dish.",
-                        userList[5].Id,
-                        userList[5]
-                    ),
+                    )
                 };
 
                 string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
@@ -711,8 +696,6 @@ namespace uni_cap_pro_be
                         Name = product.Name,
                         Price = product.Price,
                         Quantity = 10,
-                        UnitMeasureId = product.UnitMeasureId,
-                        UnitMeasure = product.UnitMeasure,
                         Active_Status = ActiveStatus.ACTIVE,
                         Total_Rating_Value = 0,
                         Total_Rating_Quantity = 0,
@@ -891,7 +874,6 @@ namespace uni_cap_pro_be
                 #endregion
 
                 #region Check and seed data
-                _dataContext.Unit_Measurements.AddRange(unitMeasureList);
                 _dataContext.Provinces.AddRange(provinceList);
                 _dataContext.Districts.AddRange(districtList);
                 _dataContext.Wards.AddRange(wardList);

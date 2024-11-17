@@ -16,7 +16,6 @@ namespace uni_cap_pro_be.Models
             cfg.CreateMap<Product, ProductResponse>()
                 .ForMember(d => d.Owner, opt => opt.MapFrom(src => src.Owner.Name))
                 .ForMember(d => d.Category, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(d => d.UnitMeasure, opt => opt.MapFrom(src => src.UnitMeasure.Symbol))
                 .ForMember(d => d.Images, opt => opt.MapFrom(src => src.GetImageUrls()))
         );
 
@@ -88,9 +87,6 @@ namespace uni_cap_pro_be.Models
         public required int Quantity { get; set; }
 
         [Required]
-        public required Guid UnitMeasureId { get; set; }
-
-        [Required]
         public required Guid OwnerId { get; set; }
 
         public string? Description { get; set; }
@@ -101,9 +97,6 @@ namespace uni_cap_pro_be.Models
         public int Total_Rating_Value { get; set; } // the total number of stars which is rated by user
         public int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
         public int Total_Sold_Quantity { get; set; } // the total number of products which is purchased by user
-
-        [Required]
-        public required UnitMeasure UnitMeasure { get; set; }
 
         [Required]
         public required User Owner { get; set; }

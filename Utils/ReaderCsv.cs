@@ -9,7 +9,10 @@ namespace uni_cap_pro_be.Utils
     // DONE
     public class ReaderCsv
     {
-        private readonly string directory = @"/usr/src/app/Vietnam-Filtered-Address";
+        // private readonly string directory = @"/usr/src/app/Vietnam-Filtered-Address";
+
+        private readonly string directory =
+            @"D:\UniCapProject\uni-cap-pro-be\Vietnam-Filtered-Address";
 
         public ReaderCsv() { }
 

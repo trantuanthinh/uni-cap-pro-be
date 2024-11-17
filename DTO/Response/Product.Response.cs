@@ -16,7 +16,6 @@ namespace uni_cap_pro_be.DTO.Response
 
         public required double Price { get; set; }
         public required double Quantity { get; set; }
-        public required string UnitMeasure { get; set; }
         public string? Description { get; set; }
 
         public required ActiveStatus Active_Status { get; set; }
