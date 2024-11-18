@@ -33,6 +33,5 @@ namespace uni_cap_pro_be.Models
         public required Guid Sub_OrderId { get; set; }
 
         public Product? Product { get; set; }
-        public Sub_Order? Sub_Order { get; set; }
     }
 }

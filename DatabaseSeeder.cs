@@ -824,6 +824,8 @@ namespace uni_cap_pro_be
 
                 #region seed feedbacks
                 var feedbacks = new List<(
+                    Guid UserId,
+                    User User,
                     Guid Item_OrderId,
                     Item_Order Item_Order,
                     Guid ProductId,
@@ -833,6 +835,8 @@ namespace uni_cap_pro_be
                 )>
                 {
                     (
+                        userList[0].Id,
+                        userList[0],
                         item_orderList[1].Id,
                         item_orderList[1],
                         productList[1].Id,
@@ -841,6 +845,8 @@ namespace uni_cap_pro_be
                         5
                     ),
                     (
+                        userList[1].Id,
+                        userList[1],
                         item_orderList[2].Id,
                         item_orderList[2],
                         productList[1].Id,
@@ -862,6 +868,8 @@ namespace uni_cap_pro_be
                         Id = Guid.NewGuid(),
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
+                        UserId = feedback.UserId,
+                        User = feedback.User,
                         Item_OrderId = feedback.Item_OrderId,
                         ProductId = feedback.ProductId,
                         Content = feedback.Content,

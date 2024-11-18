@@ -35,7 +35,6 @@ namespace uni_cap_pro_be.Models
         public double Total_Price { get; set; }
 
         public User? User { get; set; }
-        public Order? Order { get; set; }
         public List<Item_Order>? Item_Orders { get; set; }
     }
 }

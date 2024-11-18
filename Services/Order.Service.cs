@@ -99,9 +99,9 @@ namespace uni_cap_pro_be.Services
         public async Task<bool> AddSubOrder(Order order)
         {
             order.Level += 1;
-            double discount = 0;
-            double total_price = 0;
-            int total_quantity = 0;
+            // double discount = 0;
+            // double total_price = 0;
+            // int total_quantity = 0;
 
             // foreach (var discount_detail in order.Product.Discount.Discount_Details)
             // {

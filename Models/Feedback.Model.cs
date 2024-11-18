@@ -11,10 +11,7 @@ namespace uni_cap_pro_be.Models
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Feedback, FeedbackResponse>()
-                .ForMember(
-                    d => d.User,
-                    opt => opt.MapFrom(src => src.Item_Order.Sub_Order.User.ToResponse())
-                )
+                .ForMember(d => d.User, opt => opt.MapFrom(src => src.User.ToResponse()))
                 .ForMember(d => d.Product, opt => opt.MapFrom(src => src.Product.ToResponse()));
         });
 
@@ -25,6 +22,9 @@ namespace uni_cap_pro_be.Models
             var res = mapper.Map<FeedbackResponse>(this);
             return res;
         }
+
+        [Required]
+        public required Guid UserId { get; set; }
 
         [Required]
         public required Guid Item_OrderId { get; set; }
@@ -39,6 +39,7 @@ namespace uni_cap_pro_be.Models
         public string? Image { get; set; }
         public string? Video { get; set; }
 
+        public User? User { get; set; }
         public Item_Order? Item_Order { get; set; }
         public Product? Product { get; set; }
     }

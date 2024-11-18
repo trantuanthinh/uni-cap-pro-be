@@ -162,7 +162,15 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                // Order 1 - n Sub_Order
+                entity
+                    .HasMany(o => o.Sub_Orders)
+                    .WithOne()
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
+
             #endregion
 
             #region Sub_Order
@@ -170,11 +178,11 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
 
-                // Sub_Order n - 1 Order
+                // Sub_Order 1 - n Item_Order
                 entity
-                    .HasOne(o => o.Order)
-                    .WithMany(d => d.Sub_Orders)
-                    .HasForeignKey(o => o.OrderId)
+                    .HasMany(o => o.Item_Orders)
+                    .WithOne()
+                    .HasForeignKey(d => d.Sub_OrderId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
@@ -183,13 +191,6 @@ namespace uni_cap_pro_be.Data
             modelBuilder.Entity<Item_Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
-                // Item_Order n - 1 Sub_Order
-                entity
-                    .HasOne(o => o.Sub_Order)
-                    .WithMany(d => d.Item_Orders)
-                    .HasForeignKey(o => o.Sub_OrderId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 

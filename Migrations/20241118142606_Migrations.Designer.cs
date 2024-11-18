@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241117080619_Migrations")]
+    [Migration("20241118142606_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -105,6 +105,9 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Video")
                         .HasColumnType("longtext");
 
@@ -113,6 +116,8 @@ namespace uni_cap_pro_be.Migrations
                     b.HasIndex("Item_OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -528,9 +533,17 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("uni_cap_pro_be.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Item_Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Item_Order", b =>
@@ -541,15 +554,13 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("uni_cap_pro_be.Models.Sub_Order", "Sub_Order")
+                    b.HasOne("uni_cap_pro_be.Models.Sub_Order", null)
                         .WithMany("Item_Orders")
                         .HasForeignKey("Sub_OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
-
-                    b.Navigation("Sub_Order");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
@@ -632,7 +643,7 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Sub_Order", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Order", "Order")
+                    b.HasOne("uni_cap_pro_be.Models.Order", null)
                         .WithMany("Sub_Orders")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -643,8 +654,6 @@ namespace uni_cap_pro_be.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("User");
                 });
