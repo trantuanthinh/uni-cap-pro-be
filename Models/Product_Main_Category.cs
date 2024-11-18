@@ -8,18 +8,18 @@ namespace uni_cap_pro_be.Models
     // DONE
     public class Product_Main_Category : BaseEntity<Guid>
     {
-        // static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
-        // {
-        //     cfg.CreateMap<Product_Category, Product_CategoryResponse>();
-        // });
+        static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Product_Main_Category, Product_Main_CategoryResponse>();
+        });
 
-        // static readonly IMapper mapper = new Mapper(config);
+        static readonly IMapper mapper = new Mapper(config);
 
-        // public Product_CategoryResponse ToResponse()
-        // {
-        //     var res = mapper.Map<Product_CategoryResponse>(this);
-        //     return res;
-        // }
+        public Product_Main_CategoryResponse ToResponse()
+        {
+            var res = mapper.Map<Product_Main_CategoryResponse>(this);
+            return res;
+        }
 
         public DateTime Created_At { get; set; }
         public DateTime Modified_At { get; set; }

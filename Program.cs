@@ -118,6 +118,9 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<Product_ImageRepository>();
 builder.Services.AddScoped<Product_ImageService>();
 
+builder.Services.AddScoped<Product_Main_CategoryRepository>();
+builder.Services.AddScoped<Product_Main_CategoryService>();
+
 builder.Services.AddScoped<Product_CategoryRepository>();
 builder.Services.AddScoped<Product_CategoryService>();
 

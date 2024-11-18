@@ -31,7 +31,6 @@ namespace uni_cap_pro_be.Models
         [Required]
         public required Guid Main_CategoryId { get; set; }
 
-        public Product_Main_Category? Main_Category { get; set; }
         public ICollection<Product>? Products { get; set; }
     }
 }

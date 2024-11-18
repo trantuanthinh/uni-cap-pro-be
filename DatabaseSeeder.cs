@@ -265,7 +265,6 @@ namespace uni_cap_pro_be
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
                         Main_CategoryId = category.mainId,
-                        Main_Category = category.mainCategory,
                         Total_Product = 0,
                         Name = category.Name,
                     })
@@ -710,7 +709,13 @@ namespace uni_cap_pro_be
                 foreach (var product in productList)
                 {
                     product.Category.Total_Product += product.Quantity;
-                    product.Category.Main_Category.Total_Product += product.Category.Total_Product;
+                    foreach (var mainCategory in mainCategoryList)
+                    {
+                        if (mainCategory.Id == product.Category.Main_CategoryId)
+                        {
+                            mainCategory.Total_Product += product.Category.Total_Product;
+                        }
+                    }
                 }
                 #endregion
 

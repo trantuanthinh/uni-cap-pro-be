@@ -141,6 +141,13 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Name).IsUnique();
+
+                // Product_Main_Category 1 - n Product_Category
+                entity
+                    .HasMany(o => o.Categories)
+                    .WithOne()
+                    .HasForeignKey(d => d.Main_CategoryId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Product_Category
@@ -148,13 +155,6 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Name).IsUnique();
-
-                // Product_Category n - 1 Product_Main_Category
-                entity
-                    .HasOne(o => o.Main_Category)
-                    .WithMany(d => d.Categories)
-                    .HasForeignKey(o => o.Main_CategoryId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
