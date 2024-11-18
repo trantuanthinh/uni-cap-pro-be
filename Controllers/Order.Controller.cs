@@ -36,7 +36,6 @@ namespace uni_cap_pro_be.Controllers
 
             BaseResponse<OrderResponse> _items = await _service.GetOrders(queryParameters);
             var okMessage = _apiResponse.Success(methodName, _items);
-            return Ok(_items);
             return StatusCode(200, okMessage);
         }
 

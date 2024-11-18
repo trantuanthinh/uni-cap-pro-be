@@ -33,6 +33,9 @@ namespace uni_cap_pro_be.Controllers
         {
             string methodName = nameof(GetProduct_Main_Categories);
 
+            queryParameters.SortBy = "Name";
+            queryParameters.SortOrder = "asc";
+
             BaseResponse<Product_Main_CategoryResponse> _items =
                 await _service.GetProduct_Main_Categories(queryParameters);
             var okMessage = _apiResponse.Success(methodName, _items);

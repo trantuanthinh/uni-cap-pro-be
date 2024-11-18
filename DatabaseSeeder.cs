@@ -239,23 +239,23 @@ namespace uni_cap_pro_be
                     (mainCategoryList[0].Id, mainCategoryList[0], "Pasta and Noodles"),
                     (mainCategoryList[0].Id, mainCategoryList[0], "Sauces and Condiments"),
                     // Groceries and Food Staples
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Canned Goods"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Cooking Oil"),
-                    (mainCategoryList[0].Id, mainCategoryList[0], "Flour"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Canned Goods"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Cooking Oil"),
+                    (mainCategoryList[1].Id, mainCategoryList[1], "Flour"),
                     (mainCategoryList[1].Id, mainCategoryList[1], "Rice"),
                     // Personal Care Products
                     (
-                        mainCategoryList[1].Id,
-                        mainCategoryList[1],
+                        mainCategoryList[2].Id,
+                        mainCategoryList[2],
                         "Deodorants and Antiperspirants"
                     ),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Shamppos and Conditioners"),
-                    (mainCategoryList[1].Id, mainCategoryList[1], "Soaps and Body Washes"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Shamppos and Conditioners"),
+                    (mainCategoryList[2].Id, mainCategoryList[2], "Soaps and Body Washes"),
                     (mainCategoryList[2].Id, mainCategoryList[2], "Toothpaste and Oral Care Items"),
                     // Snacks and Confectionery
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Dried Vegetables"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Dried Fruits"),
-                    (mainCategoryList[2].Id, mainCategoryList[2], "Nuts and Seeds"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Dried Vegetables"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Dried Fruits"),
+                    (mainCategoryList[3].Id, mainCategoryList[3], "Nuts and Seeds"),
                 };
 
                 var productCategoryList = productCategories
