@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241118142606_Migrations")]
+    [Migration("20241120140223_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -161,6 +161,10 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<int>("Delivery_Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime(6)");
 
@@ -176,16 +180,12 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<double>("Total_Price")
                         .HasColumnType("double");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProvinceId");
+                    b.HasIndex("DistrictId");
 
                     b.ToTable("Orders");
                 });
@@ -510,13 +510,11 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Discount_Detail", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Discount", "Discount")
+                    b.HasOne("uni_cap_pro_be.Models.Discount", null)
                         .WithMany("Discount_Details")
                         .HasForeignKey("DiscountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Discount");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Feedback", b =>
@@ -565,13 +563,13 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Order", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.Province", "Province")
+                    b.HasOne("uni_cap_pro_be.Models.Setting_Data_Models.District", "District")
                         .WithMany()
-                        .HasForeignKey("ProvinceId")
+                        .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Province");
+                    b.Navigation("District");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>
@@ -599,13 +597,11 @@ namespace uni_cap_pro_be.Migrations
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Category", b =>
                 {
-                    b.HasOne("uni_cap_pro_be.Models.Product_Main_Category", "Main_Category")
+                    b.HasOne("uni_cap_pro_be.Models.Product_Main_Category", null)
                         .WithMany("Categories")
                         .HasForeignKey("Main_CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Main_Category");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product_Image", b =>

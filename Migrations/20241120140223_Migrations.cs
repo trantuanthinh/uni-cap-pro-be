@@ -141,7 +141,7 @@ namespace uni_cap_pro_be.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Created_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Modified_At = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    DistrictId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Total_Price = table.Column<double>(type: "double", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -154,9 +154,9 @@ namespace uni_cap_pro_be.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Provinces_ProvinceId",
-                        column: x => x.ProvinceId,
-                        principalTable: "Provinces",
+                        name: "FK_Orders_Districts_DistrictId",
+                        column: x => x.DistrictId,
+                        principalTable: "Districts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -448,9 +448,9 @@ namespace uni_cap_pro_be.Migrations
                 column: "Sub_OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ProvinceId",
+                name: "IX_Orders_DistrictId",
                 table: "Orders",
-                column: "ProvinceId");
+                column: "DistrictId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_Categories_Main_CategoryId",
