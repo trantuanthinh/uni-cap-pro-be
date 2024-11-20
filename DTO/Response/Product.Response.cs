@@ -27,6 +27,7 @@ namespace uni_cap_pro_be.DTO.Response
         // [JsonIgnore]
         public int Total_Sold_Quantity { get; set; } // the total number of products which is purchased by user
 
+        public required Guid OwnerId { get; set; }
         public required string Owner { get; set; }
         public string? Category { get; set; }
 
