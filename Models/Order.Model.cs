@@ -35,7 +35,7 @@ namespace uni_cap_pro_be.Models
         public DateTime Modified_At { get; set; }
 
         [Required]
-        public required string ProvinceId { get; set; }
+        public required string DistrictId { get; set; }
 
         [Required]
         public required double Total_Price { get; set; }
@@ -48,7 +48,7 @@ namespace uni_cap_pro_be.Models
         public required bool IsShare { get; set; }
         public required bool IsActive { get; set; }
 
-        public Province? Province { get; set; }
+        public District? District { get; set; }
         public List<Sub_Order>? Sub_Orders { get; set; }
     }
 }

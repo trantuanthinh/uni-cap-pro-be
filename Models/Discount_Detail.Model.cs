@@ -29,7 +29,5 @@ namespace uni_cap_pro_be.Models
 
         [Required]
         public required Guid DiscountId { get; set; }
-
-        public Discount? Discount { get; set; }
     }
 }

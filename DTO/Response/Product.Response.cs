@@ -24,6 +24,9 @@ namespace uni_cap_pro_be.DTO.Response
 
         public required int Total_Rating_Quantity { get; set; } // the total number of user who rated the product
 
+        // [JsonIgnore]
+        public int Total_Sold_Quantity { get; set; } // the total number of products which is purchased by user
+
         public required string Owner { get; set; }
         public string? Category { get; set; }
 

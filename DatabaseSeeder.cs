@@ -85,25 +85,20 @@ namespace uni_cap_pro_be
                     })
                     .ToList();
 
-                var discountDetails = new List<(
-                    Guid discountId,
-                    Discount discount,
-                    int level,
-                    double amount
-                )>
+                var discountDetails = new List<(Guid discountId, int level, double amount)>
                 {
                     // Group-Buy Discount
-                    (discountList[0].Id, discountList[0], 1, 0),
-                    (discountList[0].Id, discountList[0], 2, 0.1),
-                    (discountList[0].Id, discountList[0], 3, 0.15),
-                    (discountList[0].Id, discountList[0], 4, 0.2),
-                    (discountList[0].Id, discountList[0], 5, 0.25),
-                    (discountList[0].Id, discountList[0], 6, 0.4),
+                    (discountList[0].Id, 1, 0),
+                    (discountList[0].Id, 2, 0.1),
+                    (discountList[0].Id, 3, 0.15),
+                    (discountList[0].Id, 4, 0.2),
+                    (discountList[0].Id, 5, 0.25),
+                    (discountList[0].Id, 6, 0.4),
                     // Tiered Discount
-                    (discountList[1].Id, discountList[1], 1, 0),
-                    (discountList[1].Id, discountList[1], 2, 0.05),
-                    (discountList[1].Id, discountList[1], 3, 0.07),
-                    (discountList[1].Id, discountList[1], 4, 0.1),
+                    (discountList[1].Id, 1, 0),
+                    (discountList[1].Id, 2, 0.05),
+                    (discountList[1].Id, 3, 0.07),
+                    (discountList[1].Id, 4, 0.1),
                 };
 
                 var discountDetailList = discountDetails
@@ -113,7 +108,6 @@ namespace uni_cap_pro_be
                         Created_At = DateTime.UtcNow,
                         Modified_At = DateTime.UtcNow,
                         DiscountId = discount_detail.discountId,
-                        Discount = discount_detail.discount,
                         Level = discount_detail.level,
                         Amount = discount_detail.amount,
                     })
@@ -758,7 +752,7 @@ namespace uni_cap_pro_be
                         Modified_At = DateTime.UtcNow,
                         Total_Price = 0,
                         EndTime = DateTime.UtcNow + timeSpan,
-                        ProvinceId = "74",
+                        DistrictId = "725",
                         Level = 0,
                         Delivery_Status = DeliveryStatus.PENDING,
                         IsShare = true,

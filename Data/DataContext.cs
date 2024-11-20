@@ -199,18 +199,18 @@ namespace uni_cap_pro_be.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Active_Status).HasConversion(active_status_converter);
+
+                // Discount n - 1 Discount_Detail
+                entity
+                    .HasMany(o => o.Discount_Details)
+                    .WithOne()
+                    .HasForeignKey(o => o.DiscountId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Discount_Detail>(entity =>
             {
                 entity.HasKey(e => e.Id);
-
-                // Discount_Detail n - 1 Discount
-                entity
-                    .HasOne(o => o.Discount)
-                    .WithMany(d => d.Discount_Details)
-                    .HasForeignKey(o => o.DiscountId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
 
