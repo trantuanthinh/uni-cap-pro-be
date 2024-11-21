@@ -14,6 +14,7 @@ namespace uni_cap_pro_be.AutoMapperHelp
 
             CreateMap<ProductRequest, Product>();
 
+            CreateMap<ItemRequest, Item_Order>();
             CreateMap<BuyTogetherRequest, Sub_Order>();
 
             CreateMap<FeedbackRequest, Feedback>();

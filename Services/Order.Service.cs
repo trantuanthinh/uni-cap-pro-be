@@ -14,10 +14,9 @@ using uni_cap_pro_be.Utils;
 namespace uni_cap_pro_be.Services
 {
     // DONE
-    public class OrderService(OrderRepository repository, Sub_OrderRepository sub_orderRepository)
+    public class OrderService(OrderRepository repository)
     {
         private readonly OrderRepository _repository = repository;
-        private readonly Sub_OrderRepository _sub_orderRepository = sub_orderRepository;
 
         public async Task<BaseResponse<OrderResponse>> GetOrders(QueryParameters queryParameters)
         {

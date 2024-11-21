@@ -136,6 +136,9 @@ builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<Sub_OrderRepository>();
 builder.Services.AddScoped<Sub_OrderService>();
 
+builder.Services.AddScoped<Item_OrderRepository>();
+builder.Services.AddScoped<Item_OrderService>();
+
 builder.Services.AddScoped<FeedbackRepository>();
 builder.Services.AddScoped<FeedbackService>();
 

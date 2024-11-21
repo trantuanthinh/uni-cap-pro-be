@@ -8,4 +8,10 @@ namespace uni_cap_pro_be.Repositories.Setting_Data_Repositories
     // DONE
     public class ProvinceRepository(DataContext context)
         : BaseRepositoryAddress<Province, DataContext>(context) { }
+
+    public class DistrictRepository(DataContext context)
+        : BaseRepositoryAddress<District, DataContext>(context) { }
+
+    public class WardRepository(DataContext context)
+        : BaseRepositoryAddress<Ward, DataContext>(context) { }
 }

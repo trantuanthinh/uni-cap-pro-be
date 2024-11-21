@@ -7,4 +7,7 @@ namespace uni_cap_pro_be.Repositories
     // DONE
     public class DiscountRepository(DataContext context)
         : BaseRepository<Discount, DataContext>(context) { }
+
+    public class Discount_DetailRepository(DataContext context)
+        : BaseRepository<Discount_Detail, DataContext>(context) { }
 }

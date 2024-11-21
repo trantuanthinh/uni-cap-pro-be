@@ -13,28 +13,6 @@ namespace uni_cap_pro_be.Services
     {
         private readonly Sub_OrderRepository _repository = repository;
 
-        public async Task<BaseResponse<Sub_OrderResponse>> GetSub_Orders(
-            QueryParameters queryParameters
-        )
-        {
-            QueryParameterResult<Sub_Order> _items = _repository
-                .SelectAll()
-                .ApplyQueryParameters(queryParameters);
-
-            return _items
-                .Data.AsEnumerable()
-                .Select(item => item.ToResponse())
-                .ToList()
-                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
-        }
-
-        public async Task<Sub_OrderResponse> GetSub_Order(Guid id)
-        {
-            Sub_Order _item =
-                _repository.SelectById(id) ?? throw new NotFoundException("Sub_Order not found");
-            return _item.ToResponse();
-        }
-
         public async Task<bool> CreateSub_Order(Sub_Order _item)
         {
             _repository.Add(_item);
