@@ -22,6 +22,7 @@ namespace uni_cap_pro_be.Services
         {
             QueryParameterResult<Order> _items = _repository
                 .SelectAll()
+                .Include(item => item.Store)
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.EndTime > DateTime.UtcNow)
                 .ApplyQueryParameters(queryParameters);
@@ -61,71 +62,24 @@ namespace uni_cap_pro_be.Services
             return _repository.Save();
         }
 
-        public async Task<bool> UpdateOrder(Guid id, PatchRequest<OrderRequest> patchRequest)
-        {
-            Order _item = _repository.SelectById(id);
-            if (_item == null)
-            {
-                return false;
-            }
-
-            patchRequest.Patch(ref _item);
-            _repository.Update(_item);
-            return _repository.Save();
-        }
-
         public async Task<bool> DeleteOrder(Guid id)
         {
             _repository.Delete(id);
             return _repository.Save();
         }
 
-        public async Task<Order> FindOrder(Guid orderId)
+        public bool CheckValid(Guid orderId, OrderRequest item)
         {
             Order _item = _repository
                 .SelectAll()
                 .Include(item => item.Sub_Orders)
                 .Where(item => item.Id == orderId)
                 .FirstOrDefault();
-            return _item;
-        }
-
-        public bool CheckValid(Order order)
-        {
-            return order.Level <= 5 && order.IsShare && order.EndTime > DateTime.UtcNow;
-        }
-
-        public async Task<bool> AddSubOrder(Order order)
-        {
-            order.Level += 1;
-            // double discount = 0;
-            // double total_price = 0;
-            // int total_quantity = 0;
-
-            // foreach (var discount_detail in order.Product.Discount.Discount_Details)
-            // {
-            //     if (discount_detail.Level == order.Level)
-            //     {
-            //         discount = discount_detail.Amount;
-            //         break;
-            //     }
-            // }
-            // foreach (var sub_order in order.Sub_Orders)
-            // {
-            //     sub_order.Price = order.Product.Price - (order.Product.Price * discount);
-            //     _sub_orderRepository.Update(sub_order);
-            //     bool checkSubOrder = _sub_orderRepository.Save();
-            //     if (!checkSubOrder)
-            //     {
-            //         total_price += sub_order.Price;
-            //         total_quantity += sub_order.Quantity;
-            //     }
-            // }
-            // order.Total_Price = total_price;
-            // order.Total_Quantity = total_quantity;
-
-            _repository.Update(order);
-            return _repository.Save();
+            return _item.Level < 5
+                && _item.IsShare
+                && _item.EndTime > DateTime.UtcNow
+                && _item.Delivery_Status == DeliveryStatus.PENDING
+                && _item.DistrictId == item.DistrictId;
         }
     }
 }

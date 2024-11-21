@@ -32,7 +32,9 @@ namespace uni_cap_pro_be.Models
 
         [Required]
         public required bool IsPaid { get; set; }
-        public double Total_Price { get; set; }
+
+        [Required]
+        public required double Total_Price { get; set; }
 
         public User? User { get; set; }
         public List<Item_Order>? Item_Orders { get; set; }

@@ -66,6 +66,7 @@ namespace uni_cap_pro_be
                 {
                     return;
                 }
+                CreateTriggers(_dataContext);
 
                 #region seed settings-data
                 var provinceList = _readerCsv.ReadCsv("Filtered_Provinces.csv", new ProvinceMap());
@@ -738,10 +739,20 @@ namespace uni_cap_pro_be
                 #region seed orders
                 TimeSpan timeSpan = new(24, 0, 0);
 
-                var orders = new List<(Guid ProductId, Product Product)>
+                var orders = new List<(Guid ProductId, Product Product, Guid OwnerId, User Owner)>
                 {
-                    (productList[0].Id, productList[0]),
-                    (productList[1].Id, productList[1])
+                    (
+                        productList[0].Id,
+                        productList[0],
+                        productList[0].OwnerId,
+                        productList[0].Owner
+                    ),
+                    (
+                        productList[1].Id,
+                        productList[1],
+                        productList[1].OwnerId,
+                        productList[1].Owner
+                    )
                 };
 
                 var orderList = orders
@@ -752,6 +763,8 @@ namespace uni_cap_pro_be
                         Modified_At = DateTime.UtcNow,
                         Total_Price = 0,
                         EndTime = DateTime.UtcNow + timeSpan,
+                        StoreId = order.OwnerId,
+                        Store = order.Owner,
                         DistrictId = districtList[0].Id,
                         District = districtList[0],
                         Level = 0,
@@ -902,7 +915,6 @@ namespace uni_cap_pro_be
                 #endregion
 
                 _dataContext.SaveChanges();
-                CreateTriggers(_dataContext);
             }
             catch (Exception ex)
             {
@@ -915,99 +927,26 @@ namespace uni_cap_pro_be
         {
             try
             {
-                var afterProductsInsertTrigger =
-                    @"
-        CREATE TRIGGER after_products_insert
-        AFTER INSERT ON products
-        FOR EACH ROW
-        BEGIN
-            UPDATE product_categories
-            SET Total_Product = Total_Product + NEW.Quantity
-            WHERE Id = NEW.CategoryId;
-        END;";
+                var triggerQueries = new[]
+                {
+                    // After Insert
+                    TriggerQuery.AfterProductsInsert(),
+                    TriggerQuery.AfterProductCategoriesInsert(),
+                    TriggerQuery.AfterItemOrderInsert(),
+                    TriggerQuery.AfterSubOrderInsert(),
+                    TriggerQuery.AfterFeedbacksInsert(),
+                    // After Update
+                    TriggerQuery.AfterProductsUpdate(),
+                    TriggerQuery.AfterProductCategoriesUpdate(),
+                    TriggerQuery.AfterItemOrdersUpdate(),
+                    TriggerQuery.AfterSubOrdersUpdate(),
+                    TriggerQuery.AfterFeedbacksUpdate()
+                };
 
-                var afterProductsUpdateTrigger =
-                    @"
-        CREATE TRIGGER after_products_update
-        AFTER UPDATE ON products
-        FOR EACH ROW
-        BEGIN
-            DECLARE quantityDiff INT;
-            IF NEW.Quantity <> OLD.Quantity THEN
-                SET quantityDiff = NEW.Quantity - OLD.Quantity;
-                UPDATE product_categories
-                SET Total_Product = Total_Product + quantityDiff
-                WHERE Id = NEW.CategoryId;
-            END IF;
-        END;";
-
-                var afterProductCategoriesInsertTrigger =
-                    @"
-        CREATE TRIGGER after_product_categories_insert
-        AFTER INSERT ON product_categories
-        FOR EACH ROW
-        BEGIN
-            UPDATE product_main_categories
-            SET Total_Product = Total_Product + NEW.total_product
-            WHERE Id = NEW.Main_CategoryId;
-        END;";
-
-                var afterProductCategoriesUpdateTrigger =
-                    @"
-        CREATE TRIGGER after_product_categories_update
-        AFTER UPDATE ON product_categories
-        FOR EACH ROW
-        BEGIN
-            DECLARE quantityDiff INT;
-            IF NEW.Total_Product <> OLD.Total_Product THEN
-                SET quantityDiff = NEW.Total_Product - OLD.Total_Product;
-                UPDATE product_main_categories
-                SET Total_Product = Total_Product + quantityDiff
-                WHERE Id = NEW.Main_CategoryId;
-            END IF;
-        END;";
-
-                var afterFeedbacksInsertTrigger =
-                    @"
-        CREATE TRIGGER after_feedbacks_insert
-        AFTER INSERT ON feedbacks
-        FOR EACH ROW
-        BEGIN
-            UPDATE products
-            SET 
-                Total_Rating_Quantity = Total_Rating_Quantity + 1, 
-                Total_Rating_Value = Total_Rating_Value + NEW.Rating
-            WHERE Id = NEW.ProductId;
-
-            UPDATE item_orders
-            SET IsRating = true
-            WHERE Id = NEW.Item_OrderId; 
-        END";
-
-                var afterFeedbacksUpdateTrigger =
-                    @"
-        CREATE TRIGGER after_feedbacks_update
-        AFTER UPDATE ON feedbacks
-        FOR EACH ROW
-        BEGIN
-            DECLARE quantityDiff INT;
-
-            IF NEW.Rating <> OLD.Rating THEN
-                SET quantityDiff = NEW.Rating - OLD.Rating;
-
-                UPDATE products
-                SET Total_Rating_Value = Total_Rating_Value + quantityDiff
-                WHERE Id = NEW.ProductId;
-            END IF;
-        END";
-                // Execute each SQL command separately
-                context.Database.ExecuteSqlRaw(afterProductsInsertTrigger);
-                context.Database.ExecuteSqlRaw(afterProductCategoriesInsertTrigger);
-                context.Database.ExecuteSqlRaw(afterFeedbacksInsertTrigger);
-
-                context.Database.ExecuteSqlRaw(afterProductsUpdateTrigger);
-                context.Database.ExecuteSqlRaw(afterProductCategoriesUpdateTrigger);
-                context.Database.ExecuteSqlRaw(afterFeedbacksUpdateTrigger);
+                foreach (var triggerQuery in triggerQueries)
+                {
+                    context.Database.ExecuteSqlRaw(triggerQuery);
+                }
             }
             catch (Exception ex)
             {

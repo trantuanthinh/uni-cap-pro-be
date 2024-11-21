@@ -12,7 +12,7 @@ using uni_cap_pro_be.Data;
 namespace uni_cap_pro_be.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241121062536_Migrations")]
+    [Migration("20241121151144_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -180,12 +180,17 @@ namespace uni_cap_pro_be.Migrations
                     b.Property<DateTime>("Modified_At")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("char(36)");
+
                     b.Property<double>("Total_Price")
                         .HasColumnType("double");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DistrictId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Orders");
                 });
@@ -569,7 +574,15 @@ namespace uni_cap_pro_be.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("uni_cap_pro_be.Models.User", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("District");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("uni_cap_pro_be.Models.Product", b =>

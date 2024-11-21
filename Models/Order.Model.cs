@@ -13,6 +13,8 @@ namespace uni_cap_pro_be.Models
         static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Order, OrderResponse>()
+                .ForMember(d => d.Store, opt => opt.MapFrom(src => src.Store.ToResponse()))
+                .ForMember(d => d.District, opt => opt.MapFrom(src => src.District.Name))
                 .ForMember(
                     d => d.TimeLeft,
                     opt => opt.MapFrom(src => src.EndTime - DateTime.UtcNow)
@@ -38,6 +40,9 @@ namespace uni_cap_pro_be.Models
         public required string DistrictId { get; set; }
 
         [Required]
+        public required Guid StoreId { get; set; }
+
+        [Required]
         public required double Total_Price { get; set; }
 
         public DateTime EndTime { get; set; }
@@ -49,6 +54,7 @@ namespace uni_cap_pro_be.Models
         public required bool IsActive { get; set; }
 
         public District? District { get; set; }
+        public User? Store { get; set; }
         public List<Sub_Order>? Sub_Orders { get; set; }
     }
 }
