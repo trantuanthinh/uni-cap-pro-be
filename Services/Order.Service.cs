@@ -39,6 +39,7 @@ namespace uni_cap_pro_be.Services
             Order _item =
                 _repository
                     .SelectAll()
+                    .Include(item => item.Store)
                     .Include(item => item.Sub_Orders)
                     .Where(item => item.Id == id)
                     .FirstOrDefault() ?? throw new NotFoundException("Order not found");

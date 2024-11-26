@@ -50,6 +50,26 @@ namespace uni_cap_pro_be.Controllers
             return StatusCode(200, okMessage);
         }
 
+        [HttpGet("store/{storeId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetStoreProducts(
+            Guid storeId,
+            [FromQuery] QueryParameters queryParameters
+        )
+        {
+            string methodName = nameof(GetStoreProducts);
+
+            BaseResponse<ProductResponse> _items = await _service.GetProductByStoreId(
+                storeId,
+                queryParameters
+            );
+
+            var okMessage = _apiResponse.Success(methodName, _items);
+            return StatusCode(200, okMessage);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]

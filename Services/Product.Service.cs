@@ -47,6 +47,26 @@ namespace uni_cap_pro_be.Services
             return _item.ToResponse();
         }
 
+        public async Task<BaseResponse<ProductResponse>> GetProductByStoreId(
+            Guid storeId,
+            QueryParameters queryParameters
+        )
+        {
+            QueryParameterResult<Product> _items = _repository
+                .SelectAll()
+                .Include(item => item.Owner)
+                .Include(item => item.Category)
+                .Include(item => item.Images)
+                .Where(item => item.OwnerId == storeId)
+                .ApplyQueryParameters(queryParameters);
+
+            return _items
+                .Data.AsEnumerable()
+                .Select(item => item.ToResponse())
+                .ToList()
+                .GetBaseResponse(_items.Page, _items.PageSize, _items.TotalRecords);
+        }
+
         public async Task<bool> CreateProduct(Product _item)
         {
             _item.Total_Rating_Value = 0;
