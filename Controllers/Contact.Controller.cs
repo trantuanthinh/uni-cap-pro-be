@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using uni_cap_pro_be.Core;
 using uni_cap_pro_be.Data;
 using uni_cap_pro_be.DTO.Request;
+using uni_cap_pro_be.Middleware;
 using uni_cap_pro_be.Utils;
 
 namespace uni_cap_pro_be.Controllers

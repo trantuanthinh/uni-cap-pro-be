@@ -1,7 +1,5 @@
 using System.Collections.Concurrent;
-using System.Net;
-using System.Net.Mail;
-using uni_cap_pro_be.Utils;
+using uni_cap_pro_be.Middleware;
 
 public class OtpService
 {

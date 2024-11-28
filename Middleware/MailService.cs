@@ -1,9 +1,7 @@
-using System.Drawing;
 using System.Net;
 using System.Net.Mail;
-using System.Text.RegularExpressions;
 
-namespace uni_cap_pro_be.Utils
+namespace uni_cap_pro_be.Middleware
 {
     // DONE
     public class MailService
